@@ -1,0 +1,170 @@
+#
+# Obfuscated ASCII spam, mostly geocities addresses
+# Bayes 99 / Sexmail and geocities URLs are a sign for spam
+#
+
+rawbody		__GEOCITIES_1		/geocities\.com/i
+body		__GEOCITIES_2		/geocities\.com/i
+
+body		__GEOCITIES_PORN_B	/\b(?:mother|father|mom|dad|porno|teeny|pre[ ]{0,3}teen|school[ ]{0,3}girls?|hardcore|virgins?|babes?)\b/i
+header		__GEOCITIES_PORN_S	Subject =~ /\b(?:mother|father|mom|dad|porno|teeny|pre[ ]{0,3}teen|school[ ]{0,3}girls?|hardcore|virgins?|babes?)\b/i
+meta		__GEOCITIES_PORN	(__GEOCITIES_PORN_B + __GEOCITIES_PORN_S >= 1)
+meta            GEOCITIES_SEX_1		((__GEOCITIES_1 || __GEOCITIES_2) >= 1)
+meta            GEOCITIES_SEX_2		((__0900_CALL_BASE || RCVD_IN_BL_SPAMCOP_NET || RCVD_IN_SWINOG_SPAM || HOT_NASTY || SUBJECT_SEXUAL ) + __GEOCITIES_PORN + (__GEOCITIES_1 || __GEOCITIES_2) - BAYES_00 == 2)
+meta            GEOCITIES_SEX_3         ((__0900_CALL_BASE || RCVD_IN_BL_SPAMCOP_NET || RCVD_IN_SWINOG_SPAM || HOT_NASTY || SUBJECT_SEXUAL ) + __GEOCITIES_PORN + (__GEOCITIES_1 || __GEOCITIES_2) - BAYES_00 == 3)
+meta            GEOCITIES_SEX_4         ((HOT_NASTY || SUBJECT_SEXUAL) + (__0900_CALL_BASE || RCVD_IN_BL_SPAMCOP_NET || RCVD_IN_SWINOG_SPAM) + __GEOCITIES_PORN + (__GEOCITIES_1 || __GEOCITIES_2) - BAYES_00 == 4)
+describe        GEOCITIES_SEX_1         Geocities Link to possible sexsite
+describe        GEOCITIES_SEX_2         Geocities Sexmails 2
+describe        GEOCITIES_SEX_3         Geocities Sexmails 3
+describe        GEOCITIES_SEX_4         Geocities Sexmails 4
+score           GEOCITIES_SEX_1         0.500
+score           GEOCITIES_SEX_2         3.000
+score           GEOCITIES_SEX_3         7.500
+score           GEOCITIES_SEX_4         12.000
+
+body            __ASCII_PIC_1   /\b(?:feel|think|confident|stop|remarkable|believe|signed|finish)\b/i
+body            __ASCII_PIC_2   /(?:ooooVoIoEoWoooo|=====V=I=E=W====|---V-I-E-W---)/i
+body            __ASCII_PIC_3   (/\/\?a=/)
+meta            __ASCII_PIC_4   (LONGWORD + MAILTO_TO_SPAM_ADDR + HTML_MESSAGE + HTML_FONT_TINY >= 2)
+
+meta            ASCII_SEX_PICS_1  ((__GEOCITIES_1 || __GEOCITIES_2) + __ASCII_PIC_1 + __ASCII_PIC_2 + __ASCII_PIC_3 + __ASCII_PIC_4 == 3)
+meta            ASCII_SEX_PICS_2  ((__GEOCITIES_1 || __GEOCITIES_2) + __ASCII_PIC_1 + __ASCII_PIC_2 + __ASCII_PIC_3 + __ASCII_PIC_4 >= 4)
+describe        ASCII_SEX_PICS_1  Geocities ASCII spam (1)
+describe        ASCII_SEX_PICS_2  Geocities ASCII spam (2)
+score           ASCII_SEX_PICS_1  5.000
+score           ASCII_SEX_PICS_2  10.000
+
+body		GEOCITIES_REDIR	/geocities\.com.{2,30}\/\?a=/i
+describe	GEOCITIES_REDIR Geocities redirector
+score		GEOCITIES_REDIR 10.000
+
+#
+# Positive score rules, sign for ascii arts
+#
+rawbody		__GAP_2_CHAR	/[a-z][ ]{5}[a-z]/i
+rawbody		__GAP_3_CHAR	/[a-z][ ]{6}[a-z]/i
+rawbody		__GAP_4_CHAR	/[a-z][ ]{7}[a-z]/i
+rawbody		__GAP_5_CHAR	/[a-z][ ]{8}[a-z]/i
+rawbody		__GAP_6_CHAR	/[a-z][ ]{9}[a-z]/i
+rawbody		__GAP_7_CHAR	/[a-z][ ]{10}[a-z]/i
+rawbody		__GAP_8_CHAR	/[a-z][ ]{11}[a-z]/i
+rawbody		__GAP_9_CHAR	/[a-z][ ]{12}[a-z]/i
+rawbody		__GAP_10_CHAR	/[a-z][ ]{13}[a-z]/i
+
+
+#
+# Negative score rules, should not show up in ascii arts.
+#
+rawbody		__GAP_1_ALPH_L	/[^a-z][0-9\.,:-]{1,3}[ ]{4}[a-z0-9]{2,3}/i
+rawbody		__GAP_2_ALPH_L	/[^a-z][0-9\.,:-]{1,3}[ ]{5}[a-z0-9]{2,3}/i
+rawbody		__GAP_3_ALPH_L	/[^a-z][0-9\.,:-]{1,3}[ ]{6}[a-z0-9]{2,3}/i
+rawbody		__GAP_4_ALPH_L	/[^a-z][0-9\.,:-]{1,3}[ ]{7}[a-z0-9]{2,3}/i
+rawbody		__GAP_5_ALPH_L	/[^a-z][0-9\.,:-]{1,3}[ ]{8}[a-z0-9]{2,3}/i
+rawbody		__GAP_6_ALPH_L	/[^a-z][0-9\.,:-]{1,3}[ ]{9}[a-z0-9]{2,3}/i
+rawbody		__GAP_7_ALPH_L	/[^a-z][0-9\.,:-]{1,3}[ ]{10}[a-z0-9]{2,3}/i
+rawbody		__GAP_8_ALPH_L	/[^a-z][0-9\.,:-]{1,3}[ ]{11}[a-z0-9]{2,3}/i
+rawbody		__GAP_9_ALPH_L	/[^a-z][0-9\.,:-]{1,3}[ ]{12}[a-z0-9]{2,3}/i
+rawbody		__GAP_10_ALPH_L	/[^a-z][0-9\.,:-]{1,3}[ ]{13}[a-z0-9]{2,3}/i
+
+meta		__GAP_ALPH_L	(__GAP_1_ALPH_L + __GAP_2_ALPH_L + __GAP_3_ALPH_L + __GAP_4_ALPH_L + __GAP_5_ALPH_L + __GAP_6_ALPH_L + __GAP_7_ALPH_L + __GAP_8_ALPH_L + __GAP_9_ALPH_L + __GAP_10_ALPH_L >= 5)
+
+#
+# Negative score rules, should not show up in ascii arts.
+#
+rawbody		__GAP_1_ALPH_R	/[0-9a-z]{2,3}[ ]{4}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_2_ALPH_R	/[0-9a-z]{2,3}[ ]{5}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_3_ALPH_R	/[0-9a-z]{2,3}[ ]{6}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_4_ALPH_R	/[0-9a-z]{2,3}[ ]{7}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_5_ALPH_R	/[0-9a-z]{2,3}[ ]{8}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_6_ALPH_R	/[0-9a-z]{2,3}[ ]{9}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_7_ALPH_R	/[0-9a-z]{2,3}[ ]{10}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_8_ALPH_R	/[0-9a-z]{2,3}[ ]{11}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_9_ALPH_R	/[0-9a-z]{2,3}[ ]{12}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_10_ALPH_R	/[0-9a-z]{2,3}[ ]{13}[0-9\.,:-]{1,3}[^a-z]/i
+
+meta		__GAP_ALPH_R	(__GAP_1_ALPH_R + __GAP_2_ALPH_R + __GAP_3_ALPH_R + __GAP_4_ALPH_R + __GAP_5_ALPH_R + __GAP_6_ALPH_R + __GAP_7_ALPH_R + __GAP_8_ALPH_R + __GAP_9_ALPH_R + __GAP_10_ALPH_R >= 5)
+
+#
+# Negative score rules, should not show up in ascii arts.
+#
+rawbody		__GAP_1_ALPH_B	/[^a-z][0-9]{1,3}[ ]{4}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_2_ALPH_B	/[^a-z][0-9]{1,3}[ ]{5}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_3_ALPH_B	/[^a-z][0-9]{1,3}[ ]{6}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_4_ALPH_B	/[^a-z][0-9]{1,3}[ ]{7}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_5_ALPH_B	/[^a-z][0-9]{1,3}[ ]{8}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_6_ALPH_B	/[^a-z][0-9]{1,3}[ ]{9}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_7_ALPH_B	/[^a-z][0-9]{1,3}[ ]{10}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_8_ALPH_B	/[^a-z][0-9]{1,3}[ ]{11}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_9_ALPH_B	/[^a-z][0-9]{1,3}[ ]{12}[0-9\.,:-]{1,3}[^a-z]/i
+rawbody		__GAP_10_ALPH_B	/[^a-z][0-9]{1,3}[ ]{13}[0-9\.,:-]{1,3}[^a-z]/i
+
+meta		__GAP_ALPH_B	(__GAP_1_ALPH_B + __GAP_2_ALPH_B + __GAP_3_ALPH_B + __GAP_4_ALPH_B + __GAP_5_ALPH_B + __GAP_6_ALPH_B + __GAP_7_ALPH_B + __GAP_8_ALPH_B + __GAP_9_ALPH_B + __GAP_10_ALPH_B >= 5)
+
+meta		__GAP_ALPH_C	(__GAP_1_ALPH_L + __GAP_2_ALPH_L + __GAP_3_ALPH_L + __GAP_4_ALPH_L + __GAP_5_ALPH_L + __GAP_6_ALPH_L + __GAP_7_ALPH_L + __GAP_8_ALPH_L + __GAP_9_ALPH_L + __GAP_10_ALPH_L + __GAP_1_ALPH_R + __GAP_2_ALPH_R + __GAP_3_ALPH_R + __GAP_4_ALPH_R + __GAP_5_ALPH_R + __GAP_6_ALPH_R + __GAP_7_ALPH_R + __GAP_8_ALPH_R + __GAP_9_ALPH_R + __GAP_10_ALPH_R + __GAP_1_ALPH_B + __GAP_2_ALPH_B + __GAP_3_ALPH_B + __GAP_4_ALPH_B + __GAP_5_ALPH_B + __GAP_6_ALPH_B + __GAP_7_ALPH_B + __GAP_8_ALPH_B + __GAP_9_ALPH_B + __GAP_10_ALPH_B >= 10)
+
+#
+# Negative score rules, should not show up in ascii arts.
+#
+rawbody		__GAP_2_CHARB	/[A-Z]{2,3}[ ]{5}[A-Z]{2,3}/
+rawbody		__GAP_3_CHARB	/[A-Z]{2,3}[ ]{6}[A-Z]{2,3}/
+rawbody		__GAP_4_CHARB	/[A-Z]{2,3}[ ]{7}[A-Z]{2,3}/
+rawbody		__GAP_5_CHARB	/[A-Z]{2,3}[ ]{8}[A-Z]{2,3}/
+rawbody		__GAP_6_CHARB	/[A-Z]{2,3}[ ]{9}[A-Z]{2,3}/
+rawbody		__GAP_7_CHARB	/[A-Z]{2,3}[ ]{10}[A-Z]{2,3}/
+rawbody		__GAP_8_CHARB	/[A-Z]{2,3}[ ]{11}[A-Z]{2,3}/
+rawbody		__GAP_9_CHARB	/[A-Z]{2,3}[ ]{12}[A-Z]{2,3}/
+rawbody		__GAP_10_CHARB	/[A-Z]{2,3}[ ]{13}[A-Z]{2,3}/
+
+meta		__GAP_ALPH_D	(__GAP_2_CHARB + __GAP_3_CHARB + __GAP_4_CHARB + __GAP_5_CHARB + __GAP_6_CHARB + __GAP_7_CHARB + __GAP_8_CHARB + __GAP_9_CHARB + __GAP_10_CHARB >= 5)
+
+#
+# Char combinations which are very unlikly.
+#
+rawbody		__MY_OBFUZ	/z(r|f|k|j|v|x)/i
+rawbody		__MY_OBFUJ	/j(d|h|x|q|b|z|v|w)/i
+rawbody		__MY_OBFUY	/y(b|j)/i
+rawbody		__MY_OBFUX	/x(b|f|d|h|u)|dh|uj|vsh/i
+rawbody		__MY_OBFUT	/t(q|b|f|j)/i
+rawbody		__MY_OBFU_MISC	/uj|vsh/i
+meta		__RANDOM_CHARS_1	(__MY_OBFUZ + __MY_OBFUJ + __MY_OBFUY + __MY_OBFUX + __MY_OBFUT + __MY_OBFU_MISC >= 3)
+meta		__RANDOM_CHARS_2	(__MY_OBFUZ + __MY_OBFUJ + __MY_OBFUY + __MY_OBFUX + __MY_OBFUT + __MY_OBFU_MISC >= 5)
+
+#
+# To be listed in a URIBL is a sign for ascii arts.
+#
+meta		__HAVESPAMURI	(__URI_RBL_MULTI + __URI_RBL_SINGLE >= 1)
+
+#
+# Try to catch some false positive cases
+#
+rawbody		__LISTKEYWORD	/(?:level|host|fr.|USD|euro|file|pieces|stück|save|artikel|server|Kbyte)/i
+rawbody		__HTMLCOMMENT	/<!--/
+rawbody		__TXTATTACH	/filename=".{1,99}\.(?:txt|csv|asc|rtf)"/
+rawbody		__SPAMREPORT_1	/(?:BAYES_|BODY:|RBL:|RCVD)/i
+rawbody		__SPAMREPORT_2	/(?:Spam-Report|Scanned-By|Spam-Status|Antispam|Spam detection software|AntiAbuse)/i
+meta		__SPAMREPORT	(__SPAMREPORT_1 + __SPAMREPORT_2 >= 1)
+rawbody		__HAVE_URI	/http/i
+meta		__HAVE_NOURI	(__HAVE_URI + __HAVE_URI == 0)
+
+#
+# Small fonts are very unlikly in emails and a strong sign for ascii sign.
+#
+rawbody		__SMALL_FONT	/font-size:[\s\t ]{1,3}(?:1|2)(?:px|pt|;)/i
+
+meta		ASCII_GAPS_1	(__HAVESPAMURI + __SMALL_FONT + MAILTO_SUBJ_REMOVE + __GAP_2_CHAR + __GAP_3_CHAR + __GAP_4_CHAR + __GAP_5_CHAR + __GAP_6_CHAR + __GAP_7_CHAR + __GAP_8_CHAR + __GAP_9_CHAR + __GAP_10_CHAR - (__SPAMREPORT * 4) + __RANDOM_CHARS_1 + __RANDOM_CHARS_2 - ((__HTMLCOMMENT + __GAP_ALPH_L + __GAP_ALPH_R + __GAP_ALPH_B + __GAP_ALPH_C + __GAP_ALPH_D + __TXTATTACH + __LISTKEYWORD + __HAVE_NOURI )*2) == 5)
+meta		ASCII_GAPS_2	(__HAVESPAMURI + __SMALL_FONT + MAILTO_SUBJ_REMOVE + __GAP_2_CHAR + __GAP_3_CHAR + __GAP_4_CHAR + __GAP_5_CHAR + __GAP_6_CHAR + __GAP_7_CHAR + __GAP_8_CHAR + __GAP_9_CHAR + __GAP_10_CHAR - (__SPAMREPORT * 4) + __RANDOM_CHARS_1 + __RANDOM_CHARS_2 - ((__HTMLCOMMENT + __GAP_ALPH_L + __GAP_ALPH_R + __GAP_ALPH_B + __GAP_ALPH_C + __GAP_ALPH_D + __TXTATTACH + __LISTKEYWORD + __HAVE_NOURI )*2) == 6)
+meta		ASCII_GAPS_3	(__HAVESPAMURI + __SMALL_FONT + MAILTO_SUBJ_REMOVE + __GAP_2_CHAR + __GAP_3_CHAR + __GAP_4_CHAR + __GAP_5_CHAR + __GAP_6_CHAR + __GAP_7_CHAR + __GAP_8_CHAR + __GAP_9_CHAR + __GAP_10_CHAR - (__SPAMREPORT * 4) + __RANDOM_CHARS_1 + __RANDOM_CHARS_2 - ((__HTMLCOMMENT + __GAP_ALPH_L + __GAP_ALPH_R + __GAP_ALPH_B + __GAP_ALPH_C + __GAP_ALPH_D + __TXTATTACH + __LISTKEYWORD + __HAVE_NOURI )*2) == 7)
+meta		ASCII_GAPS_4	(__HAVESPAMURI + __SMALL_FONT + MAILTO_SUBJ_REMOVE + __GAP_2_CHAR + __GAP_3_CHAR + __GAP_4_CHAR + __GAP_5_CHAR + __GAP_6_CHAR + __GAP_7_CHAR + __GAP_8_CHAR + __GAP_9_CHAR + __GAP_10_CHAR - (__SPAMREPORT * 4) + __RANDOM_CHARS_1 + __RANDOM_CHARS_2 - ((__HTMLCOMMENT + __GAP_ALPH_L + __GAP_ALPH_R + __GAP_ALPH_B + __GAP_ALPH_C + __GAP_ALPH_D + __TXTATTACH + __LISTKEYWORD + __HAVE_NOURI )*2) == 8)
+meta		ASCII_GAPS_5	(__HAVESPAMURI + __SMALL_FONT + MAILTO_SUBJ_REMOVE + __GAP_2_CHAR + __GAP_3_CHAR + __GAP_4_CHAR + __GAP_5_CHAR + __GAP_6_CHAR + __GAP_7_CHAR + __GAP_8_CHAR + __GAP_9_CHAR + __GAP_10_CHAR - (__SPAMREPORT * 4) + __RANDOM_CHARS_1 + __RANDOM_CHARS_2 - ((__HTMLCOMMENT + __GAP_ALPH_L + __GAP_ALPH_R + __GAP_ALPH_B + __GAP_ALPH_C + __GAP_ALPH_D + __TXTATTACH + __LISTKEYWORD + __HAVE_NOURI )*2) >= 9)
+
+describe	ASCII_GAPS_1	ASCII Art (5)
+describe	ASCII_GAPS_2	ASCII Art (6)
+describe	ASCII_GAPS_3	ASCII Art (7)
+describe	ASCII_GAPS_4	ASCII Art (8)
+describe	ASCII_GAPS_5	ASCII Art (9+)
+score		ASCII_GAPS_1	2.000
+score		ASCII_GAPS_2	4.000
+score		ASCII_GAPS_3	8.000
+score		ASCII_GAPS_4	10.000
+score		ASCII_GAPS_5    15.000
+

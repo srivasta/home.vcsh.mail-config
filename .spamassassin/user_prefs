@@ -1,0 +1,392 @@
+# SpamAssassin user preferences file.
+#
+# Format:
+#
+#   required_hits n
+#		(how many hits are required to tag a mail as spam.)
+#
+#   score SYMBOLIC_TEST_NAME n
+#		(if this is omitted, 1 is used as a default score.
+#		Set the score to 0 to ignore the test.)
+#
+# # starts a comment, whitespace is not significant.
+#
+###########################################################################
+# loadplugin              Mail::SpamAssassin::Plugin::Hashcash
+# Whether to use hashcash, if it is available.
+use_hashcash            1
+hashcash_accept         *
+
+bayes_expiry_max_db_size  4000000
+bayes_auto_expire       0
+
+###########################################################################
+# First of all, the generally useful stuff; thresholds and the whitelist
+# of addresses which, for some reason or another, often trigger false
+# positives.
+
+required_hits		5
+
+bayes_auto_learn        0
+# The score threshold below which a mail has to score, to be fed into
+# SpamAssassin's learning systems automatically as a non-spam message
+bayes_auto_learn_threshold_nonspam 0.1
+
+# The score threshold below which a mail has to score, to be fed into
+# SpamAssassin's learning systems automatically as a spam message.
+bayes_auto_learn_threshold_spam 12
+
+# If you receive mail filtered by upstream mail systems, like a spam 
+# filtering ISP or mailing list, and that service adds new headers
+# (as most of them do), these headers may provide inappropriate cues
+#	to the Bayesian classifier, allowing it to take a "short cut". To
+# avoid this, list the headers using this setting.  Example:
+bayes_ignore_header X-SpamBouncer
+bayes_ignore_header X-SBPass
+bayes_ignore_header X-SBClass
+bayes_ignore_header X-Folder
+bayes_ignore_header X-SBNote
+bayes_ignore_header X-SBRule
+
+use_auto_whitelist 0
+
+# Whitelist and blacklist addresses are *not* patterns; they're just normal
+# strings.  one exception is that "*@isp.com" is allowed.  They should be
+# in lower-case.
+#
+# whitelist_from	monty@roscom.com
+whitelist_from	       plaisted@erols.com
+whitelist_from 	       jshiyou@sarpc.org
+whitelist_from 	       rajiv_chopra@hotmail.com
+whitelist_from 	       Network_Computing_Newsletter@update.networkcomputing.com
+whitelist_from 	       cujnews@cuj.email-publisher.com
+whitelist_from         AboveTheNoise@bdcimail.com
+whitelist_from         EthicsMatters@bdcimail.com
+whitelist_from         Computerworld_Ebusiness@Computerworld.com
+whitelist_from         news@administaff.rs88.net
+whitelist_from         InformationWeek@update.informationweek.com
+whitelist_from         SDonlineUpdate@softwaredevelopment.email-publisher.com
+whitelist_from         Notebooks@TigerDirect.com
+whitelist_from         67_camaro@charter.net
+whitelist_from         nhplaist@comcast.net
+whitelist_from         cringley@newsletter.infoworld.com
+whitelist_from         alerter@my-cast.com
+whitelist_from         AUSTINT@mtrmls.com
+whitelist_from         67_camaro@charter.net
+whitelist_from         webresearch@elsevier.dmdelivery.nl
+whitelist_from         umalumni@admin.umass.edu
+whitelist_from         aheadadm@TIMEINC.NET
+whitelist_from         vote-equiserve@equiserve.com
+whitelist_from         latest@daily.misleader.org
+whitelist_from         *@boozallenet.com
+whitelist_from	       amit.haldankar@stdc.com
+whitelist_from	       art.robinson@stdc.com
+whitelist_from	       ana.espinal@stdc.com
+whitelist_from	       christine.robinson@stdc.com
+
+
+# Add your blacklist entries in the format below...
+#
+# blacklist_from	friend@public.com
+blacklist_from          foryou_221@hotmail.com
+blacklist_from          *@TmiMedX.com
+blacklist_from          stepkooss@mail.ru
+blacklist_from          *@solar5.com.ar
+blacklist_from          *@estrucplan.com.ar
+blacklist_from          nicki@caller.co.uk
+blacklist_from          *@difac.com
+blacklist_from          foreclosure@aweber.com
+blacklist_from          *@hongkong.com
+blacklist_from          opetqoi@aol.com
+blacklist_from          *@opt-in-email-4-sale.com
+blacklist_from          chelsea4931@hotmail.com
+blacklist_from          susan1@homeportfoliojunction.com
+blacklist_from          whitten@insidechips.com
+blacklist_from          mycoming@ciudad.com.ar
+blacklist_from          apr_nic_family@3mail.3com.com
+blacklist_from          bush@verizon.net
+blacklist_from          al89@verizon.net
+blacklist_from          udb@verizon
+blacklist_from          *@pinkroccade.com
+blacklist_from          *@floralplanet.com
+blacklist_from          aby@templatestyles.com
+blacklist_from          drjoe4u@theuseful.com
+blacklist_from          gsplayboybaby69@site-personals.com
+blacklist_from          bichi_151@hotmail.com
+blacklist_from          nicole_neumman@hotmail.com
+blacklist_from          foryou_221@hotmail.com
+
+
+# Mail using languages used in these country codes will not be marked
+# as being possibly spam in a foreign language.
+#
+ok_locales		en
+
+# By default, the subject lines of suspected spam will be tagged.
+# This can be disabled here.
+#
+# rewrite_subject 0
+rewrite_header subject
+
+# By default, SpamAssassin will run RBL checks.  If your ISP already
+# does this, set this to 1.
+#
+# skip_rbl_checks 1
+
+add_header spam Value _HITS_
+
+report_safe 0
+
+include bogus-virus-warnings.cf
+include 70_sare_evilnum0.cf
+include 70_sare_random.cf
+include tripwire.cf
+include asciispam.cf
+
+###########################################################################
+# Add your own customised scores for some tests below.  The default scores are
+# read from the installed "spamassassin.cf" file, but you can override them
+# here.  To see the list of tests and their default scores, go to
+# http://spamassassin.taint.org/tests.html .
+
+
+header BROKEN_KOREAN_CHARSET    Content-Type =~ /charset="?ks_c_5601-1987/
+describe BROKEN_KOREAN_CHARSET  I don't speak Korean
+score BROKEN_KOREAN_CHARSET     20
+
+header CHINESE_BIG_5       X-SBRule =~ /Chinese Big 5/
+describe CHINESE_BIG_5     I do not understand Chinese
+score CHINESE_BIG_5        5
+
+header SMALL_FRY           X-SBRule =~ /Small Fry/
+describe SMALL_FRY         Spam Bouncer thinks this si a spammer
+score SMALL_FRY            2
+
+header SPAM_MAILER         SBRule =~ /Spam Mailer/
+describe SPAM_MAILER       Mail comes from a major spam originator
+score  SPAM_MAILER         1.5
+
+header SPAM_BOUNCER_100    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 1\d\d/
+describe SPAM_BOUNCER_100  Caught By Spam Bouncer
+score SPAM_BOUNCER_100     0.1
+
+header SPAM_BOUNCER_200    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 2\d\d/
+describe SPAM_BOUNCER_200  Caught By Spam Bouncer
+score SPAM_BOUNCER_200     0.2
+
+header SPAM_BOUNCER_300    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 3\d\d/
+describe SPAM_BOUNCER_300  Caught By Spam Bouncer
+score SPAM_BOUNCER_300     0.3
+
+header SPAM_BOUNCER_400    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 4\d\d/
+describe SPAM_BOUNCER_400  Caught By Spam Bouncer
+score SPAM_BOUNCER_400     0.4
+
+header SPAM_BOUNCER_500    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 5\d\d/
+describe SPAM_BOUNCER_500  Caught By Spam Bouncer
+score SPAM_BOUNCER_500     0.5
+
+header SPAM_BOUNCER_600    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 6\d\d/
+describe SPAM_BOUNCER_600  Caught By Spam Bouncer
+score SPAM_BOUNCER_600     0.6
+
+header SPAM_BOUNCER_700    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 7\d\d/
+describe SPAM_BOUNCER_700  Caught By Spam Bouncer
+score SPAM_BOUNCER_700     0.7
+
+header SPAM_BOUNCER_800    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 8\d\d/
+describe SPAM_BOUNCER_800  Caught By Spam Bouncer
+score SPAM_BOUNCER_800     0.8
+
+header SPAM_BOUNCER_900    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 9\d\d/
+describe SPAM_BOUNCER_900  Caught By Spam Bouncer
+score SPAM_BOUNCER_900     0.9
+
+header SPAM_BOUNCER_1000  X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 1[0-4]\d\d/
+describe SPAM_BOUNCER_1000  Caught By Spam Bouncer
+score SPAM_BOUNCER_1000    1.0
+
+header SPAM_BOUNCER_1500  X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 1[5-9]\d\d/
+describe SPAM_BOUNCER_1500  Caught By Spam Bouncer
+score SPAM_BOUNCER_1500     1.15
+
+header SPAM_BOUNCER_2000    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 2\d\d\d/
+describe SPAM_BOUNCER_2000  Caught By Spam Bouncer
+score SPAM_BOUNCER_2000     1.2
+
+header SPAM_BOUNCER_3000    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 3\d\d\d/
+describe SPAM_BOUNCER_3000  Caught By Spam Bouncer
+score SPAM_BOUNCER_3000     1.3
+
+header SPAM_BOUNCER_4000    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 4\d\d\d/
+describe SPAM_BOUNCER_4000  Caught By Spam Bouncer
+score SPAM_BOUNCER_4000     1.4
+
+header SPAM_BOUNCER_5000    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 5\d\d\d/
+describe SPAM_BOUNCER_5000  Caught By Spam Bouncer
+score SPAM_BOUNCER_5000     1.5
+
+header SPAM_BOUNCER_6000    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 6\d\d\d/
+describe SPAM_BOUNCER_6000  Caught By Spam Bouncer
+score SPAM_BOUNCER_6000     1.6
+
+header SPAM_BOUNCER_7000    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 7\d\d\d/
+describe SPAM_BOUNCER_7000  Caught By Spam Bouncer
+score SPAM_BOUNCER_7000     1.7
+
+header SPAM_BOUNCER_8000    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 8\d\d\d/
+describe SPAM_BOUNCER_8000  Caught By Spam Bouncer
+score SPAM_BOUNCER_8000     1.8
+
+header SPAM_BOUNCER_9000    X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: 9\d\d\d/
+describe SPAM_BOUNCER_9000  Caught By Spam Bouncer
+score SPAM_BOUNCER_9000     1.9
+
+header SPAM_BOUNCER_HIGH  X-SBRule =~ /Pattern Match \([^\)]+\) \(Score: \d\d\d\d\d/
+describe SPAM_BOUNCER_HIGH  Caught By Spam Bouncer
+score SPAM_BOUNCER_HIGH     2.0
+
+header SPAM_BOUNCER_CLASS    X-SBClass =~ /Spam/
+describe SPAM_BOUNCER_CLASS  Spam Bouncer thinks this is spam
+score SPAM_BOUNCER_CLASS    2.5
+
+header CRM114_STATUS_SPAM    X-CRM114-Status =~ /SPAM/
+describe CRM114_STATUS_SPAM  CRM114 thinks this is spam
+score CRM114_STATUS_SPAM     3.5
+
+header CRM114_STATUS_VSPAM    X-CRM114-Status =~ /SPAM  \( pR: -\d\d/
+describe CRM114_STATUS_VSPAM  CRM114 is very sure this is spam
+score CRM114_STATUS_VSPAM     3.5
+
+header CRM114_STATUS_VVSPAM    X-CRM114-Status =~ /SPAM  \( pR: -\d\d\d/
+describe CRM114_STATUS_VVSPAM  CRM114 is \certain this is spam
+score CRM114_STATUS_VVSPAM     3.5
+
+header CRM114_STATUS_VGOOD    X-CRM114-Status =~ /Good  \( pR: \d\d/
+describe CRM114_STATUS_VGOOD  CRM114 is pretty sure this is is OK
+score CRM114_STATUS_VGOOD     -3.5
+
+header CRM114_STATUS_VVGOOD    X-CRM114-Status =~ /Good  \( pR: \d\d\d/
+describe CRM114_STATUS_VVGOOD  CRM114 is certain this is is OK
+score CRM114_STATUS_VVGOOD     -3.5
+
+header CRM114_STATUS_GOOD    X-CRM114-Status =~ /Good/
+describe CRM114_STATUS_GOOD  CRM114 thinks this is is OK
+score CRM114_STATUS_GOOD     -3.5
+
+# Catch common phishing sequence
+full HTTP_CLAIMS_HTTPS  /<a[^>]{0,190}http:[^>]{0,190}>[^<]{0,190}https:/is
+describe HTTP_CLAIMS_HTTPS HTTP link claiming to be HTTPS -- Phish
+score HTTP_CLAIMS_HTTPS 4
+
+rawbody __L_PHISH               /<a[^>]{1,200}href\s{0,10}=.{0,200}(onmouseover|onmousemouse)\s{0,10}=\s{0,10}"window\.status\s{0,10}=/i
+meta L_PHISH                    (__CTYPE_HTML && __L_PHISH)
+describe L_PHISH                Test for PHISH overwriting the status bar
+score L_PHISH                   4.0
+
+# "received this in error"
+score MAILTO_TO_REMOVE  1
+score FROM_AND_TO_SAME  1
+score SUSPICIOUS_RECIPS 1
+score FROM_HAS_MIXED_NUMS       0
+
+# these two vary... just ignore them
+score X_PRIORITY_HIGH   0
+score X_MSMAIL_PRIORITY_HIGH 0
+
+# "if you do not wish to receive any more", only 0.365 by default
+score EXCUSE_10         2
+
+score INVALID_MSGID                  1.5  # (1.226)     
+score NO_REAL_NAME                   1.5  # (0.331)
+score MAILTO_TO_SPAM_ADDR            2.5  # (1.032)
+
+score HTML_FONT_FACE_BAD             3.0  # (0.204)
+
+score BAYES_00 0.0001 0.0001 -4.312 -4.599# 0.0001 0.0001 -2.312 -2.599
+score BAYES_95 0.0001 0.0001 4.0 4.0      # 0.0001 0.0001 3.0 3.0
+score BAYES_99 0.0001 0.0001 7.5 7.5      # 0.0001 0.0001 3.5 3.5
+
+
+body N419SCAM_1		/Abacha/i
+describe N419SCAM_1	Mentions Abacha, likely to be a Nigerian 419 scam
+score N419SCAM_1	2
+
+body N419SCAM_2		/BUSINESS PROPOSAL/i
+describe N419SCAM_2	Mentions BUSINESS PROPOSAL, likely a Nigerian 419 scam
+score N419SCAM_2	1.333
+
+body N419SCAM_3		/URGENT BUSINESS RELATIONSHIP/i
+describe N419SCAM_3	Mentions URGENT BUSINESS RELATIONSHIP, likely a 419
+score N419SCAM_3	1.333
+
+body N419SCAM_4		/Works and Housing/i
+describe N419SCAM_4	Mentions Works and Housing, likely a Nigerian 419 scam
+score N419SCAM_4	2
+
+body N419SCAM_5		/IMMEDIATE ASSISTANCE/i
+describe N419SCAM_5	Mentions IMMEDIATE ASSISTANCE, likely a 419 scam
+score N419SCAM_5	1.333
+
+body N419SCAM_6		/(?:Laurent|Joseph) Kabila/i
+describe N419SCAM_6	Mentions Kabila, likely to be a Nigerian 419 scam
+score N419SCAM_6	2
+
+body N419SCAM_7		/NNPC/
+describe N419SCAM_7	Mentions NNPC, likely to be a Nigerian 419 scam
+score N419SCAM_7	2
+
+body N419SCAM_8		/CONFIDENTIAL/i
+describe N419SCAM_8	Mentions CONFIDENTIAL, likely a Nigerian 419 scam
+score N419SCAM_8	1.333
+
+body N419SCAM_9		/URGENT AND CONFIDENTIAL/i
+describe N419SCAM_9	Mentions URGENT AND CONFIDENTIAL, likely a 419 scam
+score N419SCAM_9	1.333
+
+header          TMDA_CONFIRM            To =~ /-confirm-/
+describe        TMDA_CONFIRM            To a TMDA confirm address
+score           TMDA_CONFIRM            2.00
+
+header          TMDA_DATED              To =~ /-dated-/
+describe        TMDA_DATED              To a TMDA dated address
+score           TMDA_DATED              2.00
+
+header          TMDA_SENDER             To =~ /-sender-/
+describe        TMDA_SENDER             To a TMDA sender address
+score           TMDA_SENDER             2.00
+
+header         TMDA_KEYWORD            To =~ /-keyword-/
+describe       TMDA_KEYWORD            To a TMDA keyword address
+score          TMDA_KEYWORD            2.00
+
+describe TINY_TEXT_1               Body includes very small html text
+rawbody TINY_TEXT_1                /FONT-SIZE: (?:1|1.5|2|2.5|3)px/i
+score TINY_TEXT_1                  3.0
+
+describe TINY_TEXT_2               Body includes very small html text
+rawbody TINY_TEXT_2                /FONT-SIZE: (?:1|1.5|2|2.5|3)\;/i
+score TINY_TEXT_2                  3.0
+
+rawbody CU_TINY_FONT           /font-size: (0|1);/i
+describe CU_TINY_FONT          HTML obfuscation using 0 or 1 pt lettering
+
+body  SWENVIRUS          /allow an malicious user to run code on your computer/
+score SWENVIRUS          5.5
+
+body  SWENVIRUS2         /Microsoft C.*mer/i
+score SWENVIRUS2         3.5
+
+body  SWENVIRUS3         /You don't need to do anything after installing this item/i
+score SWENVIRUS3         3.5
+
+header SWENHEADER        Subject =~ /Microsoft Critical/i
+score  SWENHEADER        3.9
+
+header SWENHEADER2       Subject =~ /New Microsoft Security Update/i
+score  SWENHEADER2       4
+
+body     BALLOTBOUNCE  /No ballot found for /
+describe BALLOTBOUNCE  Bounced response to mail to ballot@debian.org
+score    BALLOTBOUNCE  5
+

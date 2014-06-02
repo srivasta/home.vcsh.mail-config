@@ -1,0 +1,254 @@
+# SARE "Evil Numbers(0)" Ruleset for SpamAssassin
+# Version:  02.00.01 # The evilnumber set has been renamed to match SARE's updated standards, the new name is 70_sare_evilnum0.cf.  Please remove evilnumber local language files
+# Created:  2004-01-02
+# Modified: 2005-03-19
+#
+#@@# Changelog:
+#@@#	2005-10-05:
+#@@#	Update GPG/PGP .sig file
+#@@#
+#@@#	2005-03-19:
+#@@#	Added entry for Costa Rican properties spammer
+#@@#
+#@@#	2005-03-13:
+#@@#	Updated ruleset name to conform to current SARE standards
+#@@#	Changed rule name format to conform to SARE standards and make them shorter 
+#@@#	Split EN_A_1XX_1 into 2 rules due to size of rule
+#@@#	Added new entries to:
+#@@#		SARE_EN_N_4XX_1, SARE_EN_N_877_1, SARE_EN_N_888_1, SARE_EN_N_2XX_1
+#@@#		SARE_EN_A_7XX_1, SARE_EN_N_5XX_1, SARE_EN_A_BOX_1, SARE_EN_A_2XX_1
+#@@#		SARE_EN_A_8XX_1, SARE_EN_N_866_1, SARE_EN_A_1XX_1, SARE_EN_N_7XX_1
+#@@#		SARE_EN_A_6XX_1, SARE_EN_A_3XX_1, SARE_EN_A_5XX_1, SARE_EN_A_9XX_1
+#@@#  		SARE_EN_A_4XX_1, SARE_EN_A_INT_1, SARE_EN_A_1XX_2, SARE_EN_N_800_5_1
+#@@#		SARE_EN_N_9XX_1, SARE_EN_N_800_6_1, SARE_EN_N_800_2_1, SARE_EN_N_800_4_1
+#@@#
+#@@#	Moved the 5 entries to new ruleset 70_sare_evilnum1.cf, due to a low amount
+#@@#	of ham hits that most folks would consider spam.
+#@@#
+#@@#	Moved the following rules to 70_sare_evilnum2.cf due to no hits during masscheck
+#@@#		SARE_EN_A_ROOM_1, SARE_EN_N_X33_1, SARE_EN_N_X34_1
+#@@#		SARE_EN_N_X44_1,  SARE_EN_N_X88_1, SARE_EN_N_095_1
+#@@#		SARE_EN_N_201_1,  SARE_EN_N_206_1, SARE_EN_N_3XX_1
+#@@#		SARE_EN_N_6XX_1,  SARE_EN_N_8XX_1, SARE_EN_N_800_4_1
+#@@#  		SARE_EN_N_800_6_1, SARE_EN_N_800_7_1, 
+#
+# License: Artistic - see http://www.rulesemporium.com/license.txt
+# Current Maintainer: Matt Yackley - sare@yackley.org
+# Current Home: http://www.rulesemporium.com/rules/70_sare_evilnum0.cf
+#
+# Notes: Rules in this file did not hit any ham during masschecks, however that does not mean that
+#	 they will never hit ham.  
+#	 Please remove evilnumber local language files
+####
+
+body     SARE_EN_A_1XX_1	/1(?:0 West Broadway, Long Beach, NY|00 E\. San Marcos Blvd|007 Church St\. Suite 510|01 (?:W|west) 23rd (?:St|street),? \#(?: ?304|2206)| ?0 ?1 ?2 ?5 W\. Oakland Park, Suite 3 ?3 ?7, Sunrise, FL|01-1865 Dilworth Dr, Kelowna, BC|011 - 246 Stewart Green SW Calgary, Alberta|013 Broad River Road \#252|019 Fort Salonga Road, ?\#10 - Suite 102 Northport New York|04 Calmont Dr\. Pittsburg PA|045 E. Mckellips Road Building One Mesa, Arizona|048 Irvine Ave \#345, Newport Beach, CA|050 Techwood Drive, Atlanta, Georgia 30318|1051 E\. Hillsdale Avenue Foster City, CA|054 Centre St\. Suite 214, Thornhill, ON|0675 Sorrento Valley Road, Suite 200, San Diego, CA|0963 Wiles Road, Suite 108, Coral Springs, FL|1 Hanover Square, 13th Floor, New York, NY|100 Hammond Dr(?:ive)?.?,? NE,? Suite 410A - 202|102 Third Ave\. Suite 501 Huntington|112 Weston Road \#(?:142|231)|117 Queen Street West \# ?780 Toronto, ON|23 North Congress Avenue Suite 180 Boynton Beach|24 Center St\. Suite 100 El Segundo|1240 Playa Court.{1,3}Culver City|133 Broadway, Suite 706, New york, NY|128-129 Royal Palm Beach Blvd|80 South 300 West, Suite 318 Salt Lake City, UT|200 Elm Street,? Cumberland, RI|205 Elizabeth St. Unit j Punta Gorda Fl|3 Summit Square Center Langhorne, PA|14 E\. 32nd St\., New York|140 Highland Ave\., Suite \#302|167 Cherry St\. PMB 292|260 16th Ave\.? W\.?,? Seattle, WA|771 Post Road East \#342 Westport|33 Beekman Street, 3rd Floor New York, NY|333 ?W,? ?120th Ave.? (?:Suite 101|Westminster, CO)|375 Gateway Blvd,? Boynton Bch|4 BOND ST 3285, GREAT NECK, NY|333A North Avenue \#622, New Rochelle, NY|413 1\/2 \#134 W\. Kenneth Rd\. Glendale, CA|4210 Hillsdale Circle.{1,3}Omaha, NE 68137|425 Market Street, LL. Denver CO|4359 Miramar Pkwy \#247|440 Coral Ridge Dr|4545 J Military Tr\. \#189, Delray Beach|4781 Memorial Dr\. \/? ?Suite 966 Houston, TX|483 9 Tanbark Circuit Werrington Downs NSW 2747)/i
+describe SARE_EN_A_1XX_1	Phone number or address pulled from spam
+score    SARE_EN_A_1XX_1	2.0
+#counts  SARE_EN_A_1XX_1	1067s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_A_1XX_1	571s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_A_1XX_1	74s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_A_1XX_2	/1(?:5 Barbara Road, Glenvista, 2058 Johannesburg|531 Acreview blvd\. Los Angeles, CA|534 North Moorpark Road, \# 309 Thousand Oaks, CA|561 N\. Cypress Pointe Dr Suite 300 Vernon Hills|564A Fitzgerald Dr, \#325, Pinole, CA|63 Amsterdam Avenue, \#127|6323 W\. Abbott Rd\. Cairo, NE|6420 SE McGillivary \#103-1007 Vancouver, WA|648 Taylor R(?:oad|d)(?:\.|,) \#312 Port Orange|660 S\. Church St\., \#131, Watertown, WI|6795 Lark Avenue; Suite 210;|700 N Monroe Street Suite 11 ?,\# ?246 Tallahassee|73-3006 Zona Franca MeoBarreal Heredia|739 E\. Broadway Rd\. Suite \#295|802 North Carson Street, Suite 212-2829|805 N. Carson St. \#17 Carson City, NV|8324 Oxnard St\.\# 2, Tarzana, CA|835 Newport Blvd A109, Suite 222|86 4-1150 N\. Terminal Ave\. Nanaimo, British Columbia|9051 Goldenwest St. \#106 Suite 309|9 9th St. Brandon, MB Canada|940 Bonita Beach Rd\. Suite 144|947 S Wadsworth Blvd \#19, Lakewood, CO|9490 East Country Club Dr\. Aventura, FL| Rue de Stockholm 75008 PARIS FRANCE)/i
+describe SARE_EN_A_1XX_2	Phone number or address pulled from spam
+score    SARE_EN_A_1XX_2	2.0
+#counts  SARE_EN_A_1XX_2	302s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_A_1XX_2	10s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_A_1XX_2	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_A_2XX_1	/2(?:\WBridge Avenue, Bldg. 6, 3rd Fl|000 Clemson Rd. \#6, Columbia, SC|005 Merrick Road, Suite 223|01 Spring Garden (?:Street|st\.)( ste 400)? Philadelphia|02 SoundView Ave Suite 63 Stamford, CT|0423 State Road 7|05 E(?:ast|\.)? 85th St|10 S\. Federal Hwy Suite\# 102|1218 St. Andrews Blvd\., FL|160 81st Street, Brooklyn, NY|20 Hickory St\., Warren, PA|135A des Laurentides Blvd, Suite 10057 Laval QC|2 Victoria St. \* Hamilton HM 12 \* Bermuda|22 Sutter St\., 5th Fl\., San Francisco|22 RT 9W; PMB 258; Haverstraw, NY|23 Wall Street \#371, HUNTINGTON, NY|2521 Mountain Laurel Way Diamond Bar, CA|234 N.{1,5} Federal Highway Suite 481, Boca Raton, Fl(orida)?|3 Kulick Rd\., Fairfield NJ|31 Market Place, Suite 522, San Ramon|36 West Portal Ave\.,? \#492 San Francisco|3933 Vanowen, Dpt. 7a|42 West 36th Street, 12th Floor New York, NY|43 5th Ave\. \#127 New York, NY|44 5th Ave\. \#L-209|44 Madison Ave. (?:\#(?:456,?| 238,?)\W+)? New York, NY 10016|444 Broadway Suite \#336 New York, NY|45 8th Avenue PMB\#290 NY, NY|22 Purchase St\. \#238|47 SW 8th Street \#152 Miami, FL|472 Broadway Suite \#336|525 BROADWAY \#1103 EVERETT, WA|533 N\. Carson St\. ?, Suite 4976|56-2545 Hilliard Rome Rd Hilliard, OH|6 Fremantle Court Harbour Views, Gibraltar|6th 6th Ave N\. St\. Cloud, MN|633 Lincoln Blvd. \#504, Santa Monica, CA|68 Bush Street \#3437|7 North Wacker Drive, Chicago, IL|70 Bellevue Avenue Suite 358 Newport, RI|780 East Fowler Ave. \#141|774 N. Cobb PKWY - Kennesaw GA|8mts Al del Sir Supermarcato SM LM San Jose, Costa Rica|80 South 300 West, Suite 318 Salt Lake City, UT|83 George St. North \#86 Peterborough, ON|840 Broadway \#301 New York, NY|843 Calumet Avenue Valparaiso, IN|900 South Harbor Blvd Santa Ana, CA|901 W\. Coast HWY, Suite \#200|973 Harbor Blvd\.?, Suite 244|nd Floor, Southern Wing Uit Df, Ikoyi)/i
+describe SARE_EN_A_2XX_1	Phone number or address pulled from spam
+score    SARE_EN_A_2XX_1	2.0
+#counts  SARE_EN_A_2XX_1	297s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_A_2XX_1	208s/3h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_A_2XX_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_A_3XX_1	/3(?:-1 Park Plaza Suite 241 Old Brookville|01 Union Ave Altoona, PA|03 Park Avenue Suite \#1117, New York|05 West Broadway, Suite 2563 New York, NY|0631 San Antonio St|070 Sandpiper rd, Virginia Beach, VA|111 Route 38 \#11 Mt\. Laurel, NJ|152 Parkway Ave, Pigeon Forge TN|2 Chiasso 6830 CH - Switzerland|33 (East|E) 149th (Street|St) (3rd Floor|FL3)|334 Long Beach Road Suite \#170. Oceanside|42 East Jericho (?:Tpke|Turnpike) \#410, Mineola, NY|50 S. Center St.,? (ste 500 )?Reno, NV|368 veterans memorial highway deg commack, new york|70 W\. Pleasant View Avenue \#314|830 Forest Drive, Suite 207, Columbia, SC|980 Broadway Suite 103 \#131|982 Powell Rd \#105 Powell, OH|972 Barranca PKWY.{1,4}Suite 292)/i
+describe SARE_EN_A_3XX_1	Phone number or address pulled from spam
+score    SARE_EN_A_3XX_1	2.0
+#counts  SARE_EN_A_3XX_1	449s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_A_3XX_1	133s/8h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_A_3XX_1	32s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_A_4XX_1	/4(?:-1150 N. Terminal Ave. Nanaim[o0], British|0 Exchange Place Suite 420 New York|001 Kennett Pike, Suite 134, Greenville, DE|011 1\/2 Riverside Dr Burbank, CA| ?0 ?4 E\. 1st \# ?1 ?3 ?4 ?5  Long Beach, CA|2 Lake Ave \#211 Danbury,CT|30 Technology Parkway Norcross, GA|33 Plaza Real Suite 275, Boca Raton, FL|405 NW 73 Av\. MIAMI, FL 33166|50 7th Avenue Suite 1605|50 NE 20th Street, Suite 113|509 S\. 143rd Street, Suite 9 - Omaha|60 Park Ave South 9th Floor, New York, NY|600 Madison Avenue, Suite 500 Kansas City|611 Hardscrabble Road, Suite 109, Columbia, SC|770 N\.W\. Boca Raton Blvd\. Suite B|800 BASELINE RD, STE E104 \#280|833 Saratoga \#140 Corpus Christi, Tx|92-C Cedar Lane, \#302, Teaneck, NJ)/i
+describe SARE_EN_A_4XX_1	Phone number or address pulled from spam
+score    SARE_EN_A_4XX_1	2.0
+#counts  SARE_EN_A_4XX_1	106s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_A_4XX_1	634s/66h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_A_4XX_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_A_5XX_1	/5(?:0 Market St. 1-A, South Portland, ME|00 Lake Ave\. Ste 105|01 W Broadway Plaza A-321|08 981 9404|1048 Irvine Avenue \#464, Newport Beach|37 Clematis St West Palm Beach, FL|53 N\. Pacific Coast Hwy|550 Prairie Stone Parkway, Suite 400|64, 179 BS AMSTERDAM| SICOMAC Road Mailbox 161, NORTH HALEDON|900 Wilshire Boulevard, 26th Floor Los Angeles)/i
+describe SARE_EN_A_5XX_1	Phone number or address pulled from spam
+score    SARE_EN_A_5XX_1	2.0
+#counts  SARE_EN_A_5XX_1	54s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_A_5XX_1	93s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_A_5XX_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_A_6XX_1	/6(?:23 Eagle Rock Avenue \#137|278 N\. Federal Hwy Suite 187|5 High Ridge Rd \#518, Stamford, CT|50 S Edmonds Ln, Suite 232|54 Malenfant B(?:oulevard|lvd) Dieppe, ?NB|574 North State Road 7|610 Nathan Road|9270 St Romain au Mont D'or)/i
+describe SARE_EN_A_6XX_1	Phone number or address pulled from spam
+score    SARE_EN_A_6XX_1	2.0
+#counts  SARE_EN_A_6XX_1	125s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_A_6XX_1	81s/3h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_A_6XX_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_A_7XX_1	/7(?:00 North Pearl St\., Suite 2150|01 Gervais Street Suite 150-108 Columbia, SC|001 St\. Andrews Road, \# 203|300 NW 19th ST. \#303 Miami, Fl|41 Alexander Rd\. Princeton, NJ|469 W\. Lake Mead Blvd Suite 200|491 North Federal Highway, Suite C5251 Boca Raton, FL|512 Dr. Phillips Blvd. \# 50, Suite 168,Orlando, FL|596 W Jewell Ave Suite 103|65 Rue Beaubien Montreal|77 N\. Palm Canyon Drive, Suite 209)/i
+describe SARE_EN_A_7XX_1	Phone number or address pulled from spam
+score    SARE_EN_A_7XX_1	2.0
+#counts  SARE_EN_A_7XX_1	6s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_A_7XX_1	131s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_A_7XX_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_A_8XX_1	/8(?:00 Fifth Avenue \#101-107 Seattle, WA|001 Castor Ave. \# 372 Philadelphia, PA|01 Stillwater Lane Henderson NV|10 Dominican Dr\. Nashville, TN|15 N\. Homestead Blvd, \# ?230 Homestead,? FL|170 S. Eastern Avenue, Suite 4-506 Las Vegas, Nevada|32-2745, World Trade Center, Panama City, Panama|721 Santa Monica (?:Blvd|Boulevard) \#1(?:35|105) Los Angeles, CA|34 S\. Broadway 5th Fl(oor)? Los Angeles, CA|345 nw 66th st \#6748 miami fl|48 N\. Rainbow Blvd\. Las Vegas, NV)/i
+describe SARE_EN_A_8XX_1	Phone number or address pulled from spam
+score    SARE_EN_A_8XX_1	2.0
+#counts  SARE_EN_A_8XX_1	82s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_A_8XX_1	3s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_A_8XX_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_A_9XX_1	/9(?:00 W\. Delaware St\., Sioux Falls, SD|140 Bonita Beach Rd. Suite 144 Bonita Springs, FL|21 Phoenix Dr. Cheyenne, Wy|23 Saw Mill River Road \#271, Ardsley, NY|360 W\. Flamingo Rd\. \#110-331 Las Vegas|435 W Tropicana Ave\. \#102, Las Vegas|5 Broadhollow.{4,12}101 Melville NY|850 S. Maryland Pkwy|6 Linwood Plaza \#419, Fort Lee, NJ|768 - 170 Street, Edmonton, Alberta, Canada|9 E\. Pearl Street Apt \"b\" Greenwood|98C Old Country Road ((?:\#|number|no)213,)? PLAINVIEW, NY|903 Santa Monica Blvd Ste 433, Beverly Hills, CA)/i
+describe SARE_EN_A_9XX_1	Phone number or address pulled from spam
+score    SARE_EN_A_9XX_1	2.0
+#counts  SARE_EN_A_9XX_1	156s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_A_9XX_1	89s/1h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_A_9XX_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_A_BOX_1	/Box (?:\d\d\d\d - 101\d\d\d,? San Francisco, CA|(?:023342|1062|11356),? ?New York, ?NY|101413 Cape Coral, FL|10872 Burke, VA 22009|1223 Glendale, CA 91209|127  ?Ellicott City, MD|1271 Boca Raton, FL|1258 NY, NY 10018|13725 Santa Barbara, CA|1527--Glendale, CA|1543, Boca Raton, FL, 33429|158265 Nashville, TN|1674, Manchaca, TX|202885, Austin, TX|2122 St\. Cloud, MN 56302-2122|21316 Denver CO|2207 Austin, Tx\. 78768-2207|2255 Livingston, NJ 07039|242 Osprey, FL|247 Penfield, NY|2515 Deland Fl(orida)?|252, Owatonna, MN, 55060|2604 Olathe, KS 66063|2652, Cherry Hill, NJ|3ll, Rensselaer,  NY l2l44|351952 Westminster CO|356 (?:Boston, MA|(?:NYC|New York), ?NY 10009)|36 Costa Mesa CA 92627|3614 Doha -|3858, New Haven, CT|390520, Mountain View, CA 94039|4030, NH475|40937 Bedford, Nova Scotia|412 Brick., NJ|4562, Grand Central Station|(?:3982|4721) Provo, UT 84603|5030, Hoboken, NJ 07030|483, Midtown Station, New York|50945 Washington DC, 20001|5225, Harrisburg, PA|531281 Henderson, NV 89053|5225, Harrisburg, PA, 17110|561.{1,10}Denton TX, 51648|5812, Santa Monica, CA|631 Clearwater, FL|643--Glendale, CA|711685, San Diego, CA|7492 Delray Beach, FL|78361, San Francisco, CA 94107-8361|87,? (?:Bellmore|Webster), NY|8587, La Crescenta, CA|92, Millersburg, PA 17061|9965 Fort Lauderdale, FL)/i
+describe SARE_EN_A_BOX_1	Phone number or address pulled from spam
+score    SARE_EN_A_BOX_1	2.0
+#counts  SARE_EN_A_BOX_1	521s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_A_BOX_1	795s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_A_BOX_1	5s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_A_INT_1	/(?:Helgoländer Str. 47 D-25746 Heide Germany|00-061 Warsaw, Marszalkowska 140 street|Ladysmith, B.C. Canada, V9G1B3 Box \#1687)/i
+describe SARE_EN_A_INT_1	Phone number or address pulled from spam
+score    SARE_EN_A_INT_1	2.0
+#counts  SARE_EN_A_INT_1	38s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_A_INT_1	26s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_A_INT_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_X31_1	/31\W?(?:206\W+006\W+491|611\W?(?:104\W+096|235\W?092)|617\W+?672\W?952|.620\W?(?:382\W+?628|677\W?376)|620\W+382\W+628|621\W+?946\W+?718|623\W?913\W?561|624\W?562\W?354|627\W?(?:583391|518\W?108)|630\W+817\W+558|642\W?(?:904\W+931|976\W?547)|645\W+228\W+230|649\W?022\W?458)/
+describe SARE_EN_N_X31_1	Phone number or address pulled from spam
+score    SARE_EN_N_X31_1	2.0
+#counts  SARE_EN_N_X31_1	0s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_X31_1	7s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_X31_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_2XX_1	/2(?:02\W+266\W+3328|08\W+275\W+7710|11\W+4560\W+176|14\W+260\W+0713|28\W+927\W+4008|48\W+927\W+0446|51\W+650\W+1616|53\W+322\W+5281|70\W+514\W+1422)/
+describe SARE_EN_N_2XX_1	Phone number or address pulled from spam
+score    SARE_EN_N_2XX_1	2.0
+#counts  SARE_EN_N_2XX_1	7s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_2XX_1	0s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_2XX_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_203_1	/203\W+(?:234\W+0292|286\W+2187)/
+describe SARE_EN_N_203_1	Phone number or address pulled from spam
+score    SARE_EN_N_203_1	2.0
+#counts  SARE_EN_N_203_1	32s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_203_1	11s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_203_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_212_1	/212\W+(?:208\W+4551|258\W+2700|330\W+8202|479\W+0870|714\W+8290|774\W+6319|780\W+4614|995\W+1744)/ 
+describe SARE_EN_N_212_1	Phone number or address pulled from spam
+score    SARE_EN_N_212_1	2.0
+#counts  SARE_EN_N_212_1	0s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_212_1	3s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_212_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_4XX_1	/4(?:08\W+(?:482\W+2102|591\W+0204)|10\W+634\W+1642|13\W+(?:382\W+5660|677\W+9800)|16\W+817\W+5824|89\W+95\W+00)/
+describe SARE_EN_N_4XX_1	Phone number or address pulled from spam
+score    SARE_EN_N_4XX_1	2.0
+#counts  SARE_EN_N_4XX_1	0s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_4XX_1	4s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_4XX_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_5XX_1	/5(?:04\W+285\W+9338|05\W+4931|08\W+448\W+0097|10\W+892\W+4659|12\W+853\W+6415|13\W+589\W+3800|61\W+(?:395\W+5954|431\W+0437|988\W+2050)|62\W+365\W+8100)/
+describe SARE_EN_N_5XX_1	Phone number or address pulled from spam
+score    SARE_EN_N_5XX_1	2.0
+#counts  SARE_EN_N_5XX_1	2s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_5XX_1	7s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_5XX_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_7XX_1	/7(?:02\W+926\W+4078|04\W+358\W+9298|14\W+990\W+2491|17\W+(?:791\W+6210|828\W+9339)|18\W+815\W+0808|20\W+488\W+3748|20\W+559\W+5904|42\W+(?:81\W+17|98\W+69)|49\W+79\W+42|82---645[0-9])/
+describe SARE_EN_N_7XX_1	Phone number or address pulled from spam
+score    SARE_EN_N_7XX_1	2.0
+#counts  SARE_EN_N_7XX_1	5s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_7XX_1	2s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_7XX_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_800_1	/800\W+(?:BUY\W+FINA|KaBloom)/i
+describe SARE_EN_N_800_1	Phone number or address pulled from spam
+score    SARE_EN_N_800_1	2.0
+#counts  SARE_EN_N_800_1	11s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_800_1	44s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_800_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_800_2_1	/800\W+2(?:15\W+4878|42\W+2284|47\W+5691|63\W+2563|74\W+6774|79\W+1586|81\W+6980|94\W+8654|99\W+4825)/
+describe SARE_EN_N_800_2_1	Phone number or address pulled from spam
+score    SARE_EN_N_800_2_1	2.0
+#counts  SARE_EN_N_800_2_1	0s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_800_2_1	1s/1h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_800_2_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_800_3_1	/800\W+3(?:37\W+6406|34\W+9291|50\W+(?:4078|5058)|61\W+6439|62\W+7070|66\W+9699|74\W+7796|91\W+8762)/
+describe SARE_EN_N_800_3_1	Phone number or address pulled from spam
+score    SARE_EN_N_800_3_1	2.0
+#counts  SARE_EN_N_800_3_1	18s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_800_3_1	2s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_800_3_1	1s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_800_5_1	/800\W+5(?:10\W+2445|45\W+5426|47\W+6294|71\W+4941|76\W+9727|77\W+6717)/
+describe SARE_EN_N_800_5_1	Phone number or address pulled from spam
+score    SARE_EN_N_800_5_1	2.0
+#counts  SARE_EN_N_800_5_1	3s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_800_5_1	1s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_800_5_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_800_8_1	/800\W+818\W+5557/
+describe SARE_EN_N_800_8_1	Phone number or address pulled from spam
+score    SARE_EN_N_800_8_1	2.0
+#counts  SARE_EN_N_800_8_1	20s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_800_8_1	3s/2h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_800_8_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_800_9_1	/800\W+9(?:25\W+1834|60\W+8400)/
+describe SARE_EN_N_800_9_1	Phone number or address pulled from spam
+score    SARE_EN_N_800_9_1	2.0
+#counts  SARE_EN_N_800_9_1	2s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_800_9_1	1s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_800_9_1	2s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_866_1	/866\W+(?:203\W+3481|204\W+7139|273\W+1624|375\W+6279|421\W+9473|431\W+8897|443\W+2133|489\W+6051|505\W+8259|546\W+1212|576\W+(?:9727|7337)|613\W+2680|619\W+6807|620\W+6500|666\W+9785|774\W+9418|814\W+5352|816\W+5867|872\W+(?:6022|2666)|893\W+1188)/
+describe SARE_EN_N_866_1	Phone number or address pulled from spam
+score    SARE_EN_N_866_1	2.0
+#counts  SARE_EN_N_866_1	113s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_866_1	37s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_866_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_877_1	/877\W+(?:234\W+7800|242\W+2284|381\W+2359|538\W+5067|571\W+(?:1821|8411|8963)|572\W+3114|576\W+(?:0647|5037|5124|6257)|678\W+2536|701\W+3800|729\W+1712|798\W+8717|807\W+8315|815\W+0742|848\W+9972|850\W+8328|869\W+1214|874\W+9791|879\W+3908|883\W+7526|953\W+2733)/
+describe SARE_EN_N_877_1	Phone number or address pulled from spam
+score    SARE_EN_N_877_1	2.0
+#counts  SARE_EN_N_877_1	72s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_877_1	72s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_877_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_888_1	/888\W+(?:203\W+4225|229\W+0942|247\W+4491|305\W+7100|378\W+6577|451\W+7830|499\W+7064|577\W+8889|632\W+2345|676\W+4491)/
+describe SARE_EN_N_888_1	Phone number or address pulled from spam
+score    SARE_EN_N_888_1 	2.0
+#counts  SARE_EN_N_888_1	4s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_888_1	2s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_888_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_9XX_1	/9(?:00\W+(?:02\W+72|48\W+18)|05\W+(629\W+7775|751\W+0199)|08\W+781\W+0323|13\W+897\W+0247|25\W+886\W+8415|28\W+832\W+5344|52\W+525\W+7800|54\W+(?:782\W+8808|977\W+3825))/
+describe SARE_EN_N_9XX_1	Phone number or address pulled from spam
+score    SARE_EN_N_9XX_1	2.0
+#counts  SARE_EN_N_9XX_1	0s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_9XX_1	9s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_9XX_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+body     SARE_EN_N_X1X_1	/1(?:1\W+9768\W+7760|5\W+13\W+3507\W+4524)/
+describe SARE_EN_N_X1X_1	Phone number or address pulled from spam
+score    SARE_EN_N_X1X_1	2.0
+#counts  SARE_EN_N_X1X_1	0s/0h of 31360 corpus (27796s/3564h MY) 03/08/05
+#counts  SARE_EN_N_X1X_1	1s/0h of 239477 corpus (113131s/126346h RM) 03/07/05
+#counts  SARE_EN_N_X1X_1	0s/0h of 10994 corpus (6567s/4427h CT) 03/10/05
+
+## EOF

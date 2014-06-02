@@ -1,0 +1,17 @@
+#!/bin/sh
+# /usr/local/sbin/unlock-smartcard -- by Simon Josefsson.
+
+# a script to unlock the smartcard by providing the PIN. This is
+# typically invoked manually if the server has restarted for some
+# reason. Don’t worry, any ssh sessions invoked by cron until you have
+# managed to unlock the smartcard will fail with an authentication
+# error — it won’t hang waiting for a PIN to be entered.
+
+. /var/run/gpg-agent-info.env; export GPG_AGENT_INFO SSH_AUTH_SOCK SSH_AGENT_PID
+gpg-connect-agent 'scd killscd' /bye > /dev/null
+while ! gpg-connect-agent 'scd serialno' /bye | grep -q SERIALNO; do
+    sleep 1
+done
+PINENTRY_USER_DATA=interactive
+export PINENTRY_USER_DATA
+checkpin

@@ -1,0 +1,2 @@
+"| exec  /usr/lib/mailagent/filter >> /home/srivasta/var/log/mailerror 2>&1"
+/home/srivasta/savebox

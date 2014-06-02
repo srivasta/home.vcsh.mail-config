@@ -1,0 +1,156 @@
+# fetchmail control file sample
+defaults
+  password "Good_Password"
+
+
+# Use this for production
+skip pop.datasync.com with protocol POP3:
+  user srivasta there with password "Good_Password" is srivasta here;
+   and stripcr
+#  preconnect with
+# "ssh -x -f  -L 1235:pop.datasync.com:110 datasync.com sleep 20 </dev/null >/dev/null"
+
+poll mail.comcast.net with protocol POP3:
+  user srivasta there with password "Good_Password" is srivasta here;
+   and stripcr
+
+## openssl s_client -connect imap.gmail.com:993 -showcerts >| ~/certs/imap.gmail.com.993.ou
+## openssl x509 -fingerprint -md5 -noout -in imap.gmail.com.993.out | sed -e 's/.*=//'
+poll imap.gmail.com with protocol IMAP;
+ user manoj.srivastava.1962 there with password passwprd is srivasta here;
+   and stripcr with options keep; wants ssl
+# and
+#     sslfingerprint "35:D1:0A:42:F3:FE:61:4E:CD:0C:02:05:D1:CC:D9:52"
+
+
+skip pop.business.earthlink.net with protocol POP3:
+  user manoj.srivastava%stdc.com with password passaword  is srivasta here;
+   and stripcr and fetchall
+
+skip pop.dtccom.net  with protocol POP3:
+  user srivasta with password password  is srivasta here;
+   and stripcr and fetchall
+
+# Don't get the INBOX
+poll smtp.golden-gryphon.com with protocol IMAP;
+  user srivasta with password "password," is srivasta here; 
+	folder inbox.admin,inbox.bounced,inbox.list,inbox.lost,inbox.newsletters,inbox.spam;
+	stripcr and ssl with sslproto 'tls1' and fetchall 
+## openssl s_client -connect smtp.golden-gryphon.com:993 -showcerts > smtp.golden-gryphon.com.993.out
+## openssl x509 -fingerprint -md5 -noout -in smtp.golden-gryphon.com.993.out | sed -e 's/.*=//'
+#and
+#sslfingerprint "D3:AE:E1:41:5F:ED:67:07:53:D9:2A:17:58:AD:E3:8D"
+#  user srivasta with password "password" is srivasta here; 
+
+
+skip mail.systecture.com  with protocol IMAP;
+  user manoj@systecture.com with password 'pasword' is srivasta here; 
+    	stripcr and ssl with sslproto 'tls1' and fetchall
+
+#	folder inbox,inbox.bounced,inbox.list,inbox.lost,inbox.newsletters,inbox.spam
+
+skip mail.mchsi.com with protocol POP3:
+  user srivasta3 there with password "password," is srivasta here;
+  and stripcr
+
+skip calidity.green-gryphon.com protocol ETRN interval 600000:
+       smtphost green-gryphon.com;
+
+skip mail.veriomail.com with protocol IMAP:
+   user manojs there with password password  is srivasta here;
+   and stripcr
+
+skip postman.opengroup.org with protocol POP3:
+  user manoj there with password password is srivasta here; 
+     and stripcr
+
+skip smtp.datasync.com protocol ETRN interval 600000:
+   smtphost golden-gryphon;
+  
+skip jaguar1.usouthal.edu with protocol POP3:
+  user jshardo there with password password-s is srivasta here; 
+     and stripcr
+
+skip mail.mbl1.al.home.com with protocol POP3:
+  user srivasta3 there with password "password," is srivasta here;
+  and stripcr
+
+#
+# This file (or one of your own creation, rather) should be located 
+# in your home directory with the name .fetchmailrc.  Permissions on this
+# file may be no greater than -rw-------, or fetchmail will refuse to
+# use it.
+#
+# To see what effect your ~/.fetchmailrc file has, do 
+#
+#	fetchmail --version
+#
+# This will display the fetchmail version number and an explanation
+# in English of what the currently set options and defaults mean.
+#
+# Comments begin with a '#' and extend through the end of the line.
+# Blank lines between server entries are ignored.
+# Keywords and identifiers are case sensitive.
+# When there is a conflict between the command-line arguments and the
+# arguments in this file, the command-line arguments take precedence.
+#
+# Legal keywords are
+#   poll                      -- must be followed by a mailserver name
+#   skip                      -- must be followed by a mailserver name
+#   protocol (or proto)       -- must be followed by a protocol ID
+#   port                      -- must be followed by a TCP/IP port number
+#   authenticate (or auth)    -- must be followed by an authentication type
+#   timeout                   -- must be followed by a numeric timeout value
+#   envelope                  -- must be followed by an envelope header name
+#   aka                       -- must be followed by one or more server aliases
+#   localdomains              -- must be followed by one or more domain names
+#   interface                 -- must be followed by device/IP address/mask
+#   monitor                   -- must be followed by IP address
+#
+#   username (or user)        -- must be followed by a name
+#   is                        -- must be followed by one or more names
+#   remotefolder (or remote)  -- must be followed by a filename
+#   password (or pass)        -- must be followed by a password string
+#   smtphost (or smtp)        -- must be followed by a host name
+#   mda                       -- must be followed by an MDA command string
+#   preconnect (or pre)       -- must be followed by an initialization command
+#
+#   keep
+#   flush
+#   fetchall
+#   rewrite
+#   stripcr
+#   dns
+#   no keep
+#   no flush
+#   no fetchall
+#   no rewrite
+#   no stripcr
+#   no dns
+#   limit                     -- must be followed by numeric size limit
+#   fetchlimit                -- must be followed by numeric msg fetch limit
+#   batchlimit                -- must be followed by numeric SMTP batch limit
+#
+# Legal protocol identifiers are
+#   pop2 (or POP2)
+#   pop3 (or POP3)
+#   imap (or IMAP)
+#   apop (or APOP)
+#   rpop (or RPOP)
+#   kpop (or KPOP)
+#
+# Legal authentication types are
+#   login
+#   kerberos
+#
+# Legal global option statements are
+#
+#   set logfile =		-- must be followed by a string
+#
+# The noise keywords `and', `with', `has', `wants', and `options' are ignored
+# anywhere in an entry; they can be used to make it resemble English.  The
+# punctuation characters `,' `:' `;' are also ignored. 
+#
+# The run control file format is fully described (with more examples) on the
+# fetchmail manual page.
+

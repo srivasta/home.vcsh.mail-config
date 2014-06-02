@@ -1,0 +1,19 @@
+# Distributions (under vi, use ':set ts=4')
+
+# prog 				version 		path 						archiv	.Z patches
+																
+kit					2.0		/src/misc/archive/kit-2.28				y	y	n
+dist				3.0		/src/misc/archive/dist-3.58				y	y	n
+cshar				3.0		/src/misc/archive/cshar-3.14			y	y	n
+rcs					5.7		/src/gnu/archive/rcs-5.7				y	y	n
+cops				104		/src/misc/archive/cops_104				y	y	n
+flex				2.4		/src/gnu/archive/flex-2.4.5				y	y	n
+less				177		/src/gnu/archive/less-177				y	y	n
+perl				4.0		/src/misc/archive/perl-4.036			y	y	p
+patch				2.0		/src/gnu/archive/patch-2.1				y	y	n
+MOMspider			1.0		/www/pub/misc/MOMspider-1.00a			y	y	n
+MHonArc				1.1		/www/pub/misc/MHonArc1.1				y	y	n
+Watcher				1.0		/www/pub/misc/Watcher					y	y	n
+logtools			1.0		/www/pub/misc/logtools-1.06a			y	y	n
+gmake				4.7		/www/pub/misc/make-3.74					y	y	n
+guestbook			3.0		/src/packages/guestbook.3.0	y	n	y

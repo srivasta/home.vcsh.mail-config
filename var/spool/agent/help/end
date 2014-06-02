@@ -1,0 +1,21 @@
+NAME
+
+	end -- Ends a server request
+
+SYNOPSIS
+
+	end
+
+DESCRIPTION
+
+This pseudo command simply ends the processing of your request. The remaining
+of your message is discarded.
+
+Usually, a server request is also ended when a signature delimiter "--" is
+reached or at the physical end of the message.
+
+EXAMPLE
+
+	... some commands ...
+	end
+	... mail message continues (ignored) ...

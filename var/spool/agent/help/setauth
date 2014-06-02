@@ -1,0 +1,24 @@
+NAME
+
+	setauth -- Replaces current clearance file
+
+SYNOPSIS
+
+	setauth name [password]
+	... list of users ...
+	EOF
+
+DESCRIPTION
+
+This command sets the clearance file for the target power. No special power is
+required when the target power is already detained. Otherwise the 'system'
+power is needed.
+
+As usual, 'root' and 'security' clearances require the corresponding power to
+be held or the appropriate password.
+
+EXAMPLE
+
+	setauth root root-password
+	ram@acri.fr
+	EOF

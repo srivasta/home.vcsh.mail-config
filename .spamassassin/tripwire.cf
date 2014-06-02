@@ -1,0 +1,1342 @@
+#############################################################################
+# Freds rules for TRIPLES  A.K.A.  TRIPWIRE
+# Send an e-mail to tech2@i-is.com with FP's and example.
+# Located at: http://www.rulesemporium.com/rules/99_FVGT_Tripwire.cf
+# Thank you!
+# Version 1.00  Initial release
+# Version 1.01  Avoid FPs with Forwards, Embedded images and PGP.
+# Version 1.02  Avoid FPs with Yahoo Groups
+# Version 1.10  Tested against Corpus, removed FPs.
+# Version 1.11  Removed FPs from RM corpus
+# Version 1.13  Removed poor performing tests thanks to hit-freq from user.
+# Version 1.14  Reverted to V.1.11 + changes from Bart Schaefer for fewer FPs.
+# Version 1.15  Added PGP MESSAGE to meta rules.
+# Version 1.16  Removed Meta tests, adjusted a few poor tests.
+# Version 1.17  Added Descriptions + Fix typo's.
+# Version 1.18  More Typo's fixed.
+#
+# Tripwire has taken OBFU to the next level! It searches for 3 characters that
+# shouldn't be together. This is based on the English language.
+#############################################################################
+
+body  TW_AJ  /[-<!\s]\w{0,10}aj[fqtvxz]\w{0,10}[->\s]/
+body  TW_AQ  /[-<!\s]\w{0,10}aq[deghjkmnprtxyz]\w{0,10}[->\s]/
+body  TW_AV  /[-<!\s]\w{0,10}av[bfhjqwxz]\w{0,10}[->\s]/
+body  TW_AZ  /[-<!\s]\w{0,10}az[jwx]\w{0,10}[->\s]/
+body  TW_BD  /[-<!\s]\w{0,10}bd[bghjkmpqvxz]\w{0,10}[->\s]/
+body  TW_BF  /[-<!\s]\w{0,10}bf[bcfgjknpqvwxyz]\w{0,10}[->\s]/
+body  TW_BG  /[-<!\s]\w{0,10}bg[bdfghjkmnqstvxz]\w{0,10}[->\s]/
+body  TW_BH  /[-<!\s]\w{0,10}bh[bfhjkmnqvwxz]\w{0,10}[->\s]/
+body  TW_BJ  /[-<!\s]\w{0,10}bj[bcdfghjklmpqtvwxyz]\w{0,10}[->\s]/
+body  TW_BK  /[-<!\s]\w{0,10}bk[dfjkmqrvwxyz]\w{0,10}[->\s]/
+body  TW_BL  /[-<!\s]\w{0,10}bl[bgpqwxz]\w{0,10}[->\s]/
+body  TW_BM  /[-<!\s]\w{0,10}bm[bcdflmnqz]\w{0,10}[->\s]/
+body  TW_BN  /[-<!\s]\w{0,10}bn[bghjlmnpqtvwx]\w{0,10}[->\s]/
+body  TW_BP  /[-<!\s]\w{0,10}bp[bfgjknqvxz]\w{0,10}[->\s]/
+body  TW_BQ  /[-<!\s]\w{0,10}bq[bcdefghijklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_BT  /[-<!\s]\w{0,10}bt[dgjkpqtxz]\w{0,10}[->\s]/
+body  TW_BV  /[-<!\s]\w{0,10}bv[bfghjklnpqsuvwxz]\w{0,10}[->\s]/
+body  TW_BW  /[-<!\s]\w{0,10}bw[bdfjknpqsuwxyz]\w{0,10}[->\s]/
+body  TW_BX  /[-<!\s]\w{0,10}bx[abcdfghijklmnopqtuvwxyz]\w{0,10}[->\s]/
+body  TW_BZ  /[-<!\s]\w{0,10}bz[bcdfgjklmnpqrstvwxz]\w{0,10}[->\s]/
+body  TW_CB  /[-<!\s]\w{0,10}cb[bfghjkpqyz]\w{0,10}[->\s]/
+body  TW_CC  /[-<!\s]\w{0,10}cc[gjqxz]\w{0,10}[->\s]/
+body  TW_CD  /[-<!\s]\w{0,10}cd[hjkqvwxz]\w{0,10}[->\s]/
+body  TW_CF  /[-<!\s]\w{0,10}cf[gjknqvwyz]\w{0,10}[->\s]/
+body  TW_CG  /[-<!\s]\w{0,10}cg[bdfgjkpqvz]\w{0,10}[->\s]/
+body  TW_CL  /[-<!\s]\w{0,10}cl[fghjmpqxz]\w{0,10}[->\s]/
+body  TW_CM  /[-<!\s]\w{0,10}cm[bjkqv]\w{0,10}[->\s]/
+body  TW_CN  /[-<!\s]\w{0,10}cn[bghjkpqwxz]\w{0,10}[->\s]/
+body  TW_CP  /[-<!\s]\w{0,10}cp[gjkvxyz]\w{0,10}[->\s]/
+body  TW_CQ  /[-<!\s]\w{0,10}cq[abcdefghijklmnopqsvwxyz]\w{0,10}[->\s]/
+body  TW_CR  /[-<!\s]\w{0,10}cr[gjqx]\w{0,10}[->\s]/
+body  TW_CS  /[-<!\s]\w{0,10}cs[gjxz]\w{0,10}[->\s]/
+body  TW_CV  /[-<!\s]\w{0,10}cv[bdfghjklmnquvwxyz]\w{0,10}[->\s]/
+body  TW_CX  /[-<!\s]\w{0,10}cx[abdefghjklmnpqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_CY  /[-<!\s]\w{0,10}cy[jqy]\w{0,10}[->\s]/
+body  TW_CZ  /[-<!\s]\w{0,10}cz[bcdfghjlpqrtvwxz]\w{0,10}[->\s]/
+body  TW_DB  /[-<!\s]\w{0,10}db[bdgjnpqtxz]\w{0,10}[->\s]/
+body  TW_DC  /[-<!\s]\w{0,10}dc[gjqxz]\w{0,10}[->\s]/
+body  TW_DD  /[-<!\s]\w{0,10}dd[gqz]\w{0,10}[->\s]/
+body  TW_DF  /[-<!\s]\w{0,10}df[bghjknpqvxyz]\w{0,10}[->\s]/
+body  TW_DG  /[-<!\s]\w{0,10}dg[bfgjqvxz]\w{0,10}[->\s]/
+body  TW_DH  /[-<!\s]\w{0,10}dh[bfkmnqwxz]\w{0,10}[->\s]/
+body  TW_DJ  /[-<!\s]\w{0,10}dj[bdfghjklnpqrwxz]\w{0,10}[->\s]/
+body  TW_DK  /[-<!\s]\w{0,10}dk[cdhjkpqrtuvwxz]\w{0,10}[->\s]/
+body  TW_DL  /[-<!\s]\w{0,10}dl[bfhjknqwxz]\w{0,10}[->\s]/
+body  TW_DM  /[-<!\s]\w{0,10}dm[bfjnqw]\w{0,10}[->\s]/
+body  TW_DN  /[-<!\s]\w{0,10}dn[fgjkmnpqvwz]\w{0,10}[->\s]/
+body  TW_DP  /[-<!\s]\w{0,10}dp[bgjkqvxz]\w{0,10}[->\s]/
+body  TW_DQ  /[-<!\s]\w{0,10}dq[abcefghijkmnopqtvwxyz]\w{0,10}[->\s]/
+body  TW_DR  /[-<!\s]\w{0,10}dr[bfkqtvx]\w{0,10}[->\s]/
+body  TW_DT  /[-<!\s]\w{0,10}dt[qtxz]\w{0,10}[->\s]/
+body  TW_DV  /[-<!\s]\w{0,10}dv[bfghjknqruvwyz]\w{0,10}[->\s]/
+body  TW_DW  /[-<!\s]\w{0,10}dw[cdfjkmnpqsvwxz]\w{0,10}[->\s]/
+body  TW_DX  /[-<!\s]\w{0,10}dx[abcdeghjklmnopqrsuvwxyz]\w{0,10}[->\s]/
+body  TW_DY  /[-<!\s]\w{0,10}dy[jyz]\w{0,10}[->\s]/
+body  TW_DZ  /[-<!\s]\w{0,10}dz[bcdfgjlnpqrstvxz]\w{0,10}[->\s]/
+body  TW_EB  /[-<!\s]\w{0,10}eb[jqx]\w{0,10}[->\s]/
+body  TW_EG  /[-<!\s]\w{0,10}eg[cjvxz]\w{0,10}[->\s]/
+body  TW_EH  /[-<!\s]\w{0,10}eh[hxz]\w{0,10}[->\s]/
+body  TW_EJ  /[-<!\s]\w{0,10}ej[fghjpqtwxyz]\w{0,10}[->\s]/
+body  TW_EK  /[-<!\s]\w{0,10}ek[jqxz]\w{0,10}[->\s]/
+body  TW_EP  /[-<!\s]\w{0,10}ep[jvx]\w{0,10}[->\s]/
+body  TW_EQ  /[-<!\s]\w{0,10}eq[bcghijkmotvxyz]\w{0,10}[->\s]/
+body  TW_EV  /[-<!\s]\w{0,10}ev[bfpq]\w{0,10}[->\s]/
+body  TW_FC  /[-<!\s]\w{0,10}fc[bdjkmnqvxz]\w{0,10}[->\s]/
+body  TW_FD  /[-<!\s]\w{0,10}fd[bgjklqsvyz]\w{0,10}[->\s]/
+body  TW_FG  /[-<!\s]\w{0,10}fg[fgjkmpqtvwxyz]\w{0,10}[->\s]/
+body  TW_FH  /[-<!\s]\w{0,10}fh[bcfghjkpqvwxz]\w{0,10}[->\s]/
+body  TW_FJ  /[-<!\s]\w{0,10}fj[bcdfghijklmnpqrstvwxyz]\w{0,10}[->\s]/
+body  TW_FK  /[-<!\s]\w{0,10}fk[bcdfghjkmpqrstvwxz]\w{0,10}[->\s]/
+body  TW_FL  /[-<!\s]\w{0,10}fl[fjkpqxz]\w{0,10}[->\s]/
+body  TW_FM  /[-<!\s]\w{0,10}fm[dfhjlmvwxyz]\w{0,10}[->\s]/
+body  TW_FN  /[-<!\s]\w{0,10}fn[bdfghjklnqrstvwxz]\w{0,10}[->\s]/
+body  TW_FP  /[-<!\s]\w{0,10}fp[bfjknqtvwxz]\w{0,10}[->\s]/
+body  TW_FQ  /[-<!\s]\w{0,10}fq[abcefghijklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_FR  /[-<!\s]\w{0,10}fr[nqxz]\w{0,10}[->\s]/
+body  TW_FS  /[-<!\s]\w{0,10}fs[gjxz]\w{0,10}[->\s]/
+body  TW_FT  /[-<!\s]\w{0,10}ft[jqx]\w{0,10}[->\s]/
+body  TW_FV  /[-<!\s]\w{0,10}fv[bcdfhjklmnpqtuvwxyz]\w{0,10}[->\s]/
+body  TW_FW  /[-<!\s]\w{0,10}fw[bcfgjklmpqstuvwxyz]\w{0,10}[->\s]/
+body  TW_FX  /[-<!\s]\w{0,10}fx[bcdfghjklmnpqrstvwxyz]\w{0,10}[->\s]/
+body  TW_FY  /[-<!\s]\w{0,10}fy[ghjpquvxy]\w{0,10}[->\s]/
+body  TW_FZ  /[-<!\s]\w{0,10}fz[abcdfghjklmnpqrtuvwxyz]\w{0,10}[->\s]/
+body  TW_GB  /[-<!\s]\w{0,10}gb[bcdknpqvwx]\w{0,10}[->\s]/
+body  TW_GC  /[-<!\s]\w{0,10}gc[gjknpqwxz]\w{0,10}[->\s]/
+body  TW_GD  /[-<!\s]\w{0,10}gd[cdfghjklmqtvwxz]\w{0,10}[->\s]/
+body  TW_GF  /[-<!\s]\w{0,10}gf[bfghjkmnpqsvwxyz]\w{0,10}[->\s]/
+body  TW_GG  /[-<!\s]\w{0,10}gg[jkqvxz]\w{0,10}[->\s]/
+body  TW_GJ  /[-<!\s]\w{0,10}gj[bcdfghjklmnpqrstvwxyz]\w{0,10}[->\s]/
+body  TW_GK  /[-<!\s]\w{0,10}gk[bcdfgjkmpqtvwxyz]\w{0,10}[->\s]/
+body  TW_GL  /[-<!\s]\w{0,10}gl[fgjklnpqwxz]\w{0,10}[->\s]/
+body  TW_GM  /[-<!\s]\w{0,10}gm[dfjkmnqvxz]\w{0,10}[->\s]/
+body  TW_GN  /[-<!\s]\w{0,10}gn[jkqvxz]\w{0,10}[->\s]/
+body  TW_GP  /[-<!\s]\w{0,10}gp[bjknpqtwxyz]\w{0,10}[->\s]/
+body  TW_GQ  /[-<!\s]\w{0,10}gq[abcdefghjklmnopqrsvwxyz]\w{0,10}[->\s]/
+body  TW_GR  /[-<!\s]\w{0,10}gr[jkqt]\w{0,10}[->\s]/
+body  TW_GT  /[-<!\s]\w{0,10}gt[fjknqvx]\w{0,10}[->\s]/
+body  TW_GU  /[-<!\s]\w{0,10}gu[qwx]\w{0,10}[->\s]/
+body  TW_GV  /[-<!\s]\w{0,10}gv[bcdfghjklmpqstvwxyz]\w{0,10}[->\s]/
+body  TW_GW  /[-<!\s]\w{0,10}gw[bcdfgjknpqtvwxz]\w{0,10}[->\s]/
+body  TW_GX  /[-<!\s]\w{0,10}gx[abcdefghjklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_GY  /[-<!\s]\w{0,10}gy[jkqxy]\w{0,10}[->\s]/
+body  TW_GZ  /[-<!\s]\w{0,10}gz[bcdfgjklmnopqrstvxyz]\w{0,10}[->\s]/
+body  TW_HB  /[-<!\s]\w{0,10}hb[bcdfghjkqstvwxz]\w{0,10}[->\s]/
+body  TW_HC  /[-<!\s]\w{0,10}hc[cjknqvwxz]\w{0,10}[->\s]/
+body  TW_HD  /[-<!\s]\w{0,10}hd[fgjnpvz]\w{0,10}[->\s]/
+body  TW_HF  /[-<!\s]\w{0,10}hf[bfghjkmnpqtvwxyz]\w{0,10}[->\s]/
+body  TW_HG  /[-<!\s]\w{0,10}hg[bcdfgjknpqsxyz]\w{0,10}[->\s]/
+body  TW_HH  /[-<!\s]\w{0,10}hh[bcgklmpqrtvwxz]\w{0,10}[->\s]/
+body  TW_HJ  /[-<!\s]\w{0,10}hj[bcdfgjkmpqtvwxyz]\w{0,10}[->\s]/
+body  TW_HK  /[-<!\s]\w{0,10}hk[bcdgkmpqrstvwxz]\w{0,10}[->\s]/
+body  TW_HL  /[-<!\s]\w{0,10}hl[jxz]\w{0,10}[->\s]/
+body  TW_HM  /[-<!\s]\w{0,10}hm[dhjqrvwxz]\w{0,10}[->\s]/
+body  TW_HN  /[-<!\s]\w{0,10}hn[jrxz]\w{0,10}[->\s]/
+body  TW_HP  /[-<!\s]\w{0,10}hp[bjkmqvwxyz]\w{0,10}[->\s]/
+body  TW_HQ  /[-<!\s]\w{0,10}hq[abcdefghijklmnopqrstvwyz]\w{0,10}[->\s]/
+body  TW_HR  /[-<!\s]\w{0,10}hr[cjqx]\w{0,10}[->\s]/
+body  TW_HS  /[-<!\s]\w{0,10}hs[jqxz]\w{0,10}[->\s]/
+body  TW_HV  /[-<!\s]\w{0,10}hv[bcdfgjklmnpqstuvwxz]\w{0,10}[->\s]/
+body  TW_HW  /[-<!\s]\w{0,10}hw[bcfgjklnpqsvwxz]\w{0,10}[->\s]/
+body  TW_HX  /[-<!\s]\w{0,10}hx[a-z]\w{0,10}[->\s]/
+body  TW_HZ  /[-<!\s]\w{0,10}hz[bcdfghjklmnpqrstuvwxz]\w{0,10}[->\s]/
+body  TW_IB  /[-<!\s]\w{0,10}ib[jqx]\w{0,10}[->\s]/
+body  TW_IF  /[-<!\s]\w{0,10}if[jqvwz]\w{0,10}[->\s]/
+body  TW_IH  /[-<!\s]\w{0,10}ih[bgjqx]\w{0,10}[->\s]/
+body  TW_II  /[-<!\s]\w{0,10}ii[bjqxy]\w{0,10}[->\s]/
+body  TW_IJ  /[-<!\s]\w{0,10}ij[cfgqxy]\w{0,10}[->\s]/
+body  TW_IK  /[-<!\s]\w{0,10}ik[bcfqx]\w{0,10}[->\s]/
+body  TW_IQ  /[-<!\s]\w{0,10}iq[cdefgjkmnopqtvxyz]\w{0,10}[->\s]/
+body  TW_IU  /[-<!\s]\w{0,10}iu[hiwxy]\w{0,10}[->\s]/
+body  TW_IV  /[-<!\s]\w{0,10}iv[cfgmqx]\w{0,10}[->\s]/
+body  TW_IW  /[-<!\s]\w{0,10}iw[dgjkmnpqtvxz]\w{0,10}[->\s]/
+body  TW_IX  /[-<!\s]\w{0,10}ix[jkqrxz]\w{0,10}[->\s]/
+body  TW_IY  /[-<!\s]\w{0,10}iy[bcdfghjklpqtvwx]\w{0,10}[->\s]/
+body  TW_JB  /[-<!\s]\w{0,10}jb[bcdghjklmnopqrtuvwxyz]\w{0,10}[->\s]/
+body  TW_JC  /[-<!\s]\w{0,10}jc[cfgjkmnopqvwxy]\w{0,10}[->\s]/
+body  TW_JD  /[-<!\s]\w{0,10}jd[cdfghjlmnpqrtvwx]\w{0,10}[->\s]/
+body  TW_JF  /[-<!\s]\w{0,10}jf[abcdfghjlnopqrtuvwxyz]\w{0,10}[->\s]/
+body  TW_JG  /[-<!\s]\w{0,10}jg[bcdfghijklmnopqstuvwxyz]\w{0,10}[->\s]/
+body  TW_JH  /[-<!\s]\w{0,10}jh[bcdfghjklmnpqrxyz]\w{0,10}[->\s]/
+body  TW_JJ  /[-<!\s]\w{0,10}jj[bcdfghjklmnopqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_JK  /[-<!\s]\w{0,10}jk[bcdfghjknqrtwxyz]\w{0,10}[->\s]/
+body  TW_JL  /[-<!\s]\w{0,10}jl[bcfghjmnpqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_JM  /[-<!\s]\w{0,10}jm[bcdfghiklmnqrtuvwyz]\w{0,10}[->\s]/
+body  TW_JN  /[-<!\s]\w{0,10}jn[bcfjlmnpqsuvwxz]\w{0,10}[->\s]/
+body  TW_JP  /[-<!\s]\w{0,10}jp[bcdfhijkmpqstvwxyz]\w{0,10}[->\s]/
+body  TW_JQ  /[-<!\s]\w{0,10}jq[a-z]\w{0,10}[->\s]/
+body  TW_JR  /[-<!\s]\w{0,10}jr[bdfhjklpqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_JS  /[-<!\s]\w{0,10}js[bfgjmoqvxyz]\w{0,10}[->\s]/
+body  TW_JT  /[-<!\s]\w{0,10}jt[bcdfghjlnpqrtvwxz]\w{0,10}[->\s]/
+body  TW_JV  /[-<!\s]\w{0,10}jv[abcdfghijklpqrstvwxyz]\w{0,10}[->\s]/
+body  TW_JW  /[-<!\s]\w{0,10}jw[bcdefghijklmpqrstuwxyz]\w{0,10}[->\s]/
+body  TW_JX  /[-<!\s]\w{0,10}jx[a-z]\w{0,10}[->\s]/
+body  TW_JY  /[-<!\s]\w{0,10}jy[bcdefghjkpqtuvwxyz]\w{0,10}[->\s]/
+body  TW_JZ  /[-<!\s]\w{0,10}jz[bcdfghijklmnopqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_KB  /[-<!\s]\w{0,10}kb[bcdfghjkmqvwxz]\w{0,10}[->\s]/
+body  TW_KC  /[-<!\s]\w{0,10}kc[cdfgjknpqtwxz]\w{0,10}[->\s]/
+body  TW_KD  /[-<!\s]\w{0,10}kd[bfghjklmnpqsvwxyz]\w{0,10}[->\s]/
+body  TW_KF  /[-<!\s]\w{0,10}kf[bdfghjkmnpqsvwxyz]\w{0,10}[->\s]/
+body  TW_KG  /[-<!\s]\w{0,10}kg[cghjkmnqtvwxyz]\w{0,10}[->\s]/
+body  TW_KH  /[-<!\s]\w{0,10}kh[cfghjkqx]\w{0,10}[->\s]/
+body  TW_KJ  /[-<!\s]\w{0,10}kj[bcdfghjkmnpqrstwxyz]\w{0,10}[->\s]/
+body  TW_KK  /[-<!\s]\w{0,10}kk[bcdfgjmpqswxz]\w{0,10}[->\s]/
+body  TW_KL  /[-<!\s]\w{0,10}kl[cfghlmqstwxz]\w{0,10}[->\s]/
+body  TW_KM  /[-<!\s]\w{0,10}km[bdfghjknqrstwxyz]\w{0,10}[->\s]/
+body  TW_KN  /[-<!\s]\w{0,10}kn[bcdfhjklmnqsvwxz]\w{0,10}[->\s]/
+body  TW_KP  /[-<!\s]\w{0,10}kp[bdfgjkmpqvxyz]\w{0,10}[->\s]/
+body  TW_KQ  /[-<!\s]\w{0,10}kq[abdefghijklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_KR  /[-<!\s]\w{0,10}kr[bcdfghjmqrvwx]\w{0,10}[->\s]/
+body  TW_KS  /[-<!\s]\w{0,10}ks[jqx]\w{0,10}[->\s]/
+body  TW_KT  /[-<!\s]\w{0,10}kt[cdfjklqvx]\w{0,10}[->\s]/
+body  TW_KU  /[-<!\s]\w{0,10}ku[qux]\w{0,10}[->\s]/
+body  TW_KV  /[-<!\s]\w{0,10}kv[bcfghjklnpqrstvxyz]\w{0,10}[->\s]/
+body  TW_KW  /[-<!\s]\w{0,10}kw[bcdfgjklmnpqsvwxz]\w{0,10}[->\s]/
+body  TW_KX  /[-<!\s]\w{0,10}kx[abcdefghjklmnopqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_KY  /[-<!\s]\w{0,10}ky[vxy]\w{0,10}[->\s]/
+body  TW_KZ  /[-<!\s]\w{0,10}kz[bcdefghjklmnpqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_LB  /[-<!\s]\w{0,10}lb[cdgkqtvxz]\w{0,10}[->\s]/
+body  TW_LC  /[-<!\s]\w{0,10}lc[bqx]\w{0,10}[->\s]/
+body  TW_LG  /[-<!\s]\w{0,10}lg[cdfgpqvxz]\w{0,10}[->\s]/
+body  TW_LH  /[-<!\s]\w{0,10}lh[cfghkmnpqrtvx]\w{0,10}[->\s]/
+body  TW_LK  /[-<!\s]\w{0,10}lk[qxz]\w{0,10}[->\s]/
+body  TW_LN  /[-<!\s]\w{0,10}ln[cfjqxz]\w{0,10}[->\s]/
+body  TW_LP  /[-<!\s]\w{0,10}lp[jkqxz]\w{0,10}[->\s]/
+body  TW_LQ  /[-<!\s]\w{0,10}lq[bcdefhijklmopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_LR  /[-<!\s]\w{0,10}lr[dfgjklmpqrtvwx]\w{0,10}[->\s]/
+body  TW_LV  /[-<!\s]\w{0,10}lv[bcfhjklmpwxz]\w{0,10}[->\s]/
+body  TW_LW  /[-<!\s]\w{0,10}lw[bcdfgjknqxz]\w{0,10}[->\s]/
+body  TW_LX  /[-<!\s]\w{0,10}lx[bcdfghjklmnpqrtuwz]\w{0,10}[->\s]/
+body  TW_LZ  /[-<!\s]\w{0,10}lz[cdjptvxz]\w{0,10}[->\s]/
+body  TW_MB  /[-<!\s]\w{0,10}mb[qxz]\w{0,10}[->\s]/
+body  TW_MD  /[-<!\s]\w{0,10}md[hjkpvz]\w{0,10}[->\s]/
+body  TW_MF  /[-<!\s]\w{0,10}mf[fkpqvwxz]\w{0,10}[->\s]/
+body  TW_MG  /[-<!\s]\w{0,10}mg[cfgjnpqsvwxz]\w{0,10}[->\s]/
+body  TW_MH  /[-<!\s]\w{0,10}mh[bchjkmnqvx]\w{0,10}[->\s]/
+body  TW_MJ  /[-<!\s]\w{0,10}mj[bcdfghjknpqrstvwxyz]\w{0,10}[->\s]/
+body  TW_MK  /[-<!\s]\w{0,10}mk[bcfgklmnpqrvwxz]\w{0,10}[->\s]/
+body  TW_ML  /[-<!\s]\w{0,10}ml[jkqz]\w{0,10}[->\s]/
+body  TW_MM  /[-<!\s]\w{0,10}mm[qvz]\w{0,10}[->\s]/
+body  TW_MN  /[-<!\s]\w{0,10}mn[fhjkqxz]\w{0,10}[->\s]/
+body  TW_MQ  /[-<!\s]\w{0,10}mq[bdefhjklmnopqtwxyz]\w{0,10}[->\s]/
+body  TW_MR  /[-<!\s]\w{0,10}mr[jklqvwz]\w{0,10}[->\s]/
+body  TW_MT  /[-<!\s]\w{0,10}mt[jkq]\w{0,10}[->\s]/
+body  TW_MV  /[-<!\s]\w{0,10}mv[bcfghjklmnqtvwxz]\w{0,10}[->\s]/
+body  TW_MW  /[-<!\s]\w{0,10}mw[bcdfgjklnpqsuvwxyz]\w{0,10}[->\s]/
+body  TW_MX  /[-<!\s]\w{0,10}mx[abcefghijklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_MZ  /[-<!\s]\w{0,10}mz[bcdfghjkmnpqrstvwxz]\w{0,10}[->\s]/
+body  TW_NB  /[-<!\s]\w{0,10}nb[hkmnqxz]\w{0,10}[->\s]/
+body  TW_NF  /[-<!\s]\w{0,10}nf[bghqvxz]\w{0,10}[->\s]/
+body  TW_NH  /[-<!\s]\w{0,10}nh[fhjkmqtvxz]\w{0,10}[->\s]/
+body  TW_NK  /[-<!\s]\w{0,10}nk[qxz]\w{0,10}[->\s]/
+body  TW_NL  /[-<!\s]\w{0,10}nl[bghjknqvwxz]\w{0,10}[->\s]/
+body  TW_NM  /[-<!\s]\w{0,10}nm[dfghjkqtvwxz]\w{0,10}[->\s]/
+body  TW_NP  /[-<!\s]\w{0,10}np[bdjmqwxz]\w{0,10}[->\s]/
+body  TW_NQ  /[-<!\s]\w{0,10}nq[abcdfghjklmnopqrtvwxyz]\w{0,10}[->\s]/
+body  TW_NR  /[-<!\s]\w{0,10}nr[bfjkqstvx]\w{0,10}[->\s]/
+body  TW_NV  /[-<!\s]\w{0,10}nv[bcdfgjkmnqswxz]\w{0,10}[->\s]/
+body  TW_NW  /[-<!\s]\w{0,10}nw[dgjpqvxz]\w{0,10}[->\s]/
+body  TW_NX  /[-<!\s]\w{0,10}nx[abfghjknopuyz]\w{0,10}[->\s]/
+body  TW_NZ  /[-<!\s]\w{0,10}nz[cfqrxz]\w{0,10}[->\s]/
+body  TW_OC  /[-<!\s]\w{0,10}oc[fjvw]\w{0,10}[->\s]/
+body  TW_OG  /[-<!\s]\w{0,10}og[qxz]\w{0,10}[->\s]/
+body  TW_OH  /[-<!\s]\w{0,10}oh[fqxz]\w{0,10}[->\s]/
+body  TW_OJ  /[-<!\s]\w{0,10}oj[bfhjmqrswxyz]\w{0,10}[->\s]/
+body  TW_OK  /[-<!\s]\w{0,10}ok[qxz]\w{0,10}[->\s]/
+body  TW_OQ  /[-<!\s]\w{0,10}oq[bcdefghijklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_OV  /[-<!\s]\w{0,10}ov[bfhjqwx]\w{0,10}[->\s]/
+body  TW_OY  /[-<!\s]\w{0,10}oy[qxy]\w{0,10}[->\s]/
+body  TW_OZ  /[-<!\s]\w{0,10}oz[fjpqtvx]\w{0,10}[->\s]/
+body  TW_PB  /[-<!\s]\w{0,10}pb[fghjknpqvwz]\w{0,10}[->\s]/
+body  TW_PC  /[-<!\s]\w{0,10}pc[gjq]\w{0,10}[->\s]/
+body  TW_PD  /[-<!\s]\w{0,10}pd[bgjkvwxz]\w{0,10}[->\s]/
+body  TW_PF  /[-<!\s]\w{0,10}pf[hjkmqtvwyz]\w{0,10}[->\s]/
+body  TW_PG  /[-<!\s]\w{0,10}pg[bdfghjkmqsvwxyz]\w{0,10}[->\s]/
+body  TW_PH  /[-<!\s]\w{0,10}ph[kqvx]\w{0,10}[->\s]/
+body  TW_PK  /[-<!\s]\w{0,10}pk[bcdfhjklmpqrvx]\w{0,10}[->\s]/
+body  TW_PL  /[-<!\s]\w{0,10}pl[ghkqvwx]\w{0,10}[->\s]/
+body  TW_PM  /[-<!\s]\w{0,10}pm[bfhjlmnqvwyz]\w{0,10}[->\s]/
+body  TW_PN  /[-<!\s]\w{0,10}pn[fjklmnqrtvwz]\w{0,10}[->\s]/
+body  TW_PP  /[-<!\s]\w{0,10}pp[gqwxz]\w{0,10}[->\s]/
+body  TW_PQ  /[-<!\s]\w{0,10}pq[abcdefghijklmnopqstvwxyz]\w{0,10}[->\s]/
+body  TW_PR  /[-<!\s]\w{0,10}pr[hjkqrwx]\w{0,10}[->\s]/
+body  TW_PT  /[-<!\s]\w{0,10}pt[jqxz]\w{0,10}[->\s]/
+body  TW_PV  /[-<!\s]\w{0,10}pv[bdfghjklquvwxyz]\w{0,10}[->\s]/
+body  TW_PW  /[-<!\s]\w{0,10}pw[fjkmnpqsuvwxz]\w{0,10}[->\s]/
+body  TW_PX  /[-<!\s]\w{0,10}px[a-z]\w{0,10}[->\s]/
+body  TW_PZ  /[-<!\s]\w{0,10}pz[bdefghjklmnpqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_QA  /[-<!\s]\w{0,10}qa[ceghkopqxy]\w{0,10}[->\s]/
+body  TW_QB  /[-<!\s]\w{0,10}qb[bcdfghjklmnqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_QC  /[-<!\s]\w{0,10}qc[abcdfghijklmnopqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_QD  /[-<!\s]\w{0,10}qd[defghijklmpqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_QE  /[-<!\s]\w{0,10}qe[abceghjkmopquwxyz]\w{0,10}[->\s]/
+body  TW_QF  /[-<!\s]\w{0,10}qf[abdfghijklmnopqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_QG  /[-<!\s]\w{0,10}qg[abcdefghijklmnopqrtuvwxz]\w{0,10}[->\s]/
+body  TW_QH  /[-<!\s]\w{0,10}qh[a-z]\w{0,10}[->\s]/
+body  TW_QI  /[-<!\s]\w{0,10}qi[efgijkmpwx]\w{0,10}[->\s]/
+body  TW_QJ  /[-<!\s]\w{0,10}qj[a-z]\w{0,10}[->\s]/
+body  TW_QK  /[-<!\s]\w{0,10}qk[abcdfghijklmnopqrsuvwxyz]\w{0,10}[->\s]/
+body  TW_QL  /[-<!\s]\w{0,10}ql[abcefghjklmnopqrtuvwxyz]\w{0,10}[->\s]/
+body  TW_QM  /[-<!\s]\w{0,10}qm[bdehijklmnoqrtuvxyz]\w{0,10}[->\s]/
+body  TW_QN  /[-<!\s]\w{0,10}qn[bcdefghijklmnoqrtuvwxyz]\w{0,10}[->\s]/
+body  TW_QO  /[-<!\s]\w{0,10}qo[abcdefgijkloqstuvwxyz]\w{0,10}[->\s]/
+body  TW_QP  /[-<!\s]\w{0,10}qp[abcdefghijkmnopqrsuvwxyz]\w{0,10}[->\s]/
+body  TW_QQ  /[-<!\s]\w{0,10}qq[bcdefghijklmnopstwxyz]\w{0,10}[->\s]/
+body  TW_QR  /[-<!\s]\w{0,10}qr[bdefghijklmnoqruvwxyz]\w{0,10}[->\s]/
+body  TW_QS  /[-<!\s]\w{0,10}qs[bcdefgijknqruvwxz]\w{0,10}[->\s]/
+body  TW_QT  /[-<!\s]\w{0,10}qt[befghjklmnpqtuvwxz]\w{0,10}[->\s]/
+body  TW_QU  /[-<!\s]\w{0,10}qu[cfgjkpwz]\w{0,10}[->\s]/
+body  TW_QV  /[-<!\s]\w{0,10}qv[abdefghjklmnopqrtuvwxyz]\w{0,10}[->\s]/
+body  TW_QW  /[-<!\s]\w{0,10}qw[bcdfghijkmnopqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_QX  /[-<!\s]\w{0,10}qx[a-z]\w{0,10}[->\s]/
+body  TW_QY  /[-<!\s]\w{0,10}qy[abcdefghjklmnopqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_QZ  /[-<!\s]\w{0,10}qz[a-z]\w{0,10}[->\s]/
+body  TW_RB  /[-<!\s]\w{0,10}rb[fxz]\w{0,10}[->\s]/
+body  TW_RG  /[-<!\s]\w{0,10}rg[jvxz]\w{0,10}[->\s]/
+body  TW_RH  /[-<!\s]\w{0,10}rh[hjkqrxz]\w{0,10}[->\s]/
+body  TW_RJ  /[-<!\s]\w{0,10}rj[bdfghjklmpqrstvwxz]\w{0,10}[->\s]/
+body  TW_RK  /[-<!\s]\w{0,10}rk[qxz]\w{0,10}[->\s]/
+body  TW_RL  /[-<!\s]\w{0,10}rl[jnq]\w{0,10}[->\s]/
+body  TW_RP  /[-<!\s]\w{0,10}rp[jxz]\w{0,10}[->\s]/
+body  TW_RQ  /[-<!\s]\w{0,10}rq[bcdefghijklmnopqrtvwxy]\w{0,10}[->\s]/
+body  TW_RR  /[-<!\s]\w{0,10}rr[jpqxz]\w{0,10}[->\s]/
+body  TW_RV  /[-<!\s]\w{0,10}rv[bcdfghjmpqrvwxz]\w{0,10}[->\s]/
+body  TW_RW  /[-<!\s]\w{0,10}rw[bfgjklqsvxz]\w{0,10}[->\s]/
+body  TW_RX  /[-<!\s]\w{0,10}rx[bcdfgjkmnopqrtuvwxz]\w{0,10}[->\s]/
+body  TW_RZ  /[-<!\s]\w{0,10}rz[djpqvxz]\w{0,10}[->\s]/
+body  TW_SB  /[-<!\s]\w{0,10}sb[kpqtvxz]\w{0,10}[->\s]/
+body  TW_SD  /[-<!\s]\w{0,10}sd[jqxz]\w{0,10}[->\s]/
+body  TW_SF  /[-<!\s]\w{0,10}sf[bghjkpqw]\w{0,10}[->\s]/
+body  TW_SG  /[-<!\s]\w{0,10}sg[cgjkqvwxz]\w{0,10}[->\s]/
+body  TW_SJ  /[-<!\s]\w{0,10}sj[bfghjkmnpqrstvwxz]\w{0,10}[->\s]/
+body  TW_SK  /[-<!\s]\w{0,10}sk[qxz]\w{0,10}[->\s]/
+body  TW_SL  /[-<!\s]\w{0,10}sl[gjkqwxz]\w{0,10}[->\s]/
+body  TW_SM  /[-<!\s]\w{0,10}sm[fkqwxz]\w{0,10}[->\s]/
+body  TW_SN  /[-<!\s]\w{0,10}sn[dhjknqvwxz]\w{0,10}[->\s]/
+body  TW_SQ  /[-<!\s]\w{0,10}sq[bfghjkmopstvwxz]\w{0,10}[->\s]/
+body  TW_SR  /[-<!\s]\w{0,10}sr[jklqrwxz]\w{0,10}[->\s]/
+body  TW_SV  /[-<!\s]\w{0,10}sv[bfhjklmnqtwxyz]\w{0,10}[->\s]/
+body  TW_SW  /[-<!\s]\w{0,10}sw[jkpqvwxz]\w{0,10}[->\s]/
+body  TW_SX  /[-<!\s]\w{0,10}sx[bcdefghjklmnopqrtuvwxyz]\w{0,10}[->\s]/
+body  TW_SY  /[-<!\s]\w{0,10}sy[qxy]\w{0,10}[->\s]/
+body  TW_SZ  /[-<!\s]\w{0,10}sz[bdfgjpqsvxz]\w{0,10}[->\s]/
+body  TW_TB  /[-<!\s]\w{0,10}tb[cghjkmnpqtvwx]\w{0,10}[->\s]/
+body  TW_TC  /[-<!\s]\w{0,10}tc[jnqvx]\w{0,10}[->\s]/
+body  TW_TD  /[-<!\s]\w{0,10}td[bfgjkpqtvxz]\w{0,10}[->\s]/
+body  TW_TF  /[-<!\s]\w{0,10}tf[ghjkqvwyz]\w{0,10}[->\s]/
+body  TW_TG  /[-<!\s]\w{0,10}tg[bdfghjkmpqsx]\w{0,10}[->\s]/
+body  TW_TJ  /[-<!\s]\w{0,10}tj[bdfhjklmnpqstvwxyz]\w{0,10}[->\s]/
+body  TW_TK  /[-<!\s]\w{0,10}tk[bcdfghjklmpqvwxz]\w{0,10}[->\s]/
+body  TW_TL  /[-<!\s]\w{0,10}tl[jkqwxz]\w{0,10}[->\s]/
+body  TW_TM  /[-<!\s]\w{0,10}tm[bknqtwxz]\w{0,10}[->\s]/
+body  TW_TN  /[-<!\s]\w{0,10}tn[fhjkmqvwxz]\w{0,10}[->\s]/
+body  TW_TP  /[-<!\s]\w{0,10}tp[bjpqvwxz]\w{0,10}[->\s]/
+body  TW_TQ  /[-<!\s]\w{0,10}tq[abdefhijklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_TR  /[-<!\s]\w{0,10}tr[gjqvx]\w{0,10}[->\s]/
+body  TW_TV  /[-<!\s]\w{0,10}tv[bcfghjknpquvwxz]\w{0,10}[->\s]/
+body  TW_TW  /[-<!\s]\w{0,10}tw[bcdfjknqvz]\w{0,10}[->\s]/
+body  TW_TX  /[-<!\s]\w{0,10}tx[bcdefghjklmnopqrsuvwxz]\w{0,10}[->\s]/
+body  TW_TZ  /[-<!\s]\w{0,10}tz[jqxz]\w{0,10}[->\s]/
+body  TW_UC  /[-<!\s]\w{0,10}uc[fjmvx]\w{0,10}[->\s]/
+body  TW_UF  /[-<!\s]\w{0,10}uf[jpqvx]\w{0,10}[->\s]/
+body  TW_UG  /[-<!\s]\w{0,10}ug[qvx]\w{0,10}[->\s]/
+body  TW_UH  /[-<!\s]\w{0,10}uh[bcgjkpvxz]\w{0,10}[->\s]/
+body  TW_UJ  /[-<!\s]\w{0,10}uj[wbfghklmqvwx]\w{0,10}[->\s]/
+body  TW_UK  /[-<!\s]\w{0,10}uk[fgqxz]\w{0,10}[->\s]/
+body  TW_UQ  /[-<!\s]\w{0,10}uq[bcdfghijklmnopqrtwxyz]\w{0,10}[->\s]/
+body  TW_UU  /[-<!\s]\w{0,10}uu[fijkqvwyz]\w{0,10}[->\s]/
+body  TW_UV  /[-<!\s]\w{0,10}uv[bcdfghjkmpqtwxz]\w{0,10}[->\s]/
+body  TW_UW  /[-<!\s]\w{0,10}uw[dgjnquvxyz]\w{0,10}[->\s]/
+body  TW_UX  /[-<!\s]\w{0,10}ux[jqxz]\w{0,10}[->\s]/
+body  TW_UY  /[-<!\s]\w{0,10}uy[jqxyz]\w{0,10}[->\s]/
+body  TW_UZ  /[-<!\s]\w{0,10}uz[fgkpqrx]\w{0,10}[->\s]/
+body  TW_VB  /[-<!\s]\w{0,10}vb[bcdfhijklmpqrtuvxyz]\w{0,10}[->\s]/
+body  TW_VC  /[-<!\s]\w{0,10}vc[bgjklnpqtvwxyz]\w{0,10}[->\s]/
+body  TW_VD  /[-<!\s]\w{0,10}vd[bdghjklnqvwxyz]\w{0,10}[->\s]/
+body  TW_VF  /[-<!\s]\w{0,10}vf[bfghijklmnpqtuvxz]\w{0,10}[->\s]/
+body  TW_VG  /[-<!\s]\w{0,10}vg[bcdgjkmnpqtuvwxyz]\w{0,10}[->\s]/
+body  TW_VH  /[-<!\s]\w{0,10}vh[bcghijklmnpqrtuvwxyz]\w{0,10}[->\s]/
+body  TW_VJ  /[-<!\s]\w{0,10}vj[abcdfghijklmnpqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_VK  /[-<!\s]\w{0,10}vk[bcdefgjklmnpqruvwxyz]\w{0,10}[->\s]/
+body  TW_VL  /[-<!\s]\w{0,10}vl[hjkmpqrvwxz]\w{0,10}[->\s]/
+body  TW_VM  /[-<!\s]\w{0,10}vm[bfghjknpquvxyz]\w{0,10}[->\s]/
+body  TW_VN  /[-<!\s]\w{0,10}vn[bdhjkmnpqrtuvwxz]\w{0,10}[->\s]/
+body  TW_VP  /[-<!\s]\w{0,10}vp[bcdeghjkmopqtuvwyz]\w{0,10}[->\s]/
+body  TW_VQ  /[-<!\s]\w{0,10}vq[abcdefghijklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_VR  /[-<!\s]\w{0,10}vr[fghjknqrtvwxz]\w{0,10}[->\s]/
+body  TW_VS  /[-<!\s]\w{0,10}vs[dfgjmqz]\w{0,10}[->\s]/
+body  TW_VT  /[-<!\s]\w{0,10}vt[bdfgjklmnqtx]\w{0,10}[->\s]/
+body  TW_VU  /[-<!\s]\w{0,10}vu[afhjquwxy]\w{0,10}[->\s]/
+body  TW_VV  /[-<!\s]\w{0,10}vv[cdfghjkmnpqrtuwxz]\w{0,10}[->\s]/
+body  TW_VW  /[-<!\s]\w{0,10}vw[abcdefghijklmnopqrtuvwxyz]\w{0,10}[->\s]/
+body  TW_VX  /[-<!\s]\w{0,10}vx[abcefghjklmnopqrstuvxyz]\w{0,10}[->\s]/
+body  TW_VY  /[-<!\s]\w{0,10}vy[oqx]\w{0,10}[->\s]/
+body  TW_VZ  /[-<!\s]\w{0,10}vz[abcdefgjklmpqrstvwxyz]\w{0,10}[->\s]/
+body  TW_WB  /[-<!\s]\w{0,10}wb[bdfghjpqtvxz]\w{0,10}[->\s]/
+body  TW_WC  /[-<!\s]\w{0,10}wc[bdfgjkmnqvwx]\w{0,10}[->\s]/
+body  TW_WD  /[-<!\s]\w{0,10}wd[dfjpqvxz]\w{0,10}[->\s]/
+body  TW_WF  /[-<!\s]\w{0,10}wf[cdghjkmqvwxyz]\w{0,10}[->\s]/
+body  TW_WG  /[-<!\s]\w{0,10}wg[bcdfgjknpqtvwxyz]\w{0,10}[->\s]/
+body  TW_WH  /[-<!\s]\w{0,10}wh[cdghjklpqvwxz]\w{0,10}[->\s]/
+body  TW_WJ  /[-<!\s]\w{0,10}wj[bfghijklmnpqrstvwxyz]\w{0,10}[->\s]/
+body  TW_WK  /[-<!\s]\w{0,10}wk[cdfgjkpqtuvxz]\w{0,10}[->\s]/
+body  TW_WL  /[-<!\s]\w{0,10}wl[jqvxz]\w{0,10}[->\s]/
+body  TW_WM  /[-<!\s]\w{0,10}wm[dghjlnqtvwxz]\w{0,10}[->\s]/
+body  TW_WP  /[-<!\s]\w{0,10}wp[dfgjkpqtvwxz]\w{0,10}[->\s]/
+body  TW_WQ  /[-<!\s]\w{0,10}wq[abcdefghijklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_WR  /[-<!\s]\w{0,10}wr[cfghjlmpqwx]\w{0,10}[->\s]/
+body  TW_WT  /[-<!\s]\w{0,10}wt[bdgjlmnpqtvx]\w{0,10}[->\s]/
+body  TW_WU  /[-<!\s]\w{0,10}wu[aikoquvwy]\w{0,10}[->\s]/
+body  TW_WV  /[-<!\s]\w{0,10}wv[bcdfghjklmnpqrtuvwxyz]\w{0,10}[->\s]/
+body  TW_WW  /[-<!\s]\w{0,10}ww[bcdgkpqstuvxyz]\w{0,10}[->\s]/
+body  TW_WX  /[-<!\s]\w{0,10}wx[abcdefghijklmnopqrstuvwxz]\w{0,10}[->\s]/
+body  TW_WY  /[-<!\s]\w{0,10}wy[jquwxy]\w{0,10}[->\s]/
+body  TW_WZ  /[-<!\s]\w{0,10}wz[bcdfghjkmnopqrstuvwxz]\w{0,10}[->\s]/
+body  TW_XA  /[-<!\s]\w{0,10}xa[ajoqy]\w{0,10}[->\s]/
+body  TW_XB  /[-<!\s]\w{0,10}xb[bcdfghjkmnpqsvwxz]\w{0,10}[->\s]/
+body  TW_XC  /[-<!\s]\w{0,10}xc[bcdgjkmnqsvwxz]\w{0,10}[->\s]/
+body  TW_XD  /[-<!\s]\w{0,10}xd[bcdfghjklnpqstuvwxyz]\w{0,10}[->\s]/
+body  TW_XF  /[-<!\s]\w{0,10}xf[bcdfghjkmnpqtvwxyz]\w{0,10}[->\s]/
+body  TW_XG  /[-<!\s]\w{0,10}xg[bcdfghjkmnpqstvwxyz]\w{0,10}[->\s]/
+body  TW_XH  /[-<!\s]\w{0,10}xh[cdfghjkmnpqrstvwxz]\w{0,10}[->\s]/
+body  TW_XI  /[-<!\s]\w{0,10}xi[jkqy]\w{0,10}[->\s]/
+body  TW_XJ  /[-<!\s]\w{0,10}xj[abcdefghijklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_XK  /[-<!\s]\w{0,10}xk[abcdfghjkmnopqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_XL  /[-<!\s]\w{0,10}xl[bcdfghjklmnpqrvwxz]\w{0,10}[->\s]/
+body  TW_XM  /[-<!\s]\w{0,10}xm[bcdfghjknpqvwxz]\w{0,10}[->\s]/
+body  TW_XN  /[-<!\s]\w{0,10}xn[bcdfghjklmnpqrvwxyz]\w{0,10}[->\s]/
+body  TW_XP  /[-<!\s]\w{0,10}xp[bcfjknpqvxz]\w{0,10}[->\s]/
+body  TW_XQ  /[-<!\s]\w{0,10}xq[abcdefghijklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_XR  /[-<!\s]\w{0,10}xr[bcdfghjklnpqrsvwyz]\w{0,10}[->\s]/
+body  TW_XS  /[-<!\s]\w{0,10}xs[bdfgjmnqrsvxz]\w{0,10}[->\s]/
+body  TW_XT  /[-<!\s]\w{0,10}xt[jkpqvwxz]\w{0,10}[->\s]/
+body  TW_XU  /[-<!\s]\w{0,10}xu[fhjkquwx]\w{0,10}[->\s]/
+body  TW_XV  /[-<!\s]\w{0,10}xv[bcdefghjklmnpqrsuvwxyz]\w{0,10}[->\s]/
+body  TW_XW  /[-<!\s]\w{0,10}xw[bcdfghjklmnpqrtuvwxyz]\w{0,10}[->\s]/
+body  TW_XX  /[-<!\s]\w{0,10}xx[bcdefghjkmnpqrstuwyz]\w{0,10}[->\s]/
+body  TW_XY  /[-<!\s]\w{0,10}xy[jxy]\w{0,10}[->\s]/
+body  TW_XZ  /[-<!\s]\w{0,10}xz[abcdefghjklmnpqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_YB  /[-<!\s]\w{0,10}yb[cfghjmpqtvwxz]\w{0,10}[->\s]/
+body  TW_YC  /[-<!\s]\w{0,10}yc[bdfgjmpqsvwx]\w{0,10}[->\s]/
+body  TW_YD  /[-<!\s]\w{0,10}yd[chjkpqvwx]\w{0,10}[->\s]/
+body  TW_YF  /[-<!\s]\w{0,10}yf[bcdghjmnpqsvwx]\w{0,10}[->\s]/
+body  TW_YG  /[-<!\s]\w{0,10}yg[cfjkpqtxz]\w{0,10}[->\s]/
+body  TW_YH  /[-<!\s]\w{0,10}yh[bcdfghjkpqx]\w{0,10}[->\s]/
+body  TW_YI  /[-<!\s]\w{0,10}yi[hjqwxy]\w{0,10}[->\s]/
+body  TW_YJ  /[-<!\s]\w{0,10}yj[bcdfghjklmnpqrstvwxyz]\w{0,10}[->\s]/
+body  TW_YK  /[-<!\s]\w{0,10}yk[bcdfgpqvwxz]\w{0,10}[->\s]/
+body  TW_YM  /[-<!\s]\w{0,10}ym[dfgjqvxz]\w{0,10}[->\s]/
+body  TW_YP  /[-<!\s]\w{0,10}yp[bcdfgjkmqxz]\w{0,10}[->\s]/
+body  TW_YQ  /[-<!\s]\w{0,10}yq[abcdefghijklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_YR  /[-<!\s]\w{0,10}yr[jqx]\w{0,10}[->\s]/
+body  TW_YT  /[-<!\s]\w{0,10}yt[bcfgjnpqx]\w{0,10}[->\s]/
+body  TW_YV  /[-<!\s]\w{0,10}yv[bcdfghjlmnpqstvwxz]\w{0,10}[->\s]/
+body  TW_YW  /[-<!\s]\w{0,10}yw[bfgjklmnpqstuvwxz]\w{0,10}[->\s]/
+body  TW_YX  /[-<!\s]\w{0,10}yx[bcdfghjknpqrstuvwxz]\w{0,10}[->\s]/
+body  TW_YY  /[-<!\s]\w{0,10}yy[bcdfghjklpqrstvwxz]\w{0,10}[->\s]/
+body  TW_YZ  /[-<!\s]\w{0,10}yz[bcdfjklmnpqtvwx]\w{0,10}[->\s]/
+body  TW_ZB  /[-<!\s]\w{0,10}zb[dfgjklmnpqstvwxz]\w{0,10}[->\s]/
+body  TW_ZC  /[-<!\s]\w{0,10}zc[bcdfgjmnpqstvwxy]\w{0,10}[->\s]/
+body  TW_ZD  /[-<!\s]\w{0,10}zd[bcdfghjklmnpqstvwxy]\w{0,10}[->\s]/
+body  TW_ZF  /[-<!\s]\w{0,10}zf[bcdfghijkmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_ZG  /[-<!\s]\w{0,10}zg[bcdfgjkmnpqtvwxyz]\w{0,10}[->\s]/
+body  TW_ZH  /[-<!\s]\w{0,10}zh[bcfghjlpqstvwxz]\w{0,10}[->\s]/
+body  TW_ZJ  /[-<!\s]\w{0,10}zj[abcdfghjklmnpqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_ZK  /[-<!\s]\w{0,10}zk[bcdfghjklmpqstvwxz]\w{0,10}[->\s]/
+body  TW_ZL  /[-<!\s]\w{0,10}zl[bcdfghjlnpqrstvwxz]\w{0,10}[->\s]/
+body  TW_ZM  /[-<!\s]\w{0,10}zm[bdfghjklmpqstvwxyz]\w{0,10}[->\s]/
+body  TW_ZN  /[-<!\s]\w{0,10}zn[bcdfghjlmnpqrstuvwxz]\w{0,10}[->\s]/
+body  TW_ZP  /[-<!\s]\w{0,10}zp[bcdfhjklmnpqstvwxz]\w{0,10}[->\s]/
+body  TW_ZQ  /[-<!\s]\w{0,10}zq[abcdefghijklmnopqrstvwxyz]\w{0,10}[->\s]/
+body  TW_ZR  /[-<!\s]\w{0,10}zr[bcfghjklmnpqrstvwxyz]\w{0,10}[->\s]/
+body  TW_ZS  /[-<!\s]\w{0,10}zs[bdfgjmnqrsuwxyz]\w{0,10}[->\s]/
+body  TW_ZT  /[-<!\s]\w{0,10}zt[bcdfgjkmnpqtuvwxz]\w{0,10}[->\s]/
+body  TW_ZU  /[-<!\s]\w{0,10}zu[ajqx]\w{0,10}[->\s]/
+body  TW_ZV  /[-<!\s]\w{0,10}zv[bcdfghjklmnpqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_ZW  /[-<!\s]\w{0,10}zw[bcdfghjklmnpqrstuvwxyz]\w{0,10}[->\s]/
+body  TW_ZX  /[-<!\s]\w{0,10}zx[a-z]\w{0,10}[->\s]/
+body  TW_ZY  /[-<!\s]\w{0,10}zy[fxy]\w{0,10}[->\s]/
+body  TW_ZZ  /[-<!\s]\w{0,10}zz[cdfhjnpqrvx]\w{0,10}[->\s]/
+
+describe  TW_AJ  Odd Letter Triples with AJ
+describe  TW_AQ  Odd Letter Triples with AQ
+describe  TW_AV  Odd Letter Triples with AV
+describe  TW_AZ  Odd Letter Triples with AZ
+describe  TW_BD  Odd Letter Triples with BD
+describe  TW_BF  Odd Letter Triples with BF
+describe  TW_BG  Odd Letter Triples with BG
+describe  TW_BH  Odd Letter Triples with BH
+describe  TW_BJ  Odd Letter Triples with BJ
+describe  TW_BK  Odd Letter Triples with BK
+describe  TW_BL  Odd Letter Triples with BL
+describe  TW_BM  Odd Letter Triples with BM
+describe  TW_BN  Odd Letter Triples with BN
+describe  TW_BP  Odd Letter Triples with BP
+describe  TW_BQ  Odd Letter Triples with BQ
+describe  TW_BT  Odd Letter Triples with BT
+describe  TW_BV  Odd Letter Triples with BV
+describe  TW_BW  Odd Letter Triples with BW
+describe  TW_BX  Odd Letter Triples with BX
+describe  TW_BZ  Odd Letter Triples with BZ
+describe  TW_CB  Odd Letter Triples with CB
+describe  TW_CC  Odd Letter Triples with CC
+describe  TW_CD  Odd Letter Triples with CD
+describe  TW_CF  Odd Letter Triples with CF
+describe  TW_CG  Odd Letter Triples with CG
+describe  TW_CL  Odd Letter Triples with CL
+describe  TW_CM  Odd Letter Triples with CM
+describe  TW_CN  Odd Letter Triples with CN
+describe  TW_CP  Odd Letter Triples with CP
+describe  TW_CQ  Odd Letter Triples with CQ
+describe  TW_CR  Odd Letter Triples with CR
+describe  TW_CS  Odd Letter Triples with CS
+describe  TW_CV  Odd Letter Triples with CV
+describe  TW_CX  Odd Letter Triples with CX
+describe  TW_CY  Odd Letter Triples with CY
+describe  TW_CZ  Odd Letter Triples with CZ
+describe  TW_DB  Odd Letter Triples with DB
+describe  TW_DC  Odd Letter Triples with DC
+describe  TW_DD  Odd Letter Triples with DD
+describe  TW_DF  Odd Letter Triples with DF
+describe  TW_DG  Odd Letter Triples with DG
+describe  TW_DH  Odd Letter Triples with DH
+describe  TW_DJ  Odd Letter Triples with DJ
+describe  TW_DK  Odd Letter Triples with DK
+describe  TW_DL  Odd Letter Triples with DL
+describe  TW_DM  Odd Letter Triples with DM
+describe  TW_DN  Odd Letter Triples with DN
+describe  TW_DP  Odd Letter Triples with DP
+describe  TW_DQ  Odd Letter Triples with DQ
+describe  TW_DR  Odd Letter Triples with DR
+describe  TW_DT  Odd Letter Triples with DT
+describe  TW_DV  Odd Letter Triples with DV
+describe  TW_DW  Odd Letter Triples with DW
+describe  TW_DX  Odd Letter Triples with DX
+describe  TW_DY  Odd Letter Triples with DY
+describe  TW_DZ  Odd Letter Triples with DX
+describe  TW_EB  Odd Letter Triples with EB
+describe  TW_EG  Odd Letter Triples with EG
+describe  TW_EH  Odd Letter Triples with EH
+describe  TW_EJ  Odd Letter Triples with EJ
+describe  TW_EK  Odd Letter Triples with EK
+describe  TW_EP  Odd Letter Triples with EP
+describe  TW_EQ  Odd Letter Triples with EQ
+describe  TW_EV  Odd Letter Triples with EV
+describe  TW_FC  Odd Letter Triples with FC
+describe  TW_FD  Odd Letter Triples with FD
+describe  TW_FG  Odd Letter Triples with FG
+describe  TW_FH  Odd Letter Triples with FH
+describe  TW_FJ  Odd Letter Triples with FJ
+describe  TW_FK  Odd Letter Triples with FK
+describe  TW_FL  Odd Letter Triples with FL
+describe  TW_FM  Odd Letter Triples with FM
+describe  TW_FN  Odd Letter Triples with FN
+describe  TW_FP  Odd Letter Triples with FP
+describe  TW_FQ  Odd Letter Triples with FQ
+describe  TW_FR  Odd Letter Triples with FR
+describe  TW_FS  Odd Letter Triples with FS
+describe  TW_FT  Odd Letter Triples with FT
+describe  TW_FV  Odd Letter Triples with FV
+describe  TW_FW  Odd Letter Triples with FW
+describe  TW_FX  Odd Letter Triples with FX
+describe  TW_FY  Odd Letter Triples with FY
+describe  TW_FZ  Odd Letter Triples with FZ
+describe  TW_GB  Odd Letter Triples with GB
+describe  TW_GC  Odd Letter Triples with GC
+describe  TW_GD  Odd Letter Triples with GD
+describe  TW_GF  Odd Letter Triples with GF
+describe  TW_GG  Odd Letter Triples with GG
+describe  TW_GJ  Odd Letter Triples with GJ
+describe  TW_GK  Odd Letter Triples with GK
+describe  TW_GL  Odd Letter Triples with GL
+describe  TW_GM  Odd Letter Triples with GM
+describe  TW_GN  Odd Letter Triples with GN
+describe  TW_GP  Odd Letter Triples with GP
+describe  TW_GQ  Odd Letter Triples with GQ
+describe  TW_GR  Odd Letter Triples with GR
+describe  TW_GT  Odd Letter Triples with GT
+describe  TW_GU  Odd Letter Triples with GU
+describe  TW_GV  Odd Letter Triples with GV
+describe  TW_GW  Odd Letter Triples with GW
+describe  TW_GX  Odd Letter Triples with GX
+describe  TW_GY  Odd Letter Triples with GY
+describe  TW_GZ  Odd Letter Triples with GZ
+describe  TW_HB  Odd Letter Triples with HB
+describe  TW_HC  Odd Letter Triples with HC
+describe  TW_HD  Odd Letter Triples with HD
+describe  TW_HF  Odd Letter Triples with HF
+describe  TW_HG  Odd Letter Triples with HG
+describe  TW_HH  Odd Letter Triples with HH
+describe  TW_HJ  Odd Letter Triples with HJ
+describe  TW_HK  Odd Letter Triples with HK
+describe  TW_HL  Odd Letter Triples with HL
+describe  TW_HM  Odd Letter Triples with HM
+describe  TW_HN  Odd Letter Triples with HN
+describe  TW_HP  Odd Letter Triples with HP
+describe  TW_HQ  Odd Letter Triples with HQ
+describe  TW_HR  Odd Letter Triples with HR
+describe  TW_HS  Odd Letter Triples with HS
+describe  TW_HV  Odd Letter Triples with HV
+describe  TW_HW  Odd Letter Triples with HW
+describe  TW_HX  Odd Letter Triples with HX
+describe  TW_HZ  Odd Letter Triples with HZ
+describe  TW_IB  Odd Letter Triples with IB
+describe  TW_IF  Odd Letter Triples with IF
+describe  TW_IH  Odd Letter Triples with IH
+describe  TW_II  Odd Letter Triples with II
+describe  TW_IJ  Odd Letter Triples with IJ
+describe  TW_IK  Odd Letter Triples with IK
+describe  TW_IQ  Odd Letter Triples with IQ
+describe  TW_IU  Odd Letter Triples with IU
+describe  TW_IV  Odd Letter Triples with IV
+describe  TW_IW  Odd Letter Triples with IW
+describe  TW_IX  Odd Letter Triples with IX
+describe  TW_IY  Odd Letter Triples with IY
+describe  TW_JB  Odd Letter Triples with JB
+describe  TW_JC  Odd Letter Triples with JC
+describe  TW_JD  Odd Letter Triples with JD
+describe  TW_JF  Odd Letter Triples with JF
+describe  TW_JG  Odd Letter Triples with JG
+describe  TW_JH  Odd Letter Triples with JH
+describe  TW_JJ  Odd Letter Triples with JJ
+describe  TW_JK  Odd Letter Triples with JK
+describe  TW_JL  Odd Letter Triples with JL
+describe  TW_JM  Odd Letter Triples with JM
+describe  TW_JN  Odd Letter Triples with JN
+describe  TW_JP  Odd Letter Triples with JP
+describe  TW_JQ  Odd Letter Triples with JQ
+describe  TW_JR  Odd Letter Triples with JR
+describe  TW_JS  Odd Letter Triples with JS
+describe  TW_JT  Odd Letter Triples with JT
+describe  TW_JV  Odd Letter Triples with JV
+describe  TW_JW  Odd Letter Triples with JW
+describe  TW_JX  Odd Letter Triples with JX
+describe  TW_JY  Odd Letter Triples with JY
+describe  TW_JZ  Odd Letter Triples with JZ
+describe  TW_KB  Odd Letter Triples with KB
+describe  TW_KC  Odd Letter Triples with KC
+describe  TW_KD  Odd Letter Triples with KD
+describe  TW_KF  Odd Letter Triples with KF
+describe  TW_KG  Odd Letter Triples with KG
+describe  TW_KH  Odd Letter Triples with KH
+describe  TW_KJ  Odd Letter Triples with KJ
+describe  TW_KK  Odd Letter Triples with KK
+describe  TW_KL  Odd Letter Triples with KL
+describe  TW_KM  Odd Letter Triples with KM
+describe  TW_KN  Odd Letter Triples with KN
+describe  TW_KP  Odd Letter Triples with KP
+describe  TW_KQ  Odd Letter Triples with KQ
+describe  TW_KR  Odd Letter Triples with KR
+describe  TW_KS  Odd Letter Triples with KS
+describe  TW_KT  Odd Letter Triples with KT
+describe  TW_KU  Odd Letter Triples with KU
+describe  TW_KV  Odd Letter Triples with KV
+describe  TW_KW  Odd Letter Triples with KW
+describe  TW_KX  Odd Letter Triples with KX
+describe  TW_KY  Odd Letter Triples with KY
+describe  TW_KZ  Odd Letter Triples with KZ
+describe  TW_LB  Odd Letter Triples with LB
+describe  TW_LC  Odd Letter Triples with LC
+describe  TW_LG  Odd Letter Triples with LG
+describe  TW_LH  Odd Letter Triples with LH
+describe  TW_LK  Odd Letter Triples with LK
+describe  TW_LN  Odd Letter Triples with LN
+describe  TW_LP  Odd Letter Triples with LP
+describe  TW_LQ  Odd Letter Triples with LQ
+describe  TW_LR  Odd Letter Triples with LR
+describe  TW_LV  Odd Letter Triples with LV
+describe  TW_LW  Odd Letter Triples with LW
+describe  TW_LX  Odd Letter Triples with LX
+describe  TW_LZ  Odd Letter Triples with LZ
+describe  TW_MB  Odd Letter Triples with MB
+describe  TW_MD  Odd Letter Triples with MD
+describe  TW_MF  Odd Letter Triples with MF
+describe  TW_MG  Odd Letter Triples with MG
+describe  TW_MH  Odd Letter Triples with MH
+describe  TW_MJ  Odd Letter Triples with MJ
+describe  TW_MK  Odd Letter Triples with MK
+describe  TW_ML  Odd Letter Triples with ML
+describe  TW_MM  Odd Letter Triples with MM
+describe  TW_MN  Odd Letter Triples with MN
+describe  TW_MQ  Odd Letter Triples with MQ
+describe  TW_MR  Odd Letter Triples with MR
+describe  TW_MT  Odd Letter Triples with MT
+describe  TW_MV  Odd Letter Triples with MV
+describe  TW_MW  Odd Letter Triples with MW
+describe  TW_MX  Odd Letter Triples with MX
+describe  TW_MZ  Odd Letter Triples with MZ
+describe  TW_NB  Odd Letter Triples with NB
+describe  TW_NF  Odd Letter Triples with NF
+describe  TW_NH  Odd Letter Triples with NH
+describe  TW_NK  Odd Letter Triples with NK
+describe  TW_NL  Odd Letter Triples with NL
+describe  TW_NM  Odd Letter Triples with NM
+describe  TW_NP  Odd Letter Triples with NP
+describe  TW_NQ  Odd Letter Triples with NQ
+describe  TW_NR  Odd Letter Triples with NR
+describe  TW_NV  Odd Letter Triples with NV
+describe  TW_NW  Odd Letter Triples with NW
+describe  TW_NX  Odd Letter Triples with NX
+describe  TW_NZ  Odd Letter Triples with NZ
+describe  TW_OC  Odd Letter Triples with OC
+describe  TW_OG  Odd Letter Triples with OG
+describe  TW_OH  Odd Letter Triples with OH
+describe  TW_OJ  Odd Letter Triples with OJ
+describe  TW_OK  Odd Letter Triples with OK
+describe  TW_OQ  Odd Letter Triples with OQ
+describe  TW_OV  Odd Letter Triples with OV
+describe  TW_OY  Odd Letter Triples with OY
+describe  TW_OZ  Odd Letter Triples with OZ
+describe  TW_PB  Odd Letter Triples with PB
+describe  TW_PC  Odd Letter Triples with PC
+describe  TW_PD  Odd Letter Triples with PD
+describe  TW_PF  Odd Letter Triples with PF
+describe  TW_PG  Odd Letter Triples with PG
+describe  TW_PH  Odd Letter Triples with PH
+describe  TW_PK  Odd Letter Triples with PK
+describe  TW_PL  Odd Letter Triples with PL
+describe  TW_PM  Odd Letter Triples with PM
+describe  TW_PN  Odd Letter Triples with PN
+describe  TW_PP  Odd Letter Triples with PP
+describe  TW_PQ  Odd Letter Triples with PQ
+describe  TW_PR  Odd Letter Triples with PR
+describe  TW_PT  Odd Letter Triples with PT
+describe  TW_PV  Odd Letter Triples with PV
+describe  TW_PW  Odd Letter Triples with PW
+describe  TW_PX  Odd Letter Triples with PX
+describe  TW_PZ  Odd Letter Triples with PZ
+describe  TW_QA  Odd Letter Triples with QA
+describe  TW_QB  Odd Letter Triples with QB
+describe  TW_QC  Odd Letter Triples with QC
+describe  TW_QD  Odd Letter Triples with QD
+describe  TW_QE  Odd Letter Triples with QE
+describe  TW_QF  Odd Letter Triples with QF
+describe  TW_QG  Odd Letter Triples with QG
+describe  TW_QH  Odd Letter Triples with QH
+describe  TW_QI  Odd Letter Triples with QI
+describe  TW_QJ  Odd Letter Triples with QJ
+describe  TW_QK  Odd Letter Triples with QK
+describe  TW_QL  Odd Letter Triples with QL
+describe  TW_QM  Odd Letter Triples with QM
+describe  TW_QN  Odd Letter Triples with QN
+describe  TW_QO  Odd Letter Triples with QO
+describe  TW_QP  Odd Letter Triples with QP
+describe  TW_QQ  Odd Letter Triples with QQ
+describe  TW_QR  Odd Letter Triples with QR
+describe  TW_QS  Odd Letter Triples with QS
+describe  TW_QT  Odd Letter Triples with QT
+describe  TW_QU  Odd Letter Triples with QU
+describe  TW_QV  Odd Letter Triples with QV
+describe  TW_QW  Odd Letter Triples with QW
+describe  TW_QX  Odd Letter Triples with QX
+describe  TW_QY  Odd Letter Triples with QY
+describe  TW_QZ  Odd Letter Triples with QZ
+describe  TW_RB  Odd Letter Triples with RB
+describe  TW_RG  Odd Letter Triples with RG
+describe  TW_RH  Odd Letter Triples with RH
+describe  TW_RJ  Odd Letter Triples with RJ
+describe  TW_RK  Odd Letter Triples with RK
+describe  TW_RL  Odd Letter Triples with RL
+describe  TW_RP  Odd Letter Triples with RP
+describe  TW_RQ  Odd Letter Triples with RQ
+describe  TW_RR  Odd Letter Triples with RR
+describe  TW_RV  Odd Letter Triples with RV
+describe  TW_RW  Odd Letter Triples with RW
+describe  TW_RX  Odd Letter Triples with RX
+describe  TW_RZ  Odd Letter Triples with RZ
+describe  TW_SB  Odd Letter Triples with SB
+describe  TW_SD  Odd Letter Triples with SD
+describe  TW_SF  Odd Letter Triples with SF
+describe  TW_SG  Odd Letter Triples with SG
+describe  TW_SJ  Odd Letter Triples with SJ
+describe  TW_SK  Odd Letter Triples with SK
+describe  TW_SL  Odd Letter Triples with SL
+describe  TW_SM  Odd Letter Triples with SM
+describe  TW_SN  Odd Letter Triples with SN
+describe  TW_SQ  Odd Letter Triples with SQ
+describe  TW_SR  Odd Letter Triples with SR
+describe  TW_SV  Odd Letter Triples with SV
+describe  TW_SW  Odd Letter Triples with SW
+describe  TW_SX  Odd Letter Triples with SX
+describe  TW_SY  Odd Letter Triples with SY
+describe  TW_SZ  Odd Letter Triples with SZ
+describe  TW_TB  Odd Letter Triples with TB
+describe  TW_TC  Odd Letter Triples with TC
+describe  TW_TD  Odd Letter Triples with TD
+describe  TW_TF  Odd Letter Triples with TF
+describe  TW_TG  Odd Letter Triples with TG
+describe  TW_TJ  Odd Letter Triples with TJ
+describe  TW_TK  Odd Letter Triples with TK
+describe  TW_TL  Odd Letter Triples with TL
+describe  TW_TM  Odd Letter Triples with TM
+describe  TW_TN  Odd Letter Triples with TN
+describe  TW_TP  Odd Letter Triples with TP
+describe  TW_TQ  Odd Letter Triples with TQ
+describe  TW_TR  Odd Letter Triples with TR
+describe  TW_TV  Odd Letter Triples with TV
+describe  TW_TW  Odd Letter Triples with TW
+describe  TW_TX  Odd Letter Triples with TX
+describe  TW_TZ  Odd Letter Triples with TZ
+describe  TW_UC  Odd Letter Triples with UC
+describe  TW_UF  Odd Letter Triples with UF
+describe  TW_UG  Odd Letter Triples with UG
+describe  TW_UH  Odd Letter Triples with UH
+describe  TW_UJ  Odd Letter Triples with UJ
+describe  TW_UK  Odd Letter Triples with UK
+describe  TW_UQ  Odd Letter Triples with UQ
+describe  TW_UU  Odd Letter Triples with UU
+describe  TW_UV  Odd Letter Triples with UV
+describe  TW_UW  Odd Letter Triples with UW
+describe  TW_UX  Odd Letter Triples with UX
+describe  TW_UY  Odd Letter Triples with UY
+describe  TW_UZ  Odd Letter Triples with UZ
+describe  TW_VB  Odd Letter Triples with VB
+describe  TW_VC  Odd Letter Triples with VC
+describe  TW_VD  Odd Letter Triples with VD
+describe  TW_VF  Odd Letter Triples with VF
+describe  TW_VG  Odd Letter Triples with VG
+describe  TW_VH  Odd Letter Triples with VH
+describe  TW_VJ  Odd Letter Triples with VJ
+describe  TW_VK  Odd Letter Triples with VK
+describe  TW_VL  Odd Letter Triples with VL
+describe  TW_VM  Odd Letter Triples with VM
+describe  TW_VN  Odd Letter Triples with VN
+describe  TW_VP  Odd Letter Triples with VP
+describe  TW_VQ  Odd Letter Triples with VQ
+describe  TW_VR  Odd Letter Triples with VR
+describe  TW_VS  Odd Letter Triples with VS
+describe  TW_VT  Odd Letter Triples with VT
+describe  TW_VU  Odd Letter Triples with VU
+describe  TW_VV  Odd Letter Triples with VV
+describe  TW_VW  Odd Letter Triples with VW
+describe  TW_VX  Odd Letter Triples with VX
+describe  TW_VY  Odd Letter Triples with VY
+describe  TW_VZ  Odd Letter Triples with VZ
+describe  TW_WB  Odd Letter Triples with WB
+describe  TW_WC  Odd Letter Triples with WC
+describe  TW_WD  Odd Letter Triples with WD
+describe  TW_WF  Odd Letter Triples with WF
+describe  TW_WG  Odd Letter Triples with WG
+describe  TW_WH  Odd Letter Triples with WH
+describe  TW_WJ  Odd Letter Triples with WJ
+describe  TW_WK  Odd Letter Triples with WK
+describe  TW_WL  Odd Letter Triples with WL
+describe  TW_WM  Odd Letter Triples with WM
+describe  TW_WP  Odd Letter Triples with WP
+describe  TW_WQ  Odd Letter Triples with WQ
+describe  TW_WR  Odd Letter Triples with WR
+describe  TW_WT  Odd Letter Triples with WT
+describe  TW_WU  Odd Letter Triples with WU
+describe  TW_WV  Odd Letter Triples with WV
+describe  TW_WW  Odd Letter Triples with WW
+describe  TW_WX  Odd Letter Triples with WX
+describe  TW_WY  Odd Letter Triples with WY
+describe  TW_WZ  Odd Letter Triples with WZ
+describe  TW_XA  Odd Letter Triples with XA
+describe  TW_XB  Odd Letter Triples with XB
+describe  TW_XC  Odd Letter Triples with XC
+describe  TW_XD  Odd Letter Triples with XD
+describe  TW_XF  Odd Letter Triples with XF
+describe  TW_XG  Odd Letter Triples with XG
+describe  TW_XH  Odd Letter Triples with XH
+describe  TW_XI  Odd Letter Triples with XI
+describe  TW_XJ  Odd Letter Triples with XJ
+describe  TW_XK  Odd Letter Triples with XK
+describe  TW_XL  Odd Letter Triples with XL
+describe  TW_XM  Odd Letter Triples with XM
+describe  TW_XN  Odd Letter Triples with XN
+describe  TW_XP  Odd Letter Triples with XP
+describe  TW_XQ  Odd Letter Triples with XQ
+describe  TW_XR  Odd Letter Triples with XR
+describe  TW_XS  Odd Letter Triples with XS
+describe  TW_XT  Odd Letter Triples with XT
+describe  TW_XU  Odd Letter Triples with XU
+describe  TW_XV  Odd Letter Triples with XV
+describe  TW_XW  Odd Letter Triples with XW
+describe  TW_XX  Odd Letter Triples with XX
+describe  TW_XY  Odd Letter Triples with XY
+describe  TW_XZ  Odd Letter Triples with XZ
+describe  TW_YB  Odd Letter Triples with YB
+describe  TW_YC  Odd Letter Triples with YC
+describe  TW_YD  Odd Letter Triples with YD
+describe  TW_YF  Odd Letter Triples with YF
+describe  TW_YG  Odd Letter Triples with YG
+describe  TW_YH  Odd Letter Triples with YH
+describe  TW_YI  Odd Letter Triples with YI
+describe  TW_YJ  Odd Letter Triples with YJ
+describe  TW_YK  Odd Letter Triples with YK
+describe  TW_YM  Odd Letter Triples with YM
+describe  TW_YP  Odd Letter Triples with YP
+describe  TW_YQ  Odd Letter Triples with YQ
+describe  TW_YR  Odd Letter Triples with YR
+describe  TW_YT  Odd Letter Triples with YT
+describe  TW_YV  Odd Letter Triples with YV
+describe  TW_YW  Odd Letter Triples with YW
+describe  TW_YX  Odd Letter Triples with YX
+describe  TW_YY  Odd Letter Triples with YY
+describe  TW_YZ  Odd Letter Triples with YZ
+describe  TW_ZB  Odd Letter Triples with ZB
+describe  TW_ZC  Odd Letter Triples with ZC
+describe  TW_ZD  Odd Letter Triples with ZD
+describe  TW_ZF  Odd Letter Triples with ZF
+describe  TW_ZG  Odd Letter Triples with ZG
+describe  TW_ZH  Odd Letter Triples with ZH
+describe  TW_ZJ  Odd Letter Triples with ZJ
+describe  TW_ZK  Odd Letter Triples with ZK
+describe  TW_ZL  Odd Letter Triples with ZL
+describe  TW_ZM  Odd Letter Triples with ZM
+describe  TW_ZN  Odd Letter Triples with ZN
+describe  TW_ZP  Odd Letter Triples with ZP
+describe  TW_ZQ  Odd Letter Triples with ZQ
+describe  TW_ZR  Odd Letter Triples with ZR
+describe  TW_ZS  Odd Letter Triples with ZS
+describe  TW_ZT  Odd Letter Triples with ZT
+describe  TW_ZU  Odd Letter Triples with ZU
+describe  TW_ZV  Odd Letter Triples with ZV
+describe  TW_ZW  Odd Letter Triples with ZW
+describe  TW_ZX  Odd Letter Triples with ZX
+describe  TW_ZY  Odd Letter Triples with ZY
+describe  TW_ZZ  Odd Letter Triples with ZZ
+
+score  TW_AJ  0.077
+score  TW_AQ  0.077
+score  TW_AV  0.077
+score  TW_AZ  0.077
+score  TW_BD  0.077
+score  TW_BF  0.077
+score  TW_BG  0.077
+score  TW_BH  0.077
+score  TW_BJ  0.077
+score  TW_BK  0.077
+score  TW_BL  0.077
+score  TW_BM  0.077
+score  TW_BN  0.077
+score  TW_BP  0.077
+score  TW_BQ  0.077
+score  TW_BT  0.077
+score  TW_BV  0.077
+score  TW_BW  0.077
+score  TW_BX  0.077
+score  TW_BZ  0.077
+score  TW_CB  0.077
+score  TW_CC  0.077
+score  TW_CD  0.077
+score  TW_CF  0.077
+score  TW_CG  0.077
+score  TW_CL  0.077
+score  TW_CM  0.077
+score  TW_CN  0.077
+score  TW_CP  0.077
+score  TW_CQ  0.077
+score  TW_CR  0.077
+score  TW_CS  0.077
+score  TW_CV  0.077
+score  TW_CX  0.077
+score  TW_CY  0.077
+score  TW_CZ  0.077
+score  TW_DB  0.077
+score  TW_DC  0.077
+score  TW_DD  0.077
+score  TW_DF  0.077
+score  TW_DG  0.077
+score  TW_DH  0.077
+score  TW_DJ  0.077
+score  TW_DK  0.077
+score  TW_DL  0.077
+score  TW_DM  0.077
+score  TW_DN  0.077
+score  TW_DP  0.077
+score  TW_DQ  0.077
+score  TW_DR  0.077
+score  TW_DT  0.077
+score  TW_DV  0.077
+score  TW_DW  0.077
+score  TW_DX  0.077
+score  TW_DY  0.077
+score  TW_DZ  0.077
+score  TW_EB  0.077
+score  TW_EG  0.077
+score  TW_EH  0.077
+score  TW_EJ  0.077
+score  TW_EK  0.077
+score  TW_EP  0.077
+score  TW_EQ  0.077
+score  TW_EV  0.077
+score  TW_FC  0.077
+score  TW_FD  0.077
+score  TW_FG  0.077
+score  TW_FH  0.077
+score  TW_FJ  0.077
+score  TW_FK  0.077
+score  TW_FL  0.077
+score  TW_FM  0.077
+score  TW_FN  0.077
+score  TW_FP  0.077
+score  TW_FQ  0.077
+score  TW_FR  0.077
+score  TW_FS  0.077
+score  TW_FT  0.077
+score  TW_FV  0.077
+score  TW_FW  0.077
+score  TW_FX  0.077
+score  TW_FY  0.077
+score  TW_FZ  0.077
+score  TW_GB  0.077
+score  TW_GC  0.077
+score  TW_GD  0.077
+score  TW_GF  0.077
+score  TW_GG  0.077
+score  TW_GJ  0.077
+score  TW_GK  0.077
+score  TW_GL  0.077
+score  TW_GM  0.077
+score  TW_GN  0.077
+score  TW_GP  0.077
+score  TW_GQ  0.077
+score  TW_GR  0.077
+score  TW_GT  0.077
+score  TW_GU  0.077
+score  TW_GV  0.077
+score  TW_GW  0.077
+score  TW_GX  0.077
+score  TW_GY  0.077
+score  TW_GZ  0.077
+score  TW_HB  0.077
+score  TW_HC  0.077
+score  TW_HD  0.077
+score  TW_HF  0.077
+score  TW_HG  0.077
+score  TW_HH  0.077
+score  TW_HJ  0.077
+score  TW_HK  0.077
+score  TW_HL  0.077
+score  TW_HM  0.077
+score  TW_HN  0.077
+score  TW_HP  0.077
+score  TW_HQ  0.077
+score  TW_HR  0.077
+score  TW_HS  0.077
+score  TW_HV  0.077
+score  TW_HW  0.077
+score  TW_HX  0.077
+score  TW_HZ  0.077
+score  TW_IB  0.077
+score  TW_IF  0.077
+score  TW_IH  0.077
+score  TW_II  0.077
+score  TW_IJ  0.077
+score  TW_IK  0.077
+score  TW_IQ  0.077
+score  TW_IU  0.077
+score  TW_IV  0.077
+score  TW_IW  0.077
+score  TW_IX  0.077
+score  TW_IY  0.077
+score  TW_JB  0.077
+score  TW_JC  0.077
+score  TW_JD  0.077
+score  TW_JF  0.077
+score  TW_JG  0.077
+score  TW_JH  0.077
+score  TW_JJ  0.077
+score  TW_JK  0.077
+score  TW_JL  0.077
+score  TW_JM  0.077
+score  TW_JN  0.077
+score  TW_JP  0.077
+score  TW_JQ  0.077
+score  TW_JR  0.077
+score  TW_JS  0.077
+score  TW_JT  0.077
+score  TW_JV  0.077
+score  TW_JW  0.077
+score  TW_JX  0.077
+score  TW_JY  0.077
+score  TW_JZ  0.077
+score  TW_KB  0.077
+score  TW_KC  0.077
+score  TW_KD  0.077
+score  TW_KF  0.077
+score  TW_KG  0.077
+score  TW_KH  0.077
+score  TW_KJ  0.077
+score  TW_KK  0.077
+score  TW_KL  0.077
+score  TW_KM  0.077
+score  TW_KN  0.077
+score  TW_KP  0.077
+score  TW_KQ  0.077
+score  TW_KR  0.077
+score  TW_KS  0.077
+score  TW_KT  0.077
+score  TW_KU  0.077
+score  TW_KV  0.077
+score  TW_KW  0.077
+score  TW_KX  0.077
+score  TW_KY  0.077
+score  TW_KZ  0.077
+score  TW_LB  0.077
+score  TW_LC  0.077
+score  TW_LG  0.077
+score  TW_LH  0.077
+score  TW_LK  0.077
+score  TW_LN  0.077
+score  TW_LP  0.077
+score  TW_LQ  0.077
+score  TW_LR  0.077
+score  TW_LV  0.077
+score  TW_LW  0.077
+score  TW_LX  0.077
+score  TW_LZ  0.077
+score  TW_MB  0.077
+score  TW_MD  0.077
+score  TW_MF  0.077
+score  TW_MG  0.077
+score  TW_MH  0.077
+score  TW_MJ  0.077
+score  TW_MK  0.077
+score  TW_ML  0.077
+score  TW_MM  0.077
+score  TW_MN  0.077
+score  TW_MQ  0.077
+score  TW_MR  0.077
+score  TW_MT  0.077
+score  TW_MV  0.077
+score  TW_MW  0.077
+score  TW_MX  0.077
+score  TW_MZ  0.077
+score  TW_NB  0.077
+score  TW_NF  0.077
+score  TW_NH  0.077
+score  TW_NK  0.077
+score  TW_NL  0.077
+score  TW_NM  0.077
+score  TW_NP  0.077
+score  TW_NQ  0.077
+score  TW_NR  0.077
+score  TW_NV  0.077
+score  TW_NW  0.077
+score  TW_NX  0.077
+score  TW_NZ  0.077
+score  TW_OC  0.077
+score  TW_OG  0.077
+score  TW_OH  0.077
+score  TW_OJ  0.077
+score  TW_OK  0.077
+score  TW_OQ  0.077
+score  TW_OV  0.077
+score  TW_OY  0.077
+score  TW_OZ  0.077
+score  TW_PB  0.077
+score  TW_PC  0.077
+score  TW_PD  0.077
+score  TW_PF  0.077
+score  TW_PG  0.077
+score  TW_PH  0.077
+score  TW_PK  0.077
+score  TW_PL  0.077
+score  TW_PM  0.077
+score  TW_PN  0.077
+score  TW_PP  0.077
+score  TW_PQ  0.077
+score  TW_PR  0.077
+score  TW_PT  0.077
+score  TW_PV  0.077
+score  TW_PW  0.077
+score  TW_PX  0.077
+score  TW_PZ  0.077
+score  TW_QA  0.077
+score  TW_QB  0.077
+score  TW_QC  0.077
+score  TW_QD  0.077
+score  TW_QE  0.077
+score  TW_QF  0.077
+score  TW_QG  0.077
+score  TW_QH  0.077
+score  TW_QI  0.077
+score  TW_QJ  0.077
+score  TW_QK  0.077
+score  TW_QL  0.077
+score  TW_QM  0.077
+score  TW_QN  0.077
+score  TW_QO  0.077
+score  TW_QP  0.077
+score  TW_QQ  0.077
+score  TW_QR  0.077
+score  TW_QS  0.077
+score  TW_QT  0.077
+score  TW_QU  0.077
+score  TW_QV  0.077
+score  TW_QW  0.077
+score  TW_QX  0.077
+score  TW_QY  0.077
+score  TW_QZ  0.077
+score  TW_RB  0.077
+score  TW_RG  0.077
+score  TW_RH  0.077
+score  TW_RJ  0.077
+score  TW_RK  0.077
+score  TW_RL  0.077
+score  TW_RP  0.077
+score  TW_RQ  0.077
+score  TW_RR  0.077
+score  TW_RV  0.077
+score  TW_RW  0.077
+score  TW_RX  0.077
+score  TW_RZ  0.077
+score  TW_SB  0.077
+score  TW_SD  0.077
+score  TW_SF  0.077
+score  TW_SG  0.077
+score  TW_SJ  0.077
+score  TW_SK  0.077
+score  TW_SL  0.077
+score  TW_SM  0.077
+score  TW_SN  0.077
+score  TW_SQ  0.077
+score  TW_SR  0.077
+score  TW_SV  0.077
+score  TW_SW  0.077
+score  TW_SX  0.077
+score  TW_SY  0.077
+score  TW_SZ  0.077
+score  TW_TB  0.077
+score  TW_TC  0.077
+score  TW_TD  0.077
+score  TW_TF  0.077
+score  TW_TG  0.077
+score  TW_TJ  0.077
+score  TW_TK  0.077
+score  TW_TL  0.077
+score  TW_TM  0.077
+score  TW_TN  0.077
+score  TW_TP  0.077
+score  TW_TQ  0.077
+score  TW_TR  0.077
+score  TW_TV  0.077
+score  TW_TW  0.077
+score  TW_TX  0.077
+score  TW_TZ  0.077
+score  TW_UC  0.077
+score  TW_UF  0.077
+score  TW_UG  0.077
+score  TW_UH  0.077
+score  TW_UJ  0.077
+score  TW_UK  0.077
+score  TW_UQ  0.077
+score  TW_UU  0.077
+score  TW_UV  0.077
+score  TW_UW  0.077
+score  TW_UX  0.077
+score  TW_UY  0.077
+score  TW_UZ  0.077
+score  TW_VB  0.077
+score  TW_VC  0.077
+score  TW_VD  0.077
+score  TW_VF  0.077
+score  TW_VG  0.077
+score  TW_VH  0.077
+score  TW_VJ  0.077
+score  TW_VK  0.077
+score  TW_VL  0.077
+score  TW_VM  0.077
+score  TW_VN  0.077
+score  TW_VP  0.077
+score  TW_VQ  0.077
+score  TW_VR  0.077
+score  TW_VS  0.077
+score  TW_VT  0.077
+score  TW_VU  0.077
+score  TW_VV  0.077
+score  TW_VW  0.077
+score  TW_VX  0.077
+score  TW_VY  0.077
+score  TW_VZ  0.077
+score  TW_WB  0.077
+score  TW_WC  0.077
+score  TW_WD  0.077
+score  TW_WF  0.077
+score  TW_WG  0.077
+score  TW_WH  0.077
+score  TW_WJ  0.077
+score  TW_WK  0.077
+score  TW_WL  0.077
+score  TW_WM  0.077
+score  TW_WP  0.077
+score  TW_WQ  0.077
+score  TW_WR  0.077
+score  TW_WT  0.077
+score  TW_WU  0.077
+score  TW_WV  0.077
+score  TW_WW  0.077
+score  TW_WX  0.077
+score  TW_WY  0.077
+score  TW_WZ  0.077
+score  TW_XA  0.077
+score  TW_XB  0.077
+score  TW_XC  0.077
+score  TW_XD  0.077
+score  TW_XF  0.077
+score  TW_XG  0.077
+score  TW_XH  0.077
+score  TW_XI  0.077
+score  TW_XJ  0.077
+score  TW_XK  0.077
+score  TW_XL  0.077
+score  TW_XM  0.077
+score  TW_XN  0.077
+score  TW_XP  0.077
+score  TW_XQ  0.077
+score  TW_XR  0.077
+score  TW_XS  0.077
+score  TW_XT  0.077
+score  TW_XU  0.077
+score  TW_XV  0.077
+score  TW_XW  0.077
+score  TW_XX  0.077
+score  TW_XY  0.077
+score  TW_XZ  0.077
+score  TW_YB  0.077
+score  TW_YC  0.077
+score  TW_YD  0.077
+score  TW_YF  0.077
+score  TW_YG  0.077
+score  TW_YH  0.077
+score  TW_YI  0.077
+score  TW_YJ  0.077
+score  TW_YK  0.077
+score  TW_YM  0.077
+score  TW_YP  0.077
+score  TW_YQ  0.077
+score  TW_YR  0.077
+score  TW_YT  0.077
+score  TW_YV  0.077
+score  TW_YW  0.077
+score  TW_YX  0.077
+score  TW_YY  0.077
+score  TW_YZ  0.077
+score  TW_ZB  0.077
+score  TW_ZC  0.077
+score  TW_ZD  0.077
+score  TW_ZF  0.077
+score  TW_ZG  0.077
+score  TW_ZH  0.077
+score  TW_ZJ  0.077
+score  TW_ZK  0.077
+score  TW_ZL  0.077
+score  TW_ZM  0.077
+score  TW_ZN  0.077
+score  TW_ZP  0.077
+score  TW_ZQ  0.077
+score  TW_ZR  0.077
+score  TW_ZS  0.077
+score  TW_ZT  0.077
+score  TW_ZU  0.077
+score  TW_ZV  0.077
+score  TW_ZW  0.077
+score  TW_ZX  0.077
+score  TW_ZY  0.077
+score  TW_ZZ  0.077
+
+#EOF

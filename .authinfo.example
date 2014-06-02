@@ -1,0 +1,3 @@
+machine news.motzarella.org login srivasta force yes password password
+machine imap.gmail.com login manoj.srivastava.1962 force yes password password
+machine smtp.golden-gryphon.com login srivasta force yes password password port imaps

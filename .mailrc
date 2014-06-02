@@ -1,0 +1,60 @@
+set append
+set ask
+set askcc
+set autoprint
+set hold
+set dot
+set msgprompt
+set folder=mail
+set toplines=0
+set EDITOR=/usr/local/bin/emacs
+set VISUAL=/usr/local/bin/emacs
+set SHELL=/bin/bash
+alias judy "Judy Shardo <jshardo@mail.golden-gryphon.com>"
+alias webmt "Elizabeth Zobel <ejz@basesys.com>" "Philip Ollapally <pjo@basesys.com>" "Steve Critchfield <critch@basesys.com>" "Rick Bradley <rick@basesys.com>"
+alias devel "Debian Development List <debian-devel@lists.debian.org>"
+alias southal "Judy Shardo <jshardo@jaguar1.usouthal.edu>" "Tim Sherman <tsherman@jaguar1.usouthal.edu>" "Andy and Julie Woodard <woodard32@home.com>" "Matilde Tellaetxe <mtellaetxe@usamail.usouthal.edu>" "Anne A. Boettcher <aboettch@jaguar1.usouthal.edu>" "Amy Sheldon <asheldon@gulftel.com>" "Dean Haley <dhaley@datasync.com>" "Dan Martin <dmartin@disl.org>"
+
+alias shardos "Angie Nunn <shardonunn@hotmail.com>" "Anita Rutschilling <rutschilling4@msn.com>" "Betty Shardo <BSHARDO@midmark.com>" "Brenda S Petitjean <petitjbs@bright.net>" "Dan Shardo <mshsdshardo@MDECA.ORG>" "Jacqueline Shardo <jacquelineshardo@hotmail.com>" "Jacques Shardo <JShardo@aol.com>" "James Shardo <james.shardo@wpafb.af.mil>" "John Slonim <John_Slonim@ih.k12.oh.us>" "John and Karen Shardo <jkshardo@wesnet.com>" "Judy Shardo <jshardo@mail.golden-gryphon.com>" "June Shardo <jslo2@fuse.net>" "Michael Shardo <mshardo@hotmail.com>" "Reyna Shardo <pccreations@watchtv.net>" "Riva Cundall <rivaridge@myway.com>
+
+aslias tangram-team tangram-team@boozallenet.com
+
+alias jack "Jack J O'Brien <jobrien@jaguar1.usouthal.edu>" 
+alias lilo levin@openprojects.net
+alias dean "Dean Haley <dhaley@datasync.com>"
+#alias ed "Ed Songy <cwsongy@bellsouth.net>"
+# alias arnob Arnob Roy <ARNOB@gda.cadence.com>, 
+# alias atanu Atanu Basu <basu@loihi.hig.hawaii.edu>,
+# alias atul patankar@ms.uky.edu
+# alias bernard BLHAYES@cs.umass.edu
+# alias chang Sabyasachi Sen <C3049I@UMRVMB.UMR.EDU>
+# alias chary chary@cfa264.harvard.edu
+# alias deshmukh deshmukh@deceat.enet.dec.com
+# alias hemant kumar@cadsys.enet.dec.com
+# alias jaikumar Jaikumar <RADHAKRI@PAUL.RUTGERS.EDU>,
+# alias kartik kartik%smdvx1.intel.com@RELAY.CS.NET
+# alias graham "Grahame Plaisted <plaisted@zko.dec.com>"
+# alias consult useg_consult@zk3.dec.com
+# # # # # # # # # alias krishnan krishnan@star.enet.dec.com
+# # # # # # # # # alias kutty  "G. Kutty" <GKUTTY@AQUA.BACS.INDIANA.EDU>,
+# alias lobo Glen Lobo <LOBO@CSD4.MILW.WISC.EDU>,
+# alias nandi Saikat Nandi <NANDI@WUOLIN>,
+# alias partho ivzj100@indyvax.iupui.edu
+# alias paul scroboha
+# alias rajat bharati@vtvm2.bitnet
+# alias rangwani jagdish@hertz.njit.edu
+# alias samir samir@uxv.larc.nasa.gov
+# alias sampath SAMPATH%tiger@eng.eng.ohio-state.edu
+# alias sen sen@research.att.com
+# alias sharad coins::saxena
+# alias somnath Somenath Banerjee <Banerjee%vdle3.csc.ti.com@relay.cs.net>,
+# alias subba subba@bambi.ece.wsu.edu
+# alias sue susanc@rice.edu
+# alias thug varanasi@est.enet.dec.com
+# alias venu rayaprol@kasi.pilgrim.umass.edu
+# alias zee zee@juliet.caltech.edu
+# alias pkb  Pranab Banerjee <ibenadl@uclamvs>, 
+
+# Local Variables:
+# eval: (setup-mailrc-hook)
+# End:

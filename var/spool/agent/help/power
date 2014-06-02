@@ -1,0 +1,24 @@
+NAME
+
+	power -- Asks for a new power
+
+SYNOPSIS
+
+	power name password
+
+DESCRIPTION
+
+This command requests for a new power. You must give the proper password and
+be listed in the clearance file in order to get it. Moreover, the server
+processing your commands must be in trusted mode to grant you the power,
+even if your credentials are otherwise perfectly valid.
+
+Any power is granted automatically to 'root', except 'security' of course
+which must be requested for separately.
+
+It is recommended you release a power when you don't need it any longer,
+to guard against mistakes.
+
+EXAMPLE
+
+	power list list-passwd

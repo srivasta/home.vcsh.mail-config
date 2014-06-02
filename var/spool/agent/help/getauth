@@ -1,0 +1,20 @@
+NAME
+
+	getauth -- Gets power clearance file
+
+SYNOPSIS
+
+	getauth power [password]
+
+DESCRIPTION
+
+This command requests the power clearance file for the specified power. The
+power password is optional if the power is already detained or the user has
+already got the 'system' power.
+
+To get the 'root' or 'security' clearances, you need the corresponding
+power.
+
+EXAMPLE
+
+	getauth list-power mypasswd

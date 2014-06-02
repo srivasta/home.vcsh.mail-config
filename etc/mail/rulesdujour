@@ -1,0 +1,3 @@
+TRUSTED_RULESETS="TRIPWIRE SARE_EVILNUMBERS0 SARE_RANDOM";
+SA_DIR="/home/srivasta/.spamassassin";
+MAIL_ADDRESS="srivasta";

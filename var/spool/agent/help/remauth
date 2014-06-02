@@ -1,0 +1,27 @@
+NAME
+
+	remauth -- Removes users from power clearance file
+
+SYNOPSIS
+
+	remauth name [password]
+	... list of users ...
+	EOF
+
+DESCRIPTION
+
+This command removes specified users from the power's clearance file. No
+special power is required when the target power is already detained. Otherwise
+the 'system' power is needed.
+
+As usual, 'root' and 'security' clearances require the corresponding power to
+be held or the appropriate password.
+
+Only users matching exactly the addresses listed in the clearance file will
+be removed.
+
+EXAMPLE
+
+	remauth list list-password
+	root@acri.fr
+	EOF

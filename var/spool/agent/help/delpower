@@ -1,0 +1,19 @@
+NAME
+
+	delpower -- Deletes a power from the system
+
+SYNOPSIS
+
+	delpower power password [security]
+
+DESCRIPTION
+
+This command deletes a power and its associated clearance list. The 'system'
+power is required to delete all powers but 'root' and 'security'.
+
+The 'security' power may only be deleted by security and the 'root' power may
+only be deleted when the security password is also specified.
+
+EXAMPLE
+
+	delpower list list-password

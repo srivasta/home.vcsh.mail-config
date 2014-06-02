@@ -1,0 +1,13 @@
+#!/bin/sh
+# /usr/local/sbin/pinentry-unattended -- by Simon Josefsson
+
+# scdaemon will normally query the user for a PIN using a tool called
+# pinentry which reads and write to the user’s TTY directly. This
+# won’t work in unattended mode, so we want the scdaemon to signal
+# failure here — unless we are actually unlocking the smartcard
+# manually.
+
+if test x"$PINENTRY_USER_DATA" = xinteractive; then
+    exec pinentry "$@"
+fi
+exit 1

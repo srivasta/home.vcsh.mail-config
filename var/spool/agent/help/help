@@ -1,0 +1,16 @@
+NAME
+
+	help -- Tells more about a specific server command
+
+SYNOPSIS
+
+	help [command]
+
+DESCRIPTION
+
+The help command will send you some help regarding a particular command.
+Without any argument, it prints a list of all the known commands.
+
+EXAMPLE
+
+	help addauth

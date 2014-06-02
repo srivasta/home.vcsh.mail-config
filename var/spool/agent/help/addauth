@@ -1,0 +1,24 @@
+NAME
+
+	addauth -- Adds users to power clearance file
+
+SYNOPSIS
+
+	addauth power [password]
+	... users ...
+	EOF
+
+DESCRIPTION
+
+This command adds the specified users to the specified power. The power
+password is optional if the power is already detained or the user has
+already got the 'system' power.
+
+To alter 'root' and 'security' clearances, the corresponding power is needed.
+
+EXAMPLE
+
+	addauth list-power mypasswd
+	ram@acri.fr
+	ram@eiffel.com
+	EOF

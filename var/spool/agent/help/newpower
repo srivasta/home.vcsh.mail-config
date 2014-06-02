@@ -1,0 +1,28 @@
+NAME
+
+	newpower -- Adds a new power to the system
+
+SYNOPSIS
+
+	newpower power password [alias]
+	... users ...
+	EOF
+
+DESCRIPTION
+
+This command creates a new server power and assigns a password to protect it.
+If the power name is longer than 12 characters, you may specify an alias for
+that power, which will be used internally by mailagent to reference it, or
+leave the field blank and mailagent will generate one for you.
+
+The 'system' power is normally required to create a new power. The 'security'
+power is required to create the root power and the 'root' power is needed to
+create 'security'. In order to bootstrap either power, please refer to the
+mailagent manual page where this is explained in detail.
+
+EXAMPLE
+
+	newpower list-power mypasswd
+	ram@acri.fr
+	ram@eiffel.com
+	EOF

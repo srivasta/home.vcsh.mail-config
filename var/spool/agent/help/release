@@ -1,0 +1,25 @@
+NAME
+
+	release -- Releases power
+
+SYNOPSIS
+
+	release name
+
+DESCRIPTION
+
+This command releases the specified power.
+
+If the 'root' power is releases, other powers obtained while root or before
+are kept. That way, it makes sense to ask for powers while root, when the
+password for some minor power has been change, since you do not need to
+supply it. Then 'root' may be released and the work continued with the
+minor power handy.
+
+It is not recommend to run an entire session with 'root' privileges, unless
+needed to bypass some restrictions like the maximum number of commands that
+may be issued in a session.
+
+EXAMPLE
+
+	release list

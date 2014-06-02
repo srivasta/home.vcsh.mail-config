@@ -1,0 +1,2722 @@
+# bogus-virus-warnings.cf version 1.151 (2004-11-07)
+# Collated and maintained by Tim Jackson (tim@timj.co.uk)
+# Latest version at http://www.timj.co.uk/linux/bogus-virus-warnings.cf
+# Lists bogus virus warnings and similar
+
+# ------------ NEWS - 2004-04-03 --------------
+# READ THIS CAREFULLY - CHECK YOUR SETUP!
+# To reduce the risk of false positives, some rules now have checks to make
+# sure that the message is a bounce. This checking is currently only enabled
+# for rules that would match it irrelevant of Return-Path, but will soon
+# be added to rules for which we need to determine for certain that the 
+# envelope sender (return path) is null. However, if you are scanning at SMTP 
+# time, and your MTA hasn't at that time inserted the Return-Path header 
+# (e.g. Exim/Exiscan), or an X-Envelope-From header (which I am told is added
+# by amavisd-new), we can't necessarily tell that it is a bounce, so in 
+# that case you need to either get your MTA to add a header X-Is-A-Bounce: 1
+# which tells us that it has a null sender, or disable the bounce checking.
+# To disable bounce-checking, put this in your local.cf:
+# meta __REPORT_DSN 1
+#
+# You can add an X-Is-A-Bounce header with Exim 4 using the following rule
+# in your RCPT ACL:
+#
+# warn message = X-Is-A-Bounce: 1
+#      senders = :
+#
+# (You may wish to add "headers_remove"/"headers remove" directives to your 
+# remote_smtp router and system filter respectively, to strip these out again
+# before the message is delivered)
+
+
+# ----------- UPDATES & CONTRIBUTIONS ---------
+# This ruleset is updated regularly; check for updates every now and then
+# Automatic updates are OK, although please don't check too often.
+# You can use the Rules du Jour script to easily check for updates:
+# http://www.exit0.us/index.php/RulesDuJour
+
+# Contributions/comments/corrections etc. are more than welcome, particularly
+# complete samples of bogus warnings not caught by this rule. Please send to
+# the following e-mail address: spam \-at/ timj.co.uk (replacing " \-at/ " with "@")
+# PLEASE send complete samples (ideally as an attachment) if at all possible - 
+# it helps me maintain an archive for regression testing and so on.
+
+# There is a Postfix derivative of this (not identical) by Niels 
+# Callesøe at: http://www.t29.dk/antiantivirus.txt
+
+# A procmail derivative (derivative of a derivative!) of Niels's Postfix
+# version is here: http://pekaje.homeip.net/antiantivirus_procmail.txt
+
+# Contributors: (if I've missed anyone, I apologise - please let me know)
+# TJ  = Tim Jackson <tim@timj.co.uk>
+# DD  = Dennis Davis <ccsdhd/at\bath.ac.uk>
+# BM  = Brian Martin (indirectly via website article)
+#       see http://www.attrition.org/security/rant/av-spammers.html
+# PV  = Paul Vixie (indirectly via NANOG mailing list)
+#       see http://www.merit.edu/mail.archives/nanog/2004-01/msg00821.html
+#       and http://www.merit.edu/mail.archives/nanog/msg01014.html
+# AF  = Alan J. Flavell <a-dot-flavell/at/physics.gla.ac.uk>
+# CE  = Chris Edwards <C\dot\Edwards-at@-compserv.gla.ac.uk>
+# NC  = Niels Callesoe <nica\at/t29-dot-dk>
+# JB  = Jethro R Binks <jethro=dot=binks\@strath.ac.uk>
+# ESR = Eric S. Raymond <esr\\a@t/snark.thyrsus^com>
+# EA  = Ed Avis <ed\at/membled.com>
+# HP  = Herb Peyerl <hpeyerl//at.beer.org>
+# JBB = John B Batzel <batzel a t seas.upenn.edu>
+# SC  = Stephane Clodic <sclodic//at\teaser.fr>
+# MK  = Martin Kutschker <Martin-dot-Kutschker'at'blackbox.net>
+# PB  = Pieter B <PieterB-at/gewis.nl>
+# PSI = Per Steinar Iversen <PerSteinar.Iversen/at/adm.hio.no>
+# HPK = Homer Parker <hparker-at-pcsrvc.com>
+# DJM = Damian Miller <djm/at/mindrot.org>
+# VS  = Jay 'veggiespam' Ball <jay//-at=veggiespam.com>
+# NL  = Nick Leverton <nick\-at$leverton.org>
+# MR  = Michael Roth <mroth%at%nessie.de>
+# JT  = Jona Tallieu <jona=at=tnt.be>
+# VD  = Vincent Deffontaines <vincent.deffontaines/at/coe.int>
+# HD  = Harald Deppeler
+# DP  = David Precious <dave=at=preshweb.co.uk>
+# AS  = Andreas Steinmetz <ast!at!domdv.de>
+# GD  = Guido Dorssers <g/dot/h/dot/j/dot/dorssers-at\ruiver.frontierfleet.net>
+# MB  = Martin Blapp <mb-at-imp.ch>
+# RP  = Rob van der Putten <rob=at-sput.nl>
+# PBR = Peter Bieringer <pb\\at\bieringer.de>
+# PC  = Paul Cormier <pcormier--at--win-soft.com>
+# TV  = Tjerk Vonck <tjerk^^at/mirc.com>
+# ML  = Maurice Lucas <mslucas%at%taos-it.nl>
+# MM  = Marek Michalkiewicz <marekm(at)amelek.gda.pl>
+
+# ---------- BOUNCE DETECTION ---------
+# General rule to indicate bounce or otherwise - used for some other rules
+header __BOUNCE_HEADER		X-Is-A-Bounce =~ /.+/
+
+# This won't match for scanning done at SMTP time, at least with Exim
+header __BOUNCE_RP1		Return-Path =~  /^<>$/
+
+# NL says this is added by amavisd-new before passing to SA
+header __BOUNCE_RP2		X-Return-Path =~ /^<>$/
+
+# Mark Martinec says the above is incorrect, and it's X-Envelope-From
+header __BOUNCE_RP3		X-Envelope-From =~ /^<>$/
+
+meta __NULL_SENDER		__BOUNCE_HEADER || __BOUNCE_RP1 || __BOUNCE_RP2 || __BOUNCE_RP3
+
+# Thanks to AF
+header __CT_DEL_STATUS		Content-Type =~ /report-type=delivery-status/
+
+meta __REPORT_DSN		__NULL_SENDER || __CT_DEL_STATUS
+
+
+# The rules are now slowly getting meta-information added to them, in the
+# form of a "DSN:" message above the rule. The codes in this correspond to
+# the following meanings:
+#
+# Null    = Messages always come with null sender
+# CT      = Message always come with Content-Type =~ /report-type=delivery-status/
+# !Attach = This rule matches the content of an attachment which has replaced
+#           a virus, so the Null/CT rules could conceivably vary
+# A rule with a leading question mark means status unknown, for example:
+# "DSN: Null, ?CT" means we know it always has a null sender, but not sure
+# whether it has the Content-Type match.
+
+
+# ---------- THE RULES PROPER -----------
+
+blacklist_from antivirus@webtar.hu
+blacklist_from asterix@ars.de
+blacklist_from deadletter@wingateweb.com
+blacklist_from mailsweeper@tso.co.uk
+blacklist_from us-interscan.admins@alcatel.com
+blacklist_from virus@praca.gov.pl
+
+
+# TJ/HPK
+header VIRUS_WARNING1		Subject =~ /^(NDN: )?\{(Virus|Filename)\?\}/i
+describe VIRUS_WARNING1		Unhelpful 'virus warning' (1)
+score VIRUS_WARNING1		20
+
+# TJ
+header VIRUS_WARNING2           Subject =~ /Virus Detected by Network Associates, Inc\. Webshield/
+describe VIRUS_WARNING2         Unhelpful NAI Webshield 'virus warning' (2)
+score VIRUS_WARNING2            20
+
+# TJ
+header VIRUS_WARNING3           Subject =~ /^---- Virus Detected ----$/
+describe VIRUS_WARNING3         Unhelpful Mail Marshal 'virus warning' (3)
+score VIRUS_WARNING3            20
+   
+# TJ                                                  
+header VIRUS_WARNING4           Subject =~ /^Virus detected$/
+describe VIRUS_WARNING4         Unhelpful Tobit Software 'virus warning' (4)
+score VIRUS_WARNING4            20
+
+# TJ
+header VIRUS_WARNING4A		Subject =~ /^Virus Detected:status/
+describe VIRUS_WARNING4A	Unhelpful MailSweeper 'virus warning' (4A)
+score VIRUS_WARNING4A		20
+
+# TJ/HPK/AF
+header VIRUS_WARNING5           Subject =~ /^Virus (Alert|Warning|intercepted)!?$/i
+describe VIRUS_WARNING5         Unhelpful 'virus warning' (5)
+score VIRUS_WARNING5            20
+
+# TJ/VS
+header VIRUS_WARNING6           Subject =~/^InterScan (NT|Virus) Alert$/
+describe VIRUS_WARNING6         Unhelpful InterScan 'virus warning' (6)
+score VIRUS_WARNING6            20
+
+# TJ
+header VIRUS_WARNING7           Subject =~/^Virus found in the message$/
+describe VIRUS_WARNING7         Unhelpful 'virus warning' (7)
+score VIRUS_WARNING7            20
+
+# TJ                                                                             
+header VIRUS_WARNING8           Subject =~/^Message quarantined$/
+describe VIRUS_WARNING8         Unhelpful 'virus warning' (8)
+score VIRUS_WARNING8            20
+
+# TJ
+# VIRUS_WARNING9 now rolled into VIRUS_WARNING5
+
+# TJ
+header VIRUS_WARNING10          Subject =~/^Virus found in e-mail \(/
+describe VIRUS_WARNING10        Unhelpful Netpilot VPN 'virus warning' (10)
+score VIRUS_WARNING10           20
+
+# TJ
+header VIRUS_WARNING11          Subject =~/^MDaemon Warning - Virus Found/
+describe VIRUS_WARNING11        Unhelpful MDaemon 'virus warning' (11)
+score VIRUS_WARNING11           20
+
+# TJ
+header VIRUS_WARNING12		From =~/F-Secure Anti-Virus for Internet Mail/
+describe VIRUS_WARNING12	Unhelpful F-Secure 'virus warning' (12)
+score VIRUS_WARNING12		20
+
+# TJ
+rawbody VIRUS_WARNING13         /If you meant to send this file then please/
+describe VIRUS_WARNING13        Unhelpful Exim system_filter 'virus warning'? (13)
+score VIRUS_WARNING13           3
+
+# TJ
+rawbody VIRUS_WARNING14		/package it up as a zip file and resend it/
+describe VIRUS_WARNING14 	Looks like Exim system_filter 'virus warning' (14)
+score VIRUS_WARNING14		3
+
+# TJ
+meta VIRUS_WARNING_EXIM		VIRUS_WARNING13 && VIRUS_WARNING14
+describe VIRUS_WARNING_EXIM	Unhelpful Exim system_filter 'virus warning'
+score VIRUS_WARNING_EXIM	6
+
+# TJ/JT
+header VIRUS_WARNING15		Subject =~ /^(Warning: E-mail viruses detected|Waarschuwing: E-mail virus ontdekt)$/
+describe VIRUS_WARNING15	Unhelpful MailScanner 'virus warning' (15)
+score VIRUS_WARNING15		20
+
+# TJ/PSI/AF
+header VIRUS_WARNING16		Subject =~ /^ScanMail Message: To (Sender|Recipient) (virus found|file blocking settings matched)/
+describe VIRUS_WARNING16	Unhelpful ScanMail/Exch 'virus warning' (16)
+score VIRUS_WARNING16		20
+
+# TJ
+rawbody VIRUS_WARNING17		/The uncleanable file is deleted\./
+describe VIRUS_WARNING17	Unhelpful Cisco 'virus warning' (17)
+score VIRUS_WARNING17		10
+
+# TJ/DD/PSI
+# TJ: removed end-assertion (2004-06-06) to catch customisations
+header VIRUS_WARNING18		Subject =~/^(VIRUS|BANNED FILENAME) .*(IN YOUR MAIL|w Twoim mejlu)/
+describe VIRUS_WARNING18	Unhelpful 'virus warning' (18)
+score VIRUS_WARNING18		20
+
+# TJ
+# Added optional space in v1.11 thanks to CE
+# See also 299
+header VIRUS_WARNING19		Subject =~/^Norton Anti ?Virus detected/
+describe VIRUS_WARNING19	Unhelpful Norton AntiVirus 'virus warning' (19)
+score VIRUS_WARNING19		20
+
+# Rule 20 deprecated in favour of modified rule #18
+# (DD: Subject: VIRUS (blah) IN YOUR MAIL)
+
+# DD/MK
+header VIRUS_WARNING21		Subject =~ /^Antigen found (VIRUS|FILE)/
+describe VIRUS_WARNING21	Unhelpful Antigen 'virus warning' (21)
+score VIRUS_WARNING21		20
+
+# TJ
+rawbody VIRUS_WARNING22		/^Panda Antivirus has taken the following actions/
+describe VIRUS_WARNING22	Unhelpful Panda Antivirus 'virus warning' (22)
+score VIRUS_WARNING22		20
+
+# TJ
+header VIRUS_WARNING23		Subject =~ /^Filter incident$/
+describe VIRUS_WARNING23	Unhelpful Panda Antivirus 'virus warning'? (23)
+score VIRUS_WARNING23		4
+
+# TJ
+rawbody VIRUS_WARNING24         /^<<< 554 TRANSACTION FAILED - Unrepairable Virus/
+describe VIRUS_WARNING24        Unhelpful AOL 'virus warning' (24)
+score VIRUS_WARNING24           20
+
+# DD
+rawbody VIRUS_WARNING25		/^Network Associates WebShield SMTP.*detected virus/
+describe VIRUS_WARNING25	Unhelpful Network Associates 'virus warning' (25)
+score VIRUS_WARNING25		20
+
+# TJ
+rawbody VIRUS_WARNING26		/^The name\(s\) of the blocked file\(s\) follow:/
+describe VIRUS_WARNING26	Unhelpful 'virus warning' (26)
+score VIRUS_WARNING26		20
+
+# TJ
+rawbody VIRUS_WARNING27		/V I R U S  A L E R T/
+describe VIRUS_WARNING27	Unhelpful amavisd 'virus warning' (27)
+score VIRUS_WARNING27		20
+
+# TJ
+# Modified to remove "^Our" (thanks CE) as is sometimes customised like so:
+# "The University of xxxx virus detector...."
+rawbody VIRUS_WARNING28		/virus detector has just been triggered by a message you sent/
+describe VIRUS_WARNING28	Unhelpful MailScanner 'virus warning' (28)
+score VIRUS_WARNING28		20
+
+# TJ
+header VIRUS_WARNING29		Subject =~ /^Vírus figyelmeztetés! Virus warning!$/
+describe VIRUS_WARNING29	Unhelpful Hungarian 'virus warning' (29)
+score VIRUS_WARNING29		20
+
+# TJ
+body VIRUS_WARNING30		/The mail was deleted on the mailserver. The sender was informed about this incident/
+describe VIRUS_WARNING30	Unhelpful 'virus warning' (30)
+score VIRUS_WARNING30		20
+
+# DD
+rawbody VIRUS_WARNING31         /^The Declude Virus.*software on our mail server detected the/
+describe VIRUS_WARNING31        Unhelpful Declude Virus software warning (31)
+score VIRUS_WARNING31           20
+
+# TJ
+body VIRUS_WARNING32		/^\/infected with .+/
+describe VIRUS_WARNING32	Unhelpful qmail-plugin virus warning (32)
+score VIRUS_WARNING32		5
+
+# BM
+body VIRUS_WARNING33		/^The virus detector said this about the message/
+describe VIRUS_WARNING33	Unhelpful MailScanner virus warning (33)
+score VIRUS_WARNING33		12
+
+# BM/AF
+header VIRUS_WARNING34		Subject =~ /^Symantec (AVF|Mail Security|AntiVirus(\/Filtering)?) (for (Lotus Notes|Domino) )?detected/
+describe VIRUS_WARNING34	Unhelpful Symantec virus warning (34)
+score VIRUS_WARNING34		20
+
+# BM/MK
+# Borderware MXtreme Firewall
+body VIRUS_WARNING35		/was stopped and (Rejected|Quarantined) because it contains one or more (viruses|forbidden attachments)/
+describe VIRUS_WARNING35	Unhelpful BorderWare MXtreme virus warning (35)
+score VIRUS_WARNING35		8
+
+# BM
+header VIRUS_WARNING36		Subject =~ /^Returned due to virus;/
+describe VIRUS_WARNING36	Unhelpful 'virus warning' (36)
+score VIRUS_WARNING36		20
+
+# PV
+header VIRUS_WARNING37		Subject =~ /^Anti-Virus Notification/
+describe VIRUS_WARNING37	Unhelpful 'virus warning' (37)
+score VIRUS_WARNING37		12
+
+# PV/JT
+header VIRUS_WARNING38		Subject =~ /^BANNED FILENAME .*IN MAIL FROM YOU/
+describe VIRUS_WARNING38	Unhelpful 'virus warning' (38)
+score VIRUS_WARNING38		9
+
+# PV
+header VIRUS_WARNING39		Subject =~ /^File blocked - ScanMail for Lotus/
+describe VIRUS_WARNING39	Unhelpful ScanMail 'virus warning' (39)
+score VIRUS_WARNING39		12
+
+# PV
+header VIRUS_WARNING40		Subject =~ /^Message deleted/
+describe VIRUS_WARNING40	Unhelpful 'virus warning' (40)
+score VIRUS_WARNING40		20
+
+# PV
+header VIRUS_WARNING41		Subject =~ /^NAV detected a virus/
+describe VIRUS_WARNING41	Unhelpful 'virus warning' (41)
+score VIRUS_WARNING41		20
+
+# PV
+header VIRUS_WARNING42		Subject =~ /^RAV AntiVirus scan/
+describe VIRUS_WARNING42	Unhelpful RAV 'virus warning' (42)
+score VIRUS_WARNING42		20
+
+# PV
+# Variant on rule #18; similar to #38
+# NC has seen caseless version "Virus in mail from you."
+header VIRUS_WARNING43		Subject =~ /^VIRUS .*IN (A )?MAIL FROM YOU/i
+describe VIRUS_WARNING43	Unhelpful 'virus warning' (43)
+score VIRUS_WARNING43		20
+
+# PV
+header VIRUS_WARNING44		Subject =~ /^Virus Notification:/
+describe VIRUS_WARNING44	Unhelpful 'virus warning' (44)
+score VIRUS_WARNING44		20
+
+# PV
+header VIRUS_WARNING45		Subject =~ /^Virus found in a message you sent/
+describe VIRUS_WARNING45	Unhelpful 'virus warning' (45)
+score VIRUS_WARNING45		20
+
+# PV
+# CE contributed caseless start
+header VIRUS_WARNING46		Subject =~ /^[Vv]irus found in sent message/
+describe VIRUS_WARNING46	Unhelpful 'virus warning' (46)
+score VIRUS_WARNING46		20
+
+# PV
+header VIRUS_WARNING47		From =~ /^GroupShield for Exchange/
+describe VIRUS_WARNING47	Unhelpful GroupShield/Exch 'virus warning' (47)
+score VIRUS_WARNING47		10
+
+# PV
+body VIRUS_WARNING48		/^The infected message's properties are:/
+describe VIRUS_WARNING48	Unhelpful McAfee 'virus warning' (48)
+score VIRUS_WARNING48		20
+
+# AF
+header VIRUS_WARNING49		Subject =~ /^VIRUS EN SU CORREO/
+describe VIRUS_WARNING49	Unhelpful 'virus warning' (49)
+score VIRUS_WARNING49		20
+
+# AF
+header VIRUS_WARNING50		Subject =~ /^Warning: antivirus system report$/
+describe VIRUS_WARNING50	Unhelpful 'virus warning' (50)
+score VIRUS_WARNING50		20
+
+# AF
+header VIRUS_WARNING51		Subject =~ /^MDaemon Notification -- Attachment Removed$/
+describe VIRUS_WARNING51	Unhelpful 'virus warning' (51)
+score VIRUS_WARNING51		20
+
+# AF
+header VIRUS_WARNING52		Subject =~ /^Information - Antivirus$/
+describe VIRUS_WARNING52	Unhelpful 'virus warning' (52)
+score VIRUS_WARNING52		20
+
+# AF
+header VIRUS_WARNING53		Subject =~ /^Symantec AntiVirus detected a violation/
+describe VIRUS_WARNING53	Unhelpful 'virus warning' (53)
+score VIRUS_WARNING53		20
+
+# AF
+header VIRUS_WARNING54		Subject =~ /^WARNING: YOU WERE SENT A VIRUS/
+describe VIRUS_WARNING54	Unhelpful 'virus warning' (54)
+score VIRUS_WARNING54		20
+
+# AF
+header VIRUS_WARNING55		Subject =~ /^SAV detected a violation in a/
+describe VIRUS_WARNING55	Unhelpful SAV 'virus warning' (55)
+score VIRUS_WARNING55		20
+
+# AF/CE
+# Virus version seen as "...a Virus in your message", not sure about other
+header VIRUS_WARNING56		Subject =~ /^MailMarshal has detected a (Virus|suspect attachment)/
+describe VIRUS_WARNING56	Unhelpful MailMarshal 'virus warning' (56)
+score VIRUS_WARNING56		20
+
+# AF
+header VIRUS_WARNING57		Subject =~ /^A virus was detected in your mail/
+describe VIRUS_WARNING57	Unhelpful 'virus warning' (57)
+score VIRUS_WARNING57		20
+
+# AF
+header VIRUS_WARNING58		Subject =~ /^Recipient Virus-alert/
+describe VIRUS_WARNING58	Unhelpful 'virus warning' (58)
+score VIRUS_WARNING58		20
+
+# AF/PBR
+#lowercase version is VirusGuard "^Virus found in message to you!$"
+header VIRUS_WARNING59		Subject =~ /^Virus [fF]ound in message/
+describe VIRUS_WARNING59	Unhelpful 'virus warning' (59)
+score VIRUS_WARNING59		20
+
+# AF
+# Roll into VIRUS_WARNING15?
+header VIRUS_WARNING60		Subject =~ /^E-?mail viruses detected/
+describe VIRUS_WARNING60	Unhelpful 'virus warning' (60)
+score VIRUS_WARNING60		20
+
+# AF
+header VIRUS_WARNING61		Subject =~ /^Undelivered mail: VIRUS FOUND/
+describe VIRUS_WARNING61	Unhelpful 'virus warning' (61)
+score VIRUS_WARNING61		20
+
+# AF/TJ/PB/HD
+header VIRUS_WARNING62		From =~ /Antivirus|InterScan|MailScanner|virusscan|WebShield SMTP|NortonAV|DrWeb-DAEMON|amavisd-new|virenscanner|GateLockX200|Filtermails|MailMonitor|Symantec\@/i
+describe VIRUS_WARNING62	'From' indicates unhelpful 'virus warning' (62)
+score VIRUS_WARNING62		3.5
+
+# AF/TJ
+# care: double count of this & 62 for 'amavisd-new'
+header VIRUS_WARNING62A		From =~ /amavis\@/
+describe VIRUS_WARNING62A	'From' contains 'amavis'; 'virus warning'? (62A)
+score VIRUS_WARNING62A		0.8
+
+# AF/TJ/MK/JT
+# Case-sensitive strong indications
+header VIRUS_WARNING63		From =~ /mail.marshal\@|InterScan Notification|Antivirus-Daemon|Nemx Power Tools for MS Exchange Server|NAVMSE-|Norton_AntiVirus_|Unicom Anti-Virus|Symantec_AntiVirus_for_SMTP|ANTIVIRUS-SYSTEM|\"System Anti-Virus Administrator\"|Eclipse-VirusShield|Anti-Virus Scanner|SymantecSMTPSecurityServer|_WatchDog_Demon|MAILsweeper|InterScan Notification|eTrust_Antivirus_Lotus_Notes|BorderWare MXtreme Mail Firewall|DinaScanner|vba_filter|KAV for Microsoft Exchange|Guinevere Anti-Virus|Barracuda Spam Firewall/
+describe VIRUS_WARNING63	'From' strongly indicates 'virus warning' (63)
+score VIRUS_WARNING63		8
+
+# TJ/AF
+# Case-insensitive strong indications
+header VIRUS_WARNING63A		From =~ /mailsweeper\@|avmailwall\@|virusscreen\@|virus-alert\@|antigen_/i
+describe VIRUS_WARNING63A	'From' strongly indicates 'virus warning' (63A)
+score VIRUS_WARNING63A		8
+
+# ML
+# blacklist_from not used, because resent-from (added by some mailing lists) overrides.
+header VIRUS_WARNING63B		From =~ /viruscheckservice\@virusguardman\.com/i
+describe VIRUS_WARNING63B	Unhelpful 'virus warning' (blacklisted) (63B)
+score VIRUS_WARNING63B		20
+
+# AF
+# False positive reported by Dan Miller <dan-dot-miller/at/ci-pinkerton.com>
+# Has had a score of 20 for a long time.
+# What a pain; Google shows huge amounts of junk
+# 2004-08-09: removed after another FP report. Would love to know more about this.
+#header VIRUS_WARNING64		X-BLTSYMAVREINSERT =~ /./
+#describe VIRUS_WARNING64	Looks like unhelpful 'virus warning' (64)
+#score VIRUS_WARNING64		3
+
+# AF
+header VIRUS_WARNING65		X-Virus-Scan-Result =~ /Repaired/
+describe VIRUS_WARNING65	Unhelpful 'virus warning' (65)
+score VIRUS_WARNING65		20
+
+# AF
+# This pattern has been seen as X-AtHome-MailScanner, X-Virus-Scanner, 
+# X-MailScanner, X-Antivirus, X-CTC-Iris-MailScanner, X-UTwente-MailScanner
+header VIRUS_WARNING66		ALL =~ /Found to be infected/
+describe VIRUS_WARNING66	Unhelpful 'virus warning' (66)
+score VIRUS_WARNING66		20
+
+# AF
+header VIRUS_WARNING67		X-Scanned =~ /Symantec Antivirus Scan - Virus found/
+describe VIRUS_WARNING67	Unhelpful 'virus warning' (67)
+score VIRUS_WARNING67		20
+
+# AF
+header VIRUS_WARNING68		X-Sender =~ /NetMail AntiVirus Agent/
+describe VIRUS_WARNING68	Unhelpful 'virus warning' (68)
+score VIRUS_WARNING68		20
+
+# Rule 69 was obsoleted by modified version of rule #66
+# (AF: X-yoursite-Mailscanner: Found to be infected)
+
+# AF
+header VIRUS_WARNING70		Subject =~ /^Quarantined Mail: virus from/
+describe VIRUS_WARNING70	Unhelpful 'virus warning' (70)
+score VIRUS_WARNING70		20
+
+# TJ
+header VIRUS_WARNING71		Subject =~ /^Failed to clean virus/
+describe VIRUS_WARNING71	Unhelpful InterScan 'virus warning' (71)
+score VIRUS_WARNING71		20
+
+# TJ
+rawbody VIRUS_WARNING72		/^   Attempted to clean the file but it is not cleanable/
+describe VIRUS_WARNING72	Unhelpful InterScan 'virus warning' (72)
+score VIRUS_WARNING72		20
+
+# AF
+header VIRUS_WARNING73		X-Mirapoint-Virus =~ /DELETED/
+describe VIRUS_WARNING73	Unhelpful Mirapoint 'virus warning' (73)
+score VIRUS_WARNING73		20
+
+# AF
+# Part of "Attenzione Virus - Virus Alert"
+header VIRUS_WARNING74		Subject =~ /^Attenzione Virus/
+describe VIRUS_WARNING74	Unhelpful 'virus warning' (74)
+score VIRUS_WARNING74		20
+
+# AF
+header VIRUS_WARNING75		X-Auto-Generated =~ /^Sophos antivirus plugin/
+describe VIRUS_WARNING75	Unhelpful 'virus warning' (75)
+score VIRUS_WARNING75		10
+
+# AF/TJ
+# Variant on #16
+header VIRUS_WARNING76		Subject =~ /^\[MailServer Notification\]\s?To (Sender|External Sender|Recipient):? (virus found|a virus was found|file blocking settings matched|Message matched eManager setting)/
+describe VIRUS_WARNING76	Unhelpful ScanMail 'virus warning' (76)
+score VIRUS_WARNING76		20
+
+# AF
+header VIRUS_WARNING77		Subject =~ /^virus in verschickter Nachricht gefunden/
+describe VIRUS_WARNING77	Unhelpful 'virus warning' (77)
+score VIRUS_WARNING77		20
+
+# AF
+rawbody VIRUS_WARNING78		/Status: 5\.7\.0 \(other or undefined security status\)/
+describe VIRUS_WARNING78	Could be a bogus virus warning (78)
+score VIRUS_WARNING78		0.5
+
+# AF
+rawbody VIRUS_WARNING79		/Message-ID: <.+> \(added by postmaster/
+describe VIRUS_WARNING79	Could be a bogus virus warning (79)
+score VIRUS_WARNING79		0.5
+
+# AF
+meta VIRUS_WARNING80		VIRUS_WARNING78 && VIRUS_WARNING79 && __REPORT_DSN
+describe VIRUS_WARNING80	Likely to be a bogus virus warning (80)
+score VIRUS_WARNING80		3.5
+
+# Rule 81 combined with 56
+
+# CE
+header VIRUS_WARNING82		Subject =~ /^Virus encontrado en el mensaje enviado/
+score VIRUS_WARNING82		20
+
+# CE
+header VIRUS_WARNING83		Subject =~ /^Security Alert - ScanMail for Lotus Notes/
+describe VIRUS_WARNING83	Unhelpful ScanMail 'virus warning' (83)
+score VIRUS_WARNING83		20
+
+# CE/MK
+# TJ: ...Detected is right-anchored
+header VIRUS_WARNING84		Subject =~ /^Virus Infection (Alert|Detected)/
+score VIRUS_WARNING84		20
+
+# CE
+header VIRUS_WARNING85		Subject =~ /^Warning - Virus Detected:/
+score VIRUS_WARNING85		20
+
+# CE
+header VIRUS_WARNING86		Subject =~ /^Skynet Mail Protection scan results/
+score VIRUS_WARNING86		20
+
+# CE
+rawbody VIRUS_WARNING87		/RAV AntiVirus plugin for CommuniGate Pro has found a virus in the e-mail you are about to send/
+describe VIRUS_WARNING87	Unhelpful RAV 'virus warning' (87)
+score VIRUS_WARNING87		20
+
+# CE
+rawbody VIRUS_WARNING88		/This is an automated return email from McAfee Virus Scan/
+describe VIRUS_WARNING88	Unhelpful McAfee 'virus warning' (88)
+score VIRUS_WARNING88		20
+
+# CE
+rawbody VIRUS_WARNING89		/------------------  Virus Warning Message/
+describe VIRUS_WARNING89	Unhelpful 'virus warning' (89)
+score VIRUS_WARNING89		20
+
+# JB
+body VIRUS_WARNING90		/^contained an attachment of a type that is frequently used to transport/
+describe VIRUS_WARNING90	Looks like unhelpful ScanMail 'virus warning' (90)
+score VIRUS_WARNING90		6
+
+# JB
+# Seen in "-- KO/Office has blocked your mail due to an email policy."
+header VIRUS_WARNING91		Subject =~ /has blocked your mail due to an email policy\./
+describe VIRUS_WARNING91	Looks like unhelpful ScanMail 'virus warning' (91)
+score VIRUS_WARNING91		6
+
+# NC: Contributed by "Safari" in n.a.n-a.e
+header VIRUS_WARNING92		Subject =~ /^Virusveszely! Virus warning!/
+score VIRUS_WARNING92		20
+
+# NC
+header VIRUS_WARNING93		Subject =~ /^Virus infection notice/
+score VIRUS_WARNING93		20
+
+# NC
+header VIRUS_WARNING94		Subject =~ /^Possible virus found in message you sent/
+score VIRUS_WARNING94		20
+
+# NC
+header VIRUS_WARNING95		Subject =~ /^AntiVir ALERT/
+score VIRUS_WARNING95		20
+
+# NC
+# TJ: I suspect this may be specific to a site
+header VIRUS_WARNING96		Subject =~ /^Centrale Anti-Virus melding/
+score VIRUS_WARNING96		20
+
+# NC
+# Looks like #95
+header VIRUS_WARNING97		Subject =~ /^Vexira ALERT/
+score VIRUS_WARNING97		20
+
+# NC
+# TJ: again, suspect site-specific. Maybe change to ALL =~ ...?
+header VIRUS_WARNING98		X-ELTE-VirusStatus =~ /^was_infected/
+score VIRUS_WARNING98		20
+
+# NC: contributed by B Briggs in n.a.n-a.e
+header VIRUS_WARNING99		Subject =~ /^You sent potentially unsafe content/
+score VIRUS_WARNING99		20
+
+# NC
+# TJ: looks site-specific to me
+header VIRUS_WARNING100		Subject =~ /^Hov, du har sendt Jubii en virus !!!$/
+score VIRUS_WARNING100		20
+
+# NC
+header VIRUS_WARNING101		Subject =~ /^\[message from .*virus detect system\]$/
+score VIRUS_WARNING101		20
+
+# NC
+header VIRUS_WARNING102		Subject =~ /^Net Integrator Virus Alert$/
+score VIRUS_WARNING102		20
+
+# NC
+header VIRUS_WARNING103		Subject =~ /^Information - Antivirus$/
+score VIRUS_WARNING103		20
+
+# NC
+header VIRUS_WARNING104		Subject =~ /^AntiVirus Alert!$/
+score VIRUS_WARNING104		20
+
+# NC
+header VIRUS_WARNING105		Subject =~ /^\{ALERTA DE VIRUS\}/
+score VIRUS_WARNING105		20
+
+# NC
+header VIRUS_WARNING106		Subject =~ /^Virus in una mail per lei/
+score VIRUS_WARNING106		20
+
+# NC
+header VIRUS_WARNING107		Subject =~ /AntiVirus scan results/
+describe VIRUS_WARNING107	Looks like an unhelpful 'virus warning' (107)
+score VIRUS_WARNING107		7
+
+# TJ
+header VIRUS_WARNING108		Subject =~ /^Returned due to - ATTACHMENT BLOCKINGS/
+describe VIRUS_WARNING108	Unhelpful WebShield 'virus warning' (108)
+score VIRUS_WARNING108		20
+
+# TJ
+# deprecated in favour of 186
+
+# JB/TJ
+body VIRUS_WARNING110		/^Please inform your (system)? administrator (and have your virus scanning|or check your machine for viruses)/
+describe VIRUS_WARNING110	Unhelpful MIMEsweeper 'virus warning'? (110)
+score VIRUS_WARNING110		8
+
+# JB
+body VIRUS_WARNING111		/^Scan: Threat: '.+' detected by/
+describe VIRUS_WARNING111	Unhelpful MIMEsweeper 'virus warning'? (111)
+score VIRUS_WARNING111		6
+
+# ESR
+header VIRUS_WARNING112		Subject =~ /^Virus Detected in your Email message!/
+describe VIRUS_WARNING112	Unhelpful Norton Antivirus 'virus warning' (112)
+score VIRUS_WARNING112		20
+
+# ESR
+rawbody VIRUS_WARNING113	/infected with the W32.Mydoom.A\@mm virus/
+describe VIRUS_WARNING113	Unhelpful Mydoom virus warning (113)
+score VIRUS_WARNING113		6
+
+# TJ
+body VIRUS_WARNING114		/RAV AntiVirus plugin for .+ has found a virus/
+describe VIRUS_WARNING114	Unhelpful RAV plugin 'virus warning' (114)
+score VIRUS_WARNING114		7.5
+
+# TJ
+body VIRUS_WARNING115		/^Remote host said: 5.. Message rejected due to possible virus/
+describe VIRUS_WARNING115	Qmail bounce of unhelpful virus warning (115)
+score VIRUS_WARNING115		10
+
+# ESR
+# Similar to rule 23
+header VIRUS_WARNING116		Subject =~ /^Virus incident/
+describe VIRUS_WARNING116	Unhelpful Panda virus warning (116)
+score VIRUS_WARNING116		6
+
+# TJ
+rawbody VIRUS_WARNING117	/^A known virus was discovered and deleted\./
+describe VIRUS_WARNING117	Looks like MIMEDefang 'virus warning' (117)
+score VIRUS_WARNING117		4
+
+# TJ/AF
+rawbody VIRUS_WARNING117A	/^WARNING: This e-mail has been altered by (SATN-)?MIMEDefang/
+describe VIRUS_WARNING117A	MIMEDefang modified message (117A)
+score VIRUS_WARNING117A		0.2
+
+# AF
+rawbody VIRUS_WARNING117B	/^I found the \S+ virus\.$/
+describe VIRUS_WARNING117B	Unhelpful MIMEDefang 'virus warning' (117B)
+score VIRUS_WARNING117B		5
+
+# TJ
+meta VIRUS_WARNING_DEFANG	VIRUS_WARNING117 && VIRUS_WARNING117A
+describe VIRUS_WARNING_DEFANG	Unhelpful MIMEDefang 'virus warning'
+score VIRUS_WARNING_DEFANG	10
+
+# EA
+# Sample at: http://article.gmane.org/gmane.comp.tv.xmltv.devel/2772
+body VIRUS_WARNING118		/^The delivery of this message has been rejected.  This message appears to have a.* virus/
+describe VIRUS_WARNING118	Unhelpful 'virus warning' (118)
+score VIRUS_WARNING118		10
+
+# EA
+# Sample at: http://article.gmane.org/gmane.comp.tv.xmltv.devel/2773
+header VIRUS_WARNING119		Subject =~ /^WARNING: YOU MAY HAVE A VIRUS/
+describe VIRUS_WARNING119	Unhelpful 'virus warning' (119)
+score VIRUS_WARNING119		20
+
+# EA
+# Sample at: http://article.gmane.org/gmane.comp.tv.xmltv.devel/2773
+body VIRUS_WARNING120		/^The E-mail containing the virus has been removed/
+describe VIRUS_WARNING120	Unhelpful 'virus warning' (120)
+score VIRUS_WARNING120		10
+
+# PV
+header VIRUS_WARNING121		Subject =~ /^ALERTE \- Vous avez envoye un mail avec virus/
+describe VIRUS_WARNING121	Unhelpful 'virus warning' (121)
+score VIRUS_WARNING121		20
+
+# PV
+header VIRUS_WARNING122		Subject =~ /^ALERTE: un virus a /
+describe VIRUS_WARNING122	Unhelpful 'virus warning' (122)
+score VIRUS_WARNING122		20
+
+# PV
+header VIRUS_WARNING123		Subject =~ /^Anti-Virus Notification/
+describe VIRUS_WARNING123	Unhelpful 'virus warning/ (123)
+score VIRUS_WARNING123		20
+
+# PV
+header VIRUS_WARNING124		Subject =~ /^Antigen Notification/
+describe VIRUS_WARNING124	Unhelpful Antigen 'virus warning' (124)
+score VIRUS_WARNING124		20
+
+# PV
+header VIRUS_WARNING125		Subject =~ /Antivirus stopped your message/
+describe VIRUS_WARNING125	Unhelpful 'virus warning' (125)
+score VIRUS_WARNING125		10
+
+# PV
+header VIRUS_WARNING126		Subject =~ /^Email Quarantined Due to Virus/
+score VIRUS_WARNING126		10
+
+# PV/MK
+# TJ: often anchored to start, but can have prefix
+header VIRUS_WARNING127		Subject =~ /Inflex scan report \[\d+\]$/
+describe VIRUS_WARNING127	Unhelpful Inflex 'virus warning' (127)
+score VIRUS_WARNING127		20
+
+# PV
+header VIRUS_WARNING128		Subject =~ /^MMS Notification/
+score VIRUS_WARNING128		4.5
+
+# PV
+header VIRUS_WARNING129		Subject =~ /MailSure Virus Alert/
+score VIRUS_WARNING129		10
+
+# PV
+header VIRUS_WARNING130		Subject =~ /Ochrona antywirusowa/
+score VIRUS_WARNING130		5
+
+# PV
+header VIRUS_WARNING131		Subject =~ /(SENDER|RECIPIENT) \! Virus Notify \!/
+score VIRUS_WARNING131		10
+
+# PV/TJ
+header VIRUS_WARNING132		Subject =~ /VIRUS (NO|EM) SEU EMAIL/i
+score VIRUS_WARNING132		20
+
+# PV
+header VIRUS_WARNING133		Subject =~ /Virus Check Alert/
+score VIRUS_WARNING133		10
+
+# TJ
+# Variation on 133
+header VIRUS_WARNING133A	Subject =~ /^\#\# Virus Check Alert \#\#$/
+score VIRUS_WARNING133A		20
+
+# PV
+# Seen as 'Virus Notification from Redstone'
+# TJ: checked
+header VIRUS_WARNING134		Subject =~ /^Virus Notification from/
+score VIRUS_WARNING134		20
+
+# PV
+# TJ: checked
+header VIRUS_WARNING135		Subject =~ /^Virus Quarantine Notification$/
+score VIRUS_WARNING135		20
+
+# PV/TJ
+# TJ: checked, and seen separately with optional virus name
+header VIRUS_WARNING136		Subject =~ /^Virus (\(.+\) )?in Ihrer Nachricht/i
+describe VIRUS_WARNING136	Unhelpful amavisd-new 'virus warning' [DE] (136)
+score VIRUS_WARNING136		10
+
+# PV
+header VIRUS_WARNING137		Subject =~ /Votre message contient un virus/
+score VIRUS_WARNING137		8
+
+# PV
+# TJ: checked
+header VIRUS_WARNING138		Subject =~ /^WorldSecure Server notification$/
+describe VIRUS_WARNING138	Unhelpful WorldSecure 'virus warning' (138)
+score VIRUS_WARNING138		20
+
+# PV
+header VIRUS_WARNING139		Subject =~ /\[SmartFilter\] Virus Alert /
+score VIRUS_WARNING139		8
+
+# PV
+header VIRUS_WARNING140		Subject =~ /\[Virus detected\]/
+score VIRUS_WARNING140		6
+
+# PV
+header VIRUS_WARNING141		Subject =~ /virus trouve dans le message envoye/
+score VIRUS_WARNING141		6
+
+# PV
+header VIRUS_WARNING142		Subject =~ /virus trovato in un messaggio inviato /
+score VIRUS_WARNING142		6
+
+# HP
+# BorderWare Mail Gateway
+rawbody VIRUS_WARNING143	/^This is a recorded message from the BorderWare Mail Gateway/
+describe VIRUS_WARNING143	Unhelpful BorderWare 'virus warning' (143)
+score VIRUS_WARNING143		6
+
+# HP
+# Also from BorderWare Mail Gateway
+header VIRUS_WARNING144		Subject =~ /^Discarded Email/
+describe VIRUS_WARNING144	Unhelpful BorderWare 'virus warning'? (144)
+score VIRUS_WARNING144		5
+
+# TJ
+body VIRUS_WARNING145		/A L E R T A\s+D E\s+V [IÍ] R U S/
+describe VIRUS_WARNING145	Unhelpful MailScanner 'virus warning' (145)
+score VIRUS_WARNING145		4
+
+# AF
+body VIRUS_WARNING146		/^The content of the following email has been checked by the HBOS plc/
+describe VIRUS_WARNING146	Unhelpful 'virus warning' - HBOS/Halifax? (146)
+score VIRUS_WARNING146		3.5
+
+# AF
+body VIRUS_WARNING147		/Aquest missatge contenia un fitxer adjunt amb virus que s'ha eliminat/
+score VIRUS_WARNING147		4
+
+# AF 
+header VIRUS_WARNING148		Subject =~ /^HBOS plc Automated Email Administrator/
+describe VIRUS_WARNING148	Unhelpful 'virus warning'- HBOS plc/Halifax (148)
+score VIRUS_WARNING148		10
+
+# TJ
+header VIRUS_WARNING149		Subject =~ /^Disallowed attachment type found in sent message/
+describe VIRUS_WARNING149	Unhelpful 'virus warning' (149)
+score VIRUS_WARNING149		20
+
+# TJ
+body VIRUS_WARNING150		/550 Error: VB0007 - Rejected: Probably a virus/
+describe VIRUS_WARNING150	Probably a virus bounce (club-internet.fr) (150)
+score VIRUS_WARNING150		4
+
+# TJ
+rawbody VIRUS_WARNING151	/^Virus\(es\) found\.$/
+describe VIRUS_WARNING151	McAfee/CommuniGate Pro 'virus warning' (151)
+score VIRUS_WARNING151		7
+
+# TJ
+body VIRUS_WARNING152		/^Captured by McAfee antivirus plugin/
+describe VIRUS_WARNING152	Unhelpful McAfee plugin 'virus warning' (152)
+score VIRUS_WARNING152		4
+
+# TJ
+rawbody VIRUS_WARNING153	/^\S+ is infected with/
+describe VIRUS_WARNING153	Unhelpful McAfee plugin 'virus warning'? (153)
+score VIRUS_WARNING153		3
+
+# TJ
+rawbody VIRUS_WARNING154	/^WARNING! Your message was infected by VIRUS:$/
+describe VIRUS_WARNING154	Unhelpful 'virus warning' (154)
+score VIRUS_WARNING154		15
+
+# TJ
+rawbody VIRUS_WARNING155	/^Antiviral program output:$/
+describe VIRUS_WARNING155	Unhelpful 'virus warning' (155)
+score VIRUS_WARNING155		3
+
+# AF
+header VIRUS_WARNING156		Subject =~ /^Virus found:/
+describe VIRUS_WARNING156	Unhelpful SurfControl 'virus warning' (156)
+score VIRUS_WARNING156		20
+
+# AF - should normally be caught by 156
+rawbody VIRUS_WARNING157	/^SurfControl E-mail Anti-Virus Agent and has detected the Virus/
+describe VIRUS_WARNING157	Unhelpful SurfControl 'virus warning' (157)
+score VIRUS_WARNING157		5
+
+# JBB
+header VIRUS_WARNING158         Subject =~ /^Your mail server sent us a virus/
+describe VIRUS_WARNING158       Unhelpful Declude 'virus warning' (158)
+score VIRUS_WARNING158		20
+
+# AF
+header VIRUS_WARNING159		Subject =~ /^This is an alert from eSafe$/
+describe VIRUS_WARNING159	Unhelpful eSafe 'virus warning' (159)
+score VIRUS_WARNING159		20
+
+# AF/PB - sometimes, but not always caught by 159
+rawbody VIRUS_WARNING160	/^\*\*\* eSafe detected a hostile content in this email( and removed it)?. \*\*\*$/
+describe VIRUS_WARNING160	Unhelpful eSafe 'virus warning' (160)
+score VIRUS_WARNING160		10
+
+# AF
+header VIRUS_WARNING161		Subject =~ /^Virus encontrado/
+describe VIRUS_WARNING161	Unhelpful 'virus warning' (161)
+score VIRUS_WARNING161		4
+
+# AF
+rawbody VIRUS_WARNING162	/^---uvscan results ---$/
+describe VIRUS_WARNING162	Looks like unhelpful 'virus warning' (162)
+score VIRUS_WARNING162		3.5
+
+# TJ
+rawbody VIRUS_WARNING162A	/^---perlscanner results ---$/
+describe VIRUS_WARNING162A	Looks like unhelpful 'virus warning' (162A)
+score VIRUS_WARNING162A		2.0
+
+# AF
+rawbody VIRUS_WARNING163	/^Scan result/
+describe VIRUS_WARNING163	Unhelpful 'virus warning'? (163)
+score VIRUS_WARNING163		2
+
+# SC - seen as 2Notification du serveur antivirus SEII"
+# TrendMicro Viruswall
+header VIRUS_WARNING164		Subject =~ /^Notification du serveur antivirus/
+describe VIRUS_WARNING164	Unhelpful Viruswall 'virus warning' (164)
+score VIRUS_WARNING164		6
+
+# SC
+rawbody VIRUS_WARNING165	/^Un virus a Ã©tÃ© dÃ©tectÃ© dans votre $/
+describe VIRUS_WARNING165	Unhelpful Viruswall 'virus warning'? (165)
+score VIRUS_WARNING165		4
+
+# SC
+rawbody VIRUS_WARNING166	/^Un virus \(.+\) a Ã©tÃ© dÃ©te/
+describe VIRUS_WARNING166	Unhelpful Viruswall 'virus warning'? (166)
+score VIRUS_WARNING166		4
+
+# SC
+header VIRUS_WARNING167		Subject =~ /^NAV ha rilevato un virus in un documento inviato$/
+describe VIRUS_WARNING167	Unhelpful NAV 'virus warning' (167)
+score VIRUS_WARNING167		100
+
+# SC
+rawbody VIRUS_WARNING168	/^Il documento analizzato Ã¨ in QUARANTEA\.$/
+describe VIRUS_WARNING168	Unhelpful NAV 'virus warning' (168)
+score VIRUS_WARNING168		4
+
+# SC
+rawbody VIRUS_WARNING169	/^Informazioni sul virus:$/
+describe VIRUS_WARNING169	Unhelpful NAV 'virus warning' (169)
+score VIRUS_WARNING169		4
+
+# AF
+# Hmm, maybe use X-WSS-ID: <uid> header? Looks like it's a NAI WS spamsign
+header VIRUS_WARNING170		Subject =~ /^Network Associates Webshield -  e-mail Content Alert$/
+describe VIRUS_WARNING170	Unhelpful Webshield 'attachment warning' (170)
+score VIRUS_WARNING170		20
+
+# AF
+rawbody VIRUS_WARNING171	/^Network Associates WebShield SMTP.+intercepted a mail/
+describe VIRUS_WARNING171	Unhelpful Webshield 'attachment warning' (171)
+score VIRUS_WARNING171		5
+
+# TJ
+rawbody VIRUS_WARNING172	/^Virus identity found:/
+describe VIRUS_WARNING172	Unhelpful MailMonitor 'virus warning' (172)
+score VIRUS_WARNING172		5
+
+# TJ
+rawbody VIRUS_WARNING173	/^The Firstnet Anti-Virus \(FAV\) system intercepted it/
+describe VIRUS_WARNING173	Unhelpful Firstnet AV 'virus warning' (173)
+score VIRUS_WARNING173		5
+
+# TJ - this is generated by the braindead qmail-scanner patch
+header VIRUS_WARNING174		X-Tnz-Problem-Type =~ /.+/
+describe VIRUS_WARNING174	Unhelpful qmail-scanner 'virus warning' (174)
+score VIRUS_WARNING174		1
+
+# TJ
+rawbody VIRUS_WARNING175	/^Panda Antivirus has found the following viruses in the message:$/
+describe VIRUS_WARNING175	Unhelpful Panda Antivirus 'virus warning' (175)
+score VIRUS_WARNING175		8
+
+# TJ - can't assert the end of this string for some reason
+rawbody VIRUS_WARNING176	/^Report generated by Panda Antivirus/
+describe VIRUS_WARNING176	Unhelpful Panda Antivirus 'virus warning' (176)
+score VIRUS_WARNING176		5
+
+# AF
+# as in "...virus in a document you authored"
+header VIRUS_WARNING177		Subject =~ /^Symantec AntiVirus\/Filtering for Domino detected a virus/
+describe VIRUS_WARNING177	Unhelpful Symantec for Domino 'virus warning'(177)
+score VIRUS_WARNING177		20
+
+# TJ
+# Honestly, ISPs should know better than this. Idiots.
+header VIRUS_WARNING178		Subject =~ /^Eclipse Internet VIRUSshield detected VIRUS/
+describe VIRUS_WARNING178	Unhelpful Eclipse Internet 'virus warning' (178)
+score VIRUS_WARNING178		20
+
+# TJ
+# see also 390
+rawbody VIRUS_WARNING179	/^VIRUS ALERT/
+describe VIRUS_WARNING179	Could be a bogus 'virus warning' (179)
+score VIRUS_WARNING179		1.0
+
+# TJ
+# Norton Antivirus Gateway
+header VIRUS_WARNING180		Subject =~ /^VIRUS MESSAGE$/
+describe VIRUS_WARNING180	Unhelpful Norton AV Gateway 'virus warning' (180)
+score VIRUS_WARNING180		4.5
+
+# AF
+header VIRUS_WARNING181		Subject =~ /^Internet Mail Failure - Virus Alert$/
+describe VIRUS_WARNING181	Unhelpful 'virus warning' (181)
+score VIRUS_WARNING181		20
+
+# AF
+rawbody VIRUS_WARNING182	/^Virus Scanner found the$/
+describe VIRUS_WARNING182	Unhelpful 'virus warning'? (182)
+score VIRUS_WARNING182		1.5
+
+# TJ
+rawbody VIRUS_WARNING183	/^YOUR MAIL HAD THE VIRUS/
+describe VIRUS_WARNING183	Unhelpful 'virus warning' (WebShield?) (183)
+score VIRUS_WARNING183		2.0
+
+# TJ
+header VIRUS_WARNING184		Subject =~ /^FOUND VIRUS IN YOUR MAIL TO:/
+describe VIRUS_WARNING184	Unhelpful ArmourPlate 'virus warning' (184)
+score VIRUS_WARNING184		10.0
+
+# TJ
+rawbody VIRUS_WARNING185	/^ArmourPlate protects organisations/
+describe VIRUS_WARNING185	Unhelpful ArmourPlate 'virus warning' spam (185)
+score VIRUS_WARNING185		3.0
+
+# AF
+rawbody VIRUS_WARNING186	/^<p>The WebShield&reg; .+ Appliance discovered a virus/
+describe VIRUS_WARNING186	Unhelpful WebShield 'virus warning' (186)
+score VIRUS_WARNING186		10.0
+
+# AF
+header VIRUS_WARNING187		Subject =~ /^\s*"Returned due to virus/
+describe VIRUS_WARNING187	Unhelpful WebShield 'virus warning' (187)
+score VIRUS_WARNING187		2.0
+
+# AF
+# TJ: From WebShield, but fairly generic
+rawbody VIRUS_WARNING188	/^\s*(Virus name|diagnostics\/Diagnose):/i
+describe VIRUS_WARNING188	Looks like unhelpful 'virus warning' (188)
+score VIRUS_WARNING188		1.5
+
+# AF
+# From some kind of Exchange-based scanner
+header VIRUS_WARNING189		Subject =~ /^ALERT - Virus .+ found/
+describe VIRUS_WARNING189	Unhelpful 'virus warning' (189)
+score VIRUS_WARNING189		8.0
+
+# AF
+rawbody VIRUS_WARNING190	/^Infected\? Yes$/i
+describe VIRUS_WARNING190	Unhelpful 'virus warning' (190)
+score VIRUS_WARNING190		2.0
+
+# TJ
+# Mis-spelling is intentional!
+rawbody VIRUS_WARNING191	/^WARNING! Virus foudn in attachment/
+describe VIRUS_WARNING191	Unhelpful Wharf T&T 'virus warning' (191)
+score VIRUS_WARNING191		10
+
+# TJ
+# Something to do with VirusWall?
+# matches Mirapoint too (2004-07-14)
+rawbody __VIRUS_WARNING192A	/^.+ is removed from here because it contains a virus\.$/
+rawbody __VIRUS_WARNING192B	/^-{40,80}( \(on .+\))?$/
+meta VIRUS_WARNING192		__VIRUS_WARNING192A && __VIRUS_WARNING192B
+describe VIRUS_WARNING192	Unhelpful 'virus warning' (192)
+score VIRUS_WARNING192		20
+
+# AF
+header VIRUS_WARNING193		Subject =~ /Suppresion du Virus/
+describe VIRUS_WARNING193	Looks like unhelpful 'virus warning' (193)
+score VIRUS_WARNING193		2.0
+
+# TJ
+rawbody VIRUS_WARNING194	/^A possible virus was detected in your message/
+describe VIRUS_WARNING194	Looks like unhelpful 'virus warning' (194)
+score VIRUS_WARNING194		2.0
+
+# TJ
+rawbody VIRUS_WARNING195	/^.+\@.+: Email Content Not Allowed/
+describe VIRUS_WARNING195	Could be unhelpful 'virus warning' (195)
+score VIRUS_WARNING195		0.5
+
+# AF
+# From postmaster@
+rawbody VIRUS_WARNING196	/^[a-zA-Z0-9_\-\.] detected a hostile content in this email and removed it/
+describe VIRUS_WARNING196	Unhelpful 'virus warning' (196)
+score VIRUS_WARNING196		6.0
+
+# AF
+header VIRUS_WARNING197		Subject =~ /^Tipo de arquivo anexo nao permitido!/
+describe VIRUS_WARNING197	Unhelpful 'virus warning' (197)
+score VIRUS_WARNING197		8.0
+
+# TJ
+header VIRUS_WARNING198		Subject =~ /^Illegal attachment type found in sent message/
+describe VIRUS_WARNING198	Unhelpful qmail-scanner 'virus warning' (198)
+score VIRUS_WARNING198		10
+
+# TJ
+rawbody VIRUS_WARNING199	/A Illegal attachment type was found in an Email message you sent\.$/
+describe VIRUS_WARNING199	Unhelpful qmail-scanner 'virus warning' (199)
+score VIRUS_WARNING199		4.0
+
+# TJ
+header VIRUS_WARNING200		Subject =~ /^Message Deleted:/
+describe VIRUS_WARNING200	Unhelpful 'virus warning' (200)
+score VIRUS_WARNING200		6.0
+
+# TJ
+rawbody VIRUS_WARNING201	/^An attachment \(.*\) in the message violated system permissions/
+describe VIRUS_WARNING201	Unhelpful 'virus warning' (201)
+score VIRUS_WARNING201		2.0
+
+# TJ
+meta VIRUS_WARNING201A		VIRUS_WARNING200 && VIRUS_WARNING201
+describe VIRUS_WARNING201A	Unhelpful 'virus warning' (201A)
+score VIRUS_WARNING201A		4.0
+
+# TJ
+# Seen from ipworldcom.ch
+rawbody VIRUS_WARNING202	/^\s*\S+ is infected with .+/
+describe VIRUS_WARNING202	Unhelpful 'virus warning' (202)
+score VIRUS_WARNING202		3.0
+
+# TJ
+rawbody VIRUS_WARNING203	/^Your computer seems to send a message containing a virus/
+describe VIRUS_WARNING203	Unhelpful 'virus warning' (203)
+score VIRUS_WARNING202		3.0
+
+# TJ
+meta VIRUS_WARNING203A		VIRUS_WARNING202 && VIRUS_WARNING203
+describe VIRUS_WARNING203A	Unhelpful 'virus warning' (203A)
+score VIRUS_WARNING203A		4.0
+
+# TJ
+rawbody VIRUS_WARNING204	/^file contains virus:/
+describe VIRUS_WARNING204	Unhelpful 'virus warning' (204)
+score VIRUS_WARNING204		3.0
+
+# TJ
+header VIRUS_WARNING205		Subject =~ /\[.+: Virus detected\]$/
+describe VIRUS_WARNING205	Unhelpful 'virus warning' (205)
+score VIRUS_WARNING205		3.0
+
+# TJ
+rawbody VIRUS_WARNING206	/^This e-mail contained attachments which were virus infected/
+describe VIRUS_WARNING206	Unhelpful 'virus warning' (206)
+score VIRUS_WARNING206		2.5
+
+# TJ
+header VIRUS_WARNING207		Subject =~ /^RAV[0-9]+ Antivirus notification/
+describe VIRUS_WARNING207	Unhelpful RAV 'virus warning' (207)
+score VIRUS_WARNING207		20
+
+# TJ
+header VIRUS_WARNING208		Subject =~ /^Invalid content in mail message/
+describe VIRUS_WARNING208	Unhelpful Kerio Mailserver 'virus warning' (208)
+score VIRUS_WARNING208		7.5
+
+# TJ
+meta VIRUS_WARNING209		VIRUS_WARNING208 && VIRUS_WARNING188
+describe VIRUS_WARNING209	Unhelpful Kerio Mailserver 'virus warning' (209)
+score VIRUS_WARNING209		5.0
+
+# TJ
+rawbody VIRUS_WARNING210	/^This virus has been deleted/i
+describe VIRUS_WARNING210	Unhelpful 'virus warning' (210)
+score VIRUS_WARNING210		2.0
+
+# AF
+header VIRUS_WARNING211		Subject =~ /^IcoMailServer: Virus dÃ©tect$/
+describe VIRUS_WARNING211	Unhelpful IcoMailServer 'virus warning' (211)
+score VIRUS_WARNING211		20
+
+# AF
+rawbody VIRUS_WARNING212	/^IcoMailServer Antivirus v[0-9\.]+ a dÃ©tectÃ©n virus/
+describe VIRUS_WARNING212	Unhelpful IcoMailServer 'virus warning' (212)
+score VIRUS_WARNING212		5
+
+# TJ
+rawbody VIRUS_WARNING213	/^Bola Vam poslana elektronicka posta s prilohou. Obsahuje VIRUS!$/
+describe VIRUS_WARNING213	Unhelpful 'virus warning'
+score VIRUS_WARNING213		20
+
+# MK
+header VIRUS_WARNING214		Subject =~ /^ALERT!! Infected mail sent by you!$/
+describe VIRUS_WARNING214	Unhelpful NAVMSE 'virus warning' (214)
+score VIRUS_WARNING214		20
+
+# AF
+header VIRUS_WARNING215		Subject =~ /^NAV hat einen Virus oder nicht erlaubten Inhalt/
+describe VIRUS_WARNING215	Unhelpful NAV 'virus warning' (215)
+score VIRUS_WARNING215		20
+
+# AF
+rawbody VIRUS_WARNING216	/^The infected component in the scanned document was deleted\.$/
+describe VIRUS_WARNING216	Unhelpful NAV 'virus warning' (216)
+score VIRUS_WARNING216		5
+
+# AF
+rawbody VIRUS_WARNING217	/^The attachment \S+ contained the virus \S+/
+describe VIRUS_WARNING217	Unhelpful NAV 'virus warning' (217)
+score VIRUS_WARNING217		5
+
+# PB/JT
+# DSN: None
+# note 2004-08-18: sometimes has trailing space
+header VIRUS_WARNING218		Subject =~ /McAfee GroupShield Alert\s*$/
+describe VIRUS_WARNING218	Unhelpful GroupShield 'virus warning'? (218)
+score VIRUS_WARNING218		4
+
+rawbody VIRUS_WARNING218A	/^Reason: Anti-Virus/
+
+meta VIRUS_WARNING218B		VIRUS_WARNING218 && VIRUS_WARNING218A
+describe VIRUS_WARNING218B	Definitely GroupShield 'virus warning' (218B)
+score VIRUS_WARNING218B		20
+
+# TJ
+header VIRUS_WARNING219		Subject =~ /^Illegal Content Violation - Message [0-9]+$/
+describe VIRUS_WARNING219	Unhelpful 'virus warning' (219)
+score VIRUS_WARNING219		20
+
+# MK
+# Seen alonside 221
+header VIRUS_WARNING220		Subject =~ /^Virus found in message from you!$/
+describe VIRUS_WARNING220	Unhelpful Kaspersky 'virus warning' (220)
+score VIRUS_WARNING220		20
+
+# MK
+header VIRUS_WARNING221		X-Mailer =~ /^Kaspersky SMTPSCAN/
+describe VIRUS_WARNING221	Could be unhelpful Kaspersky 'virus warning' (221)
+score VIRUS_WARNING221		2
+
+# TJ
+rawbody VIRUS_WARNING222	/^X-NAI-WebShield[a-zA-Z0-9]+-mimepp: Attachment repaired$/
+describe VIRUS_WARNING222	Could be unhelpful NAI 'virus warning' (222)
+score VIRUS_WARNING222		8
+
+# MK/JT
+header VIRUS_WARNING223		Subject =~ /^(Spam mail warning notification!|VirusWall has detected a sensitive e-mail !!!) \(Attachment Removal\)$/
+describe VIRUS_WARNING223	Unhelpful eManager 'virus warning' (223)
+score VIRUS_WARNING223		20
+
+# MK/JT
+rawbody VIRUS_WARNING224	/^(The following mail was blocked since it contains sensitive content|eManager has removed a sensitive attachment file in the email)\.$/
+describe VIRUS_WARNING224	Unhelpful eManager 'virus warning'? (224)
+score VIRUS_WARNING224		2.5
+
+# PSI
+header VIRUS_WARNING225		Subject =~ /^A Virus was detected in the message you sent$/i
+describe VIRUS_WARNING225	Unhelpful MAILsweeper 'virus warning' (225)
+score VIRUS_WARNING225		20
+
+# TJ
+rawbody VIRUS_WARNING226	/^\/var\/spool\/mailscanner.+ Infection:/
+describe VIRUS_WARNING226	Unhelpful MailScanner 'virus warning' (226)
+score VIRUS_WARNING226		5
+
+# AF
+# BT-specific
+body VIRUS_WARNING227		/^"An attempt has been made to send a file called \S+ into BT's e-mail/
+describe VIRUS_WARNING227	Unhelpful BT 'virus warning' (227)
+score VIRUS_WARNING227		10
+
+# TJ
+# Goes alonside 229
+rawbody VIRUS_WARNING228	/^Found the \S+in message\.$/
+describe VIRUS_WARNING228	Unhelpful 'virus warning' (228)
+score VIRUS_WARNING228		2.5
+
+# TJ
+rawbody VIRUS_WARNING229	/^Found the (W32\/\S+|.+\@MM\S*)in message\.$/
+describe VIRUS_WARNING229	Unhelpful 'virus warning' (229)
+score VIRUS_WARNING229		10
+
+# TJ
+# Don't double count
+meta VIRUS_WARNING229A	VIRUS_WARNING228 && VIRUS_WARNING229
+describe VIRUS_WARNING229A	Don't double-count 228/229
+score VIRUS_WARNING229A	-3.5
+
+# PB
+rawbody VIRUS_WARNING230	/^Dr\. Web (detailed )?report:$/
+describe VIRUS_WARNING230	Unhelpful Dr. Web 'virus warning' (230)
+score VIRUS_WARNING230		10
+
+# PB
+header VIRUS_WARNING231		Content-Type =~ /boundary="001-DrWeb-MailFilter-Notification"$/
+describe VIRUS_WARNING231	Looks like Dr. Web notification (231)
+score VIRUS_WARNING231		10
+
+# PSI
+rawbody VIRUS_WARNING232	/^Found virus .+ in file .+$/
+describe VIRUS_WARNING232	Unhelpful 'virus warning' (232)
+score VIRUS_WARNING232		5
+
+# PSI
+rawbody VIRUS_WARNING233	/^The file is deleted\.$/
+describe VIRUS_WARNING233	Looks like unhelpful 'virus warning' (233)
+score VIRUS_WARNING233		1
+
+# PSI
+rawbody VIRUS_WARNING234	/^-+\s*Virus i denne meldingen er fjernet/
+describe VIRUS_WARNING234	Looks like unhelpful 'virus warning' (234)
+score VIRUS_WARNING234		4
+
+# PSI
+rawbody VIRUS_WARNING235	/^550 Error: The message probably contains the .+ virus/
+describe VIRUS_WARNING235	Could be unhelpful 'virus warning' (235)
+score VIRUS_WARNING235		2
+
+# AF
+body VIRUS_WARNING236		/^Votre mail a été rejeté car il comporte une pièce jointe qui n'est pas acceptée par notre outil de filtrage/
+describe VIRUS_WARNING236	Unhelpful 'virus warning' (236)
+score VIRUS_WARNING236		7
+
+# AF
+# Could be virus infection too
+header VIRUS_WARNING237		X-BitDefender-Scanner =~ /^Infected/
+describe VIRUS_WARNING237	Unhelpful BitDefender 'virus warning' (237)
+score VIRUS_WARNING237		10
+
+# MK
+rawbody VIRUS_WARNING238	/^Ihre Mail beinhaltete verbotene Anhänge !$/
+describe VIRUS_WARNING238	Unhelpful 'virus warning' (238)
+score VIRUS_WARNING238		20
+
+# MK
+header VIRUS_WARNING239		Subject =~ /^<WatchDog: Verbotener Dateianhang>$/
+describe VIRUS_WARNING239	Unhelpful 'virus warning' (239)
+score VIRUS_WARNING239		20
+
+# PSI
+header VIRUS_WARNING240		Subject =~ /^Advarsel! Dit e-brev indeholder virus$/
+describe VIRUS_WARNING240	Unhelpful 'virus warning' (240)
+score VIRUS_WARNING240		20
+
+# PSI
+# TrendMicro Interscan eManager
+rawbody VIRUS_WARNING241	/^The attachment file in the message has been removed by eManager\.$/
+describe VIRUS_WARNING241	Unhelpful Interscan 'virus warning' (241)
+score VIRUS_WARNING241		20
+
+# PSI
+rawbody VIRUS_WARNING242	/^ScanMail has detected a virus during a real-time scan of the mail traffic\.$/
+describe VIRUS_WARNING242	Unhelpful ScanMail 'virus warning' (242)
+score VIRUS_WARNING242		5
+
+# PSI
+header VIRUS_WARNING243		Subject =~ /^Virus Alert - ScanMail for Lotus Notes -->/
+describe VIRUS_WARNING243	Unhelpful ScanMail 'virus warning' (243)
+score VIRUS_WARNING243		20
+
+# TJ
+body VIRUS_WARNING244		/^Our content checker found\s+viruses/
+describe VIRUS_WARNING244	Could be an unhelpful 'virus warning' (244)
+score VIRUS_WARNING244		5
+
+# TJ
+meta VIRUS_WARNING245		VIRUS_WARNING179 && VIRUS_WARNING244
+describe VIRUS_WARNING245	Unhelpful 'virus warning' (245)
+score VIRUS_WARNING245		20
+
+# PSI
+rawbody VIRUS_WARNING246	/^was stopped by MailSweeper because it contained an executable file\.$/
+describe VIRUS_WARNING246	Unhelpful 'virus warning' (246)
+score VIRUS_WARNING246		20
+
+# TJ
+rawbody VIRUS_WARNING247	/^Zalaczony plik (.+) zawiera wirusa  (.+) \.$/
+describe VIRUS_WARNING247	Unhelpful 'virus warning' (247)
+score VIRUS_WARNING247		20
+
+# TJ
+rawbody VIRUS_WARNING248	/^Disallowed attach type$/
+describe VIRUS_WARNING248	Unhelpful 'virus warning' (248)
+score VIRUS_WARNING248		20
+
+# PSI
+body VIRUS_WARNING249		/^This mail is not complete because a part of it \(body or attachment\) violated Norman Gateway Protection/
+describe VIRUS_WARNING249	Unhelpful 'virus warning' (249)
+score VIRUS_WARNING249		20
+
+# HPK
+# This is a general rule which will catch lots of MailScanner stuff.
+# MailScanner is a real PITA.
+rawbody VIRUS_WARNING250	/^This is a message from the MailScanner E-Mail Virus Protection Service/
+describe VIRUS_WARNING250	Some kind of MailScanner notification? (250)
+score VIRUS_WARNING250		1.5
+
+# HPK
+body VIRUS_WARNING251		/The file .+ has been replaced as it contains the\s+.+ virus\./
+describe VIRUS_WARNING251	Unhelpful GroupShield/Exch 'virus warning' (251)
+score VIRUS_WARNING251		20
+
+# HPK
+rawbody VIRUS_WARNING252	/^\*+\s+McAfee GroupShield for Microsoft Exchange\s+\*+$/
+describe VIRUS_WARNING252	Unhelpful GroupShield/Exch 'virus warning' (252)
+score VIRUS_WARNING252		10
+
+# TJ
+body VIRUS_WARNING253		/please (check your system for viruses|update your virus scanner|run an antivirus program)/i
+describe VIRUS_WARNING253	Asks you to check for viruses (253)
+score VIRUS_WARNING253		0.5
+
+# MK
+# Variant on 43
+header VIRUS_WARNING254		Subject =~ /^VIRUS \(.+\) IN MAIL$/
+describe VIRUS_WARNING254	Unhelpful 'virus warning' (254)
+score VIRUS_WARNING254		20
+
+# MK
+rawbody VIRUS_WARNING255	/^VIRUS-WARNUNG$/
+describe VIRUS_WARNING255	Looks like unhelpful 'virus warning' (255)
+score VIRUS_WARNING255		5
+
+# MK
+rawbody VIRUS_WARNING256	/^Our virus checker found/i
+describe VIRUS_WARNING256	Could be unhelpful 'virus warning' (256)
+score VIRUS_WARNING256		3
+
+# MK
+rawbody VIRUS_WARNING257	/^Content violation found in email message\.$/
+describe VIRUS_WARNING257	Unhelpful 'virus warning' (257)
+score VIRUS_WARNING257		20
+
+# MK
+# Site-specific, sigh
+body VIRUS_WARNING258		/had an attachment that is not accepted by the American Red Cross Email System/
+describe VIRUS_WARNING258	Unhelpful 'virus warning' (258)
+score VIRUS_WARNING258		20
+
+# TJ
+# The bit in the middle has been seen as "Inbound Messages"/"Anti-Virus (Inbound)"/"Content Security (Inbound)"
+rawbody VIRUS_WARNING259	/^MailMarshal Rule: .+ : Block (Dangerous Attachments|EXECUTABLE Files|Known Virus Attachments|Virus|Stripped Attachments|Executables|Script and Code)$/
+describe VIRUS_WARNING259	Unhelpful MailMarshal 'virus warning' (259)
+score VIRUS_WARNING259		20
+
+# DJM/AF
+rawbody VIRUS_WARNING260	/^(ScanMail for Microsoft Exchange has detected virus-infected attachment\(s\)\.|Warning to sender\. ScanMail has detected a virus in an email you sent\.)$/
+describe VIRUS_WARNING260	Unhelpful ScanMail/Exch 'virus warning' (260)
+score VIRUS_WARNING260		20
+
+# AF
+# Not null-sender
+header VIRUS_WARNING261		Subject =~ /^Alerte de l'Anti-virus$/
+describe VIRUS_WARNING261	Unhelpful 'virus warning' (261)
+score VIRUS_WARNING261		20
+
+# AF
+# Seen with 261
+rawbody VIRUS_WARNING262	/^Details: (.+) Infected with/
+describe VIRUS_WARNING262	Unhelpful 'virus warning'? (262)
+score VIRUS_WARNING262		5
+
+# AF
+header VIRUS_WARNING263		Subject =~ /^Attachment Filter$/
+describe VIRUS_WARNING263	Unhelpful 'virus warning' (263)
+score VIRUS_WARNING263		10
+
+# AF
+# With/without null sender
+body VIRUS_WARNING264		/\*\*\*L'anti-virus AXERGY a détecté un virus (et l'a enlevé|ou une pièce jointe interdite dans ce mail)/
+describe VIRUS_WARNING264	Unhelpful 'virus warning' (264)
+score VIRUS_WARNING264		20
+
+# AF
+# DSN: Null, CT
+# Big thanks to Alan for helping to get rid of this big annoyance!
+# AOL handle aol.com, netscape.net, cs.com
+full __VIRUS_WARNING265		/mx\.aol\.com..The original message was received.{35,45}^from ([-.\w]+ (?<!aol\.com )\[[.\d]+\]).*^Content-Type: text\/rfc822-headers..Received: from\s\s(aol\.com|netscape\.net|cs\.com) \(\1\)/ms
+meta VIRUS_WARNING265		__REPORT_DSN && __VIRUS_WARNING265
+describe VIRUS_WARNING265	Unhelpful AOL bounce fake aol.com HELO (265)
+score VIRUS_WARNING265		15
+
+# AF/TJ
+# DSN: Null, CT
+# Similar to 265, but catches unqualified HELOs that aren't aol.com
+full __VIRUS_WARNING265A        /mx\.aol\.com..The original message was received.{35,45}^from ([-.\w]+ (?<!aol\.com )\[[.\d]+\]).*^Content-Type: text\/rfc822-headers..Received: from\s\s[a-zA-Z0-9]+ \(\1\)/ms
+meta VIRUS_WARNING265A          __REPORT_DSN && __VIRUS_WARNING265A
+describe VIRUS_WARNING265A      Looks like unhelpful AOL virus bounce (265A)
+score VIRUS_WARNING265A         5
+
+# AF
+# DSN: Null, CT
+# Similar to 265, but catches mail received from hosts with no rDNS
+full __VIRUS_WARNING265B	/mx\.aol\.com..The original message was received.{35,45}^from\s\s(\[[.\d]+\]).*^Content-Type: text\/rfc822-headers..Received: from\s\saol\.com \(\1\)/ms
+meta VIRUS_WARNING265B		__REPORT_DSN && __VIRUS_WARNING265B
+describe VIRUS_WARNING265B	AOL accept faked aol.com HELO (no PTR) (265B)
+score VIRUS_WARNING265B		15
+
+# PSI
+# DSN: Null, CT
+rawbody __VIRUS_WARNING266	/^Telenor Plus Virus Scan detected a virus in an e-mail you sent/
+meta VIRUS_WARNING266		__REPORT_DSN && __VIRUS_WARNING266
+describe VIRUS_WARNING266	Unhelpful Telenor 'virus warning' (266)
+score VIRUS_WARNING266		15
+
+# AF
+# DSN: Null
+# Another stupid big ISP which should know better
+header VIRUS_WARNING267		Subject =~ /^Mail virus incident report$/
+describe VIRUS_WARNING267	Unhelpful Via Networks 'virus warning' (267)
+score VIRUS_WARNING267		20
+
+# AF/TJ
+# General proactive rule - catches stuff about infections, asserted to start
+# of line (optionally with spaces)
+rawbody __VIRUS_WARNING268X	/^\s*(infected(:|\s(with|file))|contain(ed|s) (a|the) (virus|viruses):|quarantine$)/i
+describe __VIRUS_WARNING268X	Could be unhelpful 'virus warning'? (268X)
+
+# TJ
+# We split Sender and To off and only match if they have a preceding space
+# to avoid hits on forwards etc. with a Sender: header in the body
+rawbody __VIRUS_WARNING268A	/^\s*(mail from|originator)\s*[:=]/i
+rawbody __VIRUS_WARNING268B	/^(\s+(sender|from)\s*:|\s*(sender|from)\s*=)/i
+rawbody __VIRUS_WARNING268C	/^\s*(((the )?(e-?)?mail )?recipient(s|\(s\))?|(e-?)?mail sent to)\s*[:=]/i
+rawbody __VIRUS_WARNING268D	/^(\s+to\s*:|\s*to\s*=)/i
+meta __VIRUS_WARNING_SENDREC	(__VIRUS_WARNING268A || __VIRUS_WARNING268B) && (__VIRUS_WARNING268C || __VIRUS_WARNING268D)
+
+meta VIRUS_WARNING268E		(__VIRUS_WARNING268X && __VIRUS_WARNING_SENDREC)
+describe VIRUS_WARNING268E	Looks like an unhelpful 'virus warning' (268E)
+score VIRUS_WARNING268E		3
+
+# May catch FP's - forwards etc. with Sender: in the body
+rawbody __VIRUS_WARNING268F	/^(sender|from)\s*:.+/i
+body __VIRUS_WARNING268G	/contain(ed|s) (a|the) virus/
+
+# This may catch some FP's - hence score low
+meta VIRUS_WARNING268H		(__VIRUS_WARNING268C || __VIRUS_WARNING268D) && __VIRUS_WARNING268F && (__VIRUS_WARNING268X || __VIRUS_WARNING268G)
+describe VIRUS_WARNING268H	Could be unhelpful 'virus warning' (268H)
+score VIRUS_WARNING268H		1
+
+
+# TJ
+rawbody VIRUS_WARNING269	/^This Email scanner intercepted it and stopped the entire message/
+describe VIRUS_WARNING269	Unhelpful 'virus warning' (269)
+score VIRUS_WARNING269		15
+
+# NL
+header VIRUS_WARNING270		Subject =~ /^Trovato virus nel messaggio/
+describe VIRUS_WARNING270	Unhelpful 'virus warning' (270)
+score VIRUS_WARNING270		10
+
+# NL
+rawbody VIRUS_WARNING271	/^Symantec AntiVirus ha trovato un virus in un allegato inviato/
+describe VIRUS_WARNING271	Unhelpful 'virus warning' (271)
+score VIRUS_WARNING271		5
+
+# MR
+header VIRUS_WARNING272		Subject =~ /^Viruswarnung$/
+describe VIRUS_WARNING272	Unhelpful 'virus warning' (272)
+score VIRUS_WARNING272		10
+
+# DJM
+header VIRUS_WARNING273		Subject =~ /^MailMonitor for Exchange has processed a suspicious mail$/
+describe VIRUS_WARNING273	Unhelpful MailMonitor/Exch 'virus warning' (273)
+score VIRUS_WARNING273		10
+
+# TJ
+body VIRUS_WARNING274		/The email you have sent to (\S+) has the virus .+/
+describe VIRUS_WARNING274	Unhelpful MIMEsweeper 'virus warning' (274)
+score VIRUS_WARNING274		5
+
+# TJ
+body VIRUS_WARNING275		/Scenarios\/Incoming/
+describe VIRUS_WARNING275	Unhelpful (MIMESweeper?) 'virus warning'? (275)
+score VIRUS_WARNING275		1
+
+# TJ
+# MIMESweeper?
+body VIRUS_WARNING276		/Threat: '.+' detected by '.+'/
+describe VIRUS_WARNING276	Unhelpful MIMEsweeper 'virus warning'? (276)
+score VIRUS_WARNING276		1
+
+# TJ
+body VIRUS_WARNING277		/A filename matching the file mask was detected: '.+'\./
+describe VIRUS_WARNING277	Unhelpful (MIMESweeper?) 'virus warning'? (277)
+score VIRUS_WARNING277		1
+
+# TJ
+# Sophos/MIMEsweeper
+meta VIRUS_WARNING278		((VIRUS_WARNING110 + VIRUS_WARNING274 + VIRUS_WARNING275 + VIRUS_WARNING276 + VIRUS_WARNING277) > 2)
+describe VIRUS_WARNING278	Unhelpful Sophos/MIMEswp 'virus warning'? (277)
+score VIRUS_WARNING278		5
+
+# TJ
+# Another sadly misguided/out of date Exim user
+rawbody VIRUS_WARNING279	/^===== WARNING! WARNING! WARNING! - POSSIBLE VIRUS!/
+describe VIRUS_WARNING279	Unhelpful 'virus warning' (279)
+score VIRUS_WARNING279		20
+
+# JT
+# eTrust Lotus Notes Domino
+header VIRUS_WARNING280		Subject =~ /^eTrust Antivirus Lotus Notes Domino Option detected virus!$/
+describe VIRUS_WARNING280	Unhelpful eTrust/Domino 'virus warning' (280)
+score VIRUS_WARNING280		20
+
+# TJ
+rawbody VIRUS_WARNING281	/^The Ansbacher Email Gateway has stopped the following message:$/
+describe VIRUS_WARNING281	Unhelpful 'virus warning' (281)
+score VIRUS_WARNING281		20
+
+# TJ
+rawbody VIRUS_WARNING282	/^Status: 550 .+ Unacceptable attachment \(170\)./
+describe VIRUS_WARNING282	Unhelpful 'virus warning' (282)
+score VIRUS_WARNING282		10
+
+# PSI
+header VIRUS_WARNING283		Subject =~ /^Symantec Mail Security detected that you sent a message containing prohibited content$/
+describe VIRUS_WARNING283	Unhelpful Symantec 'virus warning' (283)
+score VIRUS_WARNING283		20
+
+# VD
+header VIRUS_WARNING284		Subject =~ /^Virus infection detected!!!$/
+describe VIRUS_WARNING284	Unhelpful 'virus warning' (284)
+score VIRUS_WARNING284		20
+
+# AF
+header VIRUS_WARNING285		Subject =~ /^gefaehrlicher Anhang \(.+\) FROM YOUR E- MAIL ADDRESS$/
+describe VIRUS_WARNING285	Unhelpful 'virus warning' (285)
+score VIRUS_WARNING285		20
+
+# TJ
+# Not null sender, or any other DSN indications
+header VIRUS_WARNING286		Subject =~ /^Warning - Virus detected in email$/
+describe VIRUS_WARNING286	Unhelpful 'virus warning' (286)
+score VIRUS_WARNING286		20
+
+# TJ
+# Seen from postmaster@g-icap.com, no DSN indications
+rawbody VIRUS_WARNING287	/^This message has been blocked because it contains a virus\./
+describe VIRUS_WARNING287	Unhelpful 'virus warning' (287)
+score VIRUS_WARNING287		20
+
+# HD
+header VIRUS_WARNING288		Subject =~ /-- Email Scanner Report \[\d+\]$/
+describe VIRUS_WARNING288	Looks like unhelpful 'virus warning' (288)
+score VIRUS_WARNING288		5
+
+# HD
+rawbody VIRUS_WARNING289	/^Your email to <.+> was blocked by our email scanning system!$/
+describe VIRUS_WARNING289	Unhelpful 'virus warning' (289)
+score VIRUS_WARNING289		20
+
+# PSI
+# No DSN indications
+header VIRUS_WARNING290		X-Originator =~ /^MailScan$/
+describe VIRUS_WARNING290	Unhelpful MailScan 'virus warning' (290)
+score VIRUS_WARNING290		5
+
+# PSI
+# See also 290
+header VIRUS_WARNING291		Subject =~ /^Virus Warning from MailScan to Mail-Sender!$/
+describe VIRUS_WARNING291	Unhelpful MailScan 'virus warning' (291)
+score VIRUS_WARNING291		20
+
+# TJ
+# DSN: Null, CT, !Attach
+# This rule MUST check for DSN; InterScan sometimes adds this junk to
+# non-infected mails
+rawbody __VIRUS_WARNING292	/^\*+\s*Message from InterScan E-Mail VirusWall NT\s*\*+$/
+meta VIRUS_WARNING292		__REPORT_DSN && __VIRUS_WARNING292
+describe VIRUS_WARNING292	Unhelpful InterScan 'virus warning' (292)
+score VIRUS_WARNING292		20
+
+# TJ
+# DSN: No DSN indications
+# Seen from MAILsweeper@Dyson.com
+header VIRUS_WARNING293		Subject =~ /^Warning Possible Virus Alert !!!$/
+describe VIRUS_WARNING293	Unhelpful MAILsweeper 'virus warning' (293)
+score VIRUS_WARNING293		20
+
+# TJ
+# DSN: Null, CT, !Attach
+rawbody VIRUS_WARNING294	/^The attachment to your E-mail has been disabled by the SonicWALL Virus Filter\./
+describe VIRUS_WARNING294	Unhelpful SonicWALL 'virus warning' (294)
+score VIRUS_WARNING294		20
+
+# AF
+# DSN: None
+rawbody VIRUS_WARNING295	/^A message filter removed the following attachment\(s\) from this message: .+/
+describe VIRUS_WARNING295	Unhelpful 'virus warning' (295)
+score VIRUS_WARNING295		10
+
+# AF
+# DSN: Null
+# Custom message from some particularly clue-impaired people at iucindore.ernet.in
+rawbody VIRUS_WARNING296	/^Viruswall at IUC server has scaned the mail\.$/
+describe VIRUS_WARNING296	Unhelpful 'virus warning' (296)
+score VIRUS_WARNING296		20
+
+# AF
+# DSN: Null, but could potentially vary as we're trying to catch instances
+# where someone scans the mail but bounces the infected version
+rawbody VIRUS_WARNING297	/^X-AMaViS-Alert: INFECTED, message contains virus:/
+describe VIRUS_WARNING297	Unhelpful 'virus warning' (297)
+score VIRUS_WARNING297		20
+
+# TJ
+header VIRUS_WARNING298         Subject =~ /^\[Magic OnLine\] Suppression du Virus/
+describe VIRUS_WARNING298       Unhelpful Magic OnLine 'virus warning' (296)
+score VIRUS_WARNING298          20
+
+# PB
+# See also 19
+rawbody VIRUS_WARNING299	/^Recipient of the infected attachment:/
+describe VIRUS_WARNING299	Unhelpful Norton Antivirus 'virus warning' (299)
+score VIRUS_WARNING299		5
+
+# AF
+# This should be caught by other MailScanner rules, but is here in case
+# they fail (e.g. bounced bounce etc.)
+rawbody VIRUS_WARNING300	/^Warning: Please read the "VirusWarning\.txt" attachment\(s\) for more information\.$/
+describe VIRUS_WARNING300	Unhelpful MailScanner 'virus warning' (300)
+score VIRUS_WARNING300		20
+
+# HD
+#Trend Micro GateLock
+header VIRUS_WARNING301		Subject =~ /^GateLock (Virus Notification|Viren-Benachrichtigung)\.$/
+describe VIRUS_WARNING301	Unhelpful GateLock 'virus warning' (301)
+score VIRUS_WARNING301		20
+
+# DP
+header VIRUS_WARNING302		Subject =~ /^NOTICE - Rejected atta?chment$/
+describe VIRUS_WARNING302	Unhelpful Watchdog 'virus warning' (302)
+score VIRUS_WARNING302		20
+
+# TJ
+# DSN: Null
+# Seen with "Creative Labs corporate" in place of .+; not sure if a customised
+# message or not
+# MessageSoft StormMail
+header VIRUS_WARNING303		Subject =~ /^The .+ email system has detected a banned or restricted attachment in your mail\./
+describe VIRUS_WARNING303	Unhelpful StormMail 'virus warning' (303)
+score VIRUS_WARNING303		20
+
+# TJ
+# see also 303
+# MessageSoft StormMail
+header VIRUS_WARNING304		X-Mailer =~ /^MessageSoft StormMail$/
+describe VIRUS_WARNING304	Unhelpful StormMail 'virus warning'? (304)
+score VIRUS_WARNING304		5
+
+# HD
+rawbody VIRUS_WARNING305	/^A potentially dangerous document attachment not complying with our IT Security policy has been detected/
+describe VIRUS_WARNING305	Unhelpful 'virus warning' (305)
+score VIRUS_WARNING305		10
+
+# MK
+header VIRUS_WARNING306		Subject =~ /^VIRUS WARNING( :)?$/
+describe VIRUS_WARNING306	Unhelpful 'virus warning' (306)
+score VIRUS_WARNING306		20
+
+# MK
+header VIRUS_WARNING307		Subject =~ /^Virus Found$/
+describe VIRUS_WARNING307	Unhelpful 'virus warning' (307)
+score VIRUS_WARNING307		20
+
+# MK
+header VIRUS_WARNING308		Subject =~ /^AVAST ALERT$/
+describe VIRUS_WARNING308	Unhelpful Avast/Exch 'virus warning' (308)
+score VIRUS_WARNING308		20
+
+# MK
+# Seen with 308
+rawbody VIRUS_WARNING309	/^You sent an infected message!$/
+describe VIRUS_WARNING309	Unhelpful Avast/Exch 'virus warning' (309)
+score VIRUS_WARNING309		5
+
+# MK
+header VIRUS_WARNING310		Subject =~ /^Atención: Virus detectado en e-mail$/
+describe VIRUS_WARNING310	Unhelpful 'virus warning' (310)
+score VIRUS_WARNING310		20
+
+# MK
+header VIRUS_WARNING311		Subject =~ /^Virus detected in:/
+describe VIRUS_WARNING311	Unhelpful 'virus warning' (311)
+score VIRUS_WARNING311		10
+
+# MK/TJ
+header VIRUS_WARNING312		Subject =~ /^\[GWAVA:[a-z0-9]+\] (Attachment block|Virus detect) message notification$/
+describe VIRUS_WARNING312	Unhelpful Novell GroupWise 'virus warning' (312)
+score VIRUS_WARNING312		20
+
+# MK/JT
+rawbody VIRUS_WARNING313	/^\*+ (eManager|Content Filter) Notification \*+$/
+describe VIRUS_WARNING313	Unhelpful eManager 'virus warning' (313)
+score VIRUS_WARNING313		20
+
+# MK
+rawbody VIRUS_WARNING314	/^Rejected by Kingsoft-EYOU Antivirus Gateway for the following reason:$/
+describe VIRUS_WARNING314	Unhelpful Kingsoft 'virus warning' (314)
+score VIRUS_WARNING314		20
+
+# MK
+header VIRUS_WARNING315		Subject =~ /^Message Blocked /
+describe VIRUS_WARNING315	Could be an unhelpful 'virus warning' (315)
+score VIRUS_WARNING315		3
+
+# MK
+header VIRUS_WARNING316		Subject =~ /^\s*File was infected with a virus$/
+describe VIRUS_WARNING316	Unhelpful 'virus warning' (316)
+score VIRUS_WARNING316		20
+
+# MK
+header VIRUS_WARNING317		Subject =~ /^\*\*\* You have sent a virus !$/
+describe VIRUS_WARNING317	Unhelpful 'virus warning' (317)
+score VIRUS_WARNING317		20
+
+# MK
+rawbody VIRUS_WARNING318	/^WARNING - Virus detected in message:$/
+describe VIRUS_WARNING318	Unhelpful 'virus warning' (318)
+score VIRUS_WARNING318		20
+
+# TJ
+rawbody VIRUS_WARNING319	/^Requested action not taken: virus detected$/
+describe VIRUS_WARNING319	Unhelpful 'virus warning' (319)
+score VIRUS_WARNING319		20
+
+# PSI
+# DSN: Null
+rawbody VIRUS_WARNING320	/^This following attachments is removed by TBS Virus Scan/
+describe VIRUS_WARNING320	Unhelpful TBS Virus Scan 'virus warning' (320)
+score VIRUS_WARNING320		20
+
+# PSI
+# See also 320
+# DSN: Null
+header VIRUS_WARNING321		Subject =~ /^NOTICE - Attachments removed$/
+describe VIRUS_WARNING321	Unhelpful TBS Virus Scan 'virus warning' (321)
+score VIRUS_WARNING321		10
+
+# MK
+header VIRUS_WARNING322A	Subject =~ /\(Blocked attachment\)$/
+describe VIRUS_WARNING322A	Looks like unhelpful XWall 'virus warning' (322A)
+score VIRUS_WARNING322A		2
+
+header __VIRUS_WARNING322B	X-Mailer =~ /^XWall v/
+
+meta VIRUS_WARNING322		VIRUS_WARNING322A && __VIRUS_WARNING322B
+describe VIRUS_WARNING322	Unhelpful XWall 'virus warning' (322)
+score VIRUS_WARNING322		20
+
+# AF
+# Also seen bounced, see 324
+header VIRUS_WARNING323		Subject =~ /^\[VIRUS FOUND AND REMOVED\]/
+describe VIRUS_WARNING323	Unhelpful 'virus warning' (323)
+score VIRUS_WARNING323		10
+
+# AF
+rawbody __VIRUS_WARNING324	/^Subject: \[VIRUS FOUND AND REMOVED\]/
+meta VIRUS_WARNING324		__VIRUS_WARNING324 && __REPORT_DSN
+describe VIRUS_WARNING324	Unhelpful 'virus warning' (324)
+score VIRUS_WARNING324		10
+
+# AF
+# DSN: Null, CT
+rawbody VIRUS_WARNING325	/^\s*Reason: Virus \S+ is detected!$/
+describe VIRUS_WARNING325	Unhelpful 'virus warning' (325)
+score VIRUS_WARNING325		20
+
+# AF/TJ
+full VIRUS_WARNING326		/Content-type: text\/plain; Name=VirusAlert.txt/
+describe VIRUS_WARNING326	Unhelpful MailScanner 'virus warning'? (326)
+score VIRUS_WARNING326		3
+
+# AF
+# DSN: Anyone's guess. Has been seen forging the victim as RP etc.
+# TJ: There has got to be a better way of doing "multiline text anchored 
+# to start of a line" than this...if anyone knows please tell me!
+body __VIRUS_WARNING327A	/An attachment named \S+ was removed from this document as it constituted a security hazard\./
+rawbody __VIRUS_WARNING327B	/^An attachment named \S+ was removed from this document as it$/
+meta VIRUS_WARNING327		__VIRUS_WARNING327A && __VIRUS_WARNING327B
+describe VIRUS_WARNING327	Unhelpful MIMEDefang 'virus warning' (327)
+score VIRUS_WARNING327		10
+
+# TJ
+# DSN: Null
+header VIRUS_WARNING328		Subject =~ /^VIRUS REJECT$/
+describe VIRUS_WARNING328	Unhelpful 'virus warning' (328)
+score VIRUS_WARNING328		20
+
+# AS
+header VIRUS_WARNING329		Subject =~ /^BitDefender found an infected object$/
+describe VIRUS_WARNING329	Unhelpful 'virus warning' (329)
+score VIRUS_WARNING329		20
+
+# TJ
+# DSN: None
+body VIRUS_WARNING330		/the message with following attributes has not been delivered, because it contains infected object\(s\)./
+describe VIRUS_WARNING330	Unhelpful 'virus warning' (330)
+score VIRUS_WARNING330 		10
+
+# TJ
+body VIRUS_WARNING331		/A message sent from, or apparently sent from, your email address, failed due to the presence of files frequently used to transmit viruses \(\.scr\/\.zip\/\.bat\/\.com\/\.exe\)\./
+describe VIRUS_WARNING331	Unhelpful 'virus warning' (331)
+score VIRUS_WARNING331		15
+
+# AF
+# DSN: None
+header VIRUS_WARNING332		Subject =~ /^\[Computer Cops\] Infected Email Found$/
+describe VIRUS_WARNING332	Unhelpful 'virus warning' (332)
+score VIRUS_WARNING332		20
+
+# AF
+rawbody VIRUS_WARNING333	/^\*+ UNSAFE FILE IS REJECTED! \*+$/
+describe VIRUS_WARNING333	Unhelpful 'virus warning' (333)
+score VIRUS_WARNING333		20
+
+# AF
+rawbody VIRUS_WARNING334	/^\s*Reason: This email is rejected because an unsafe file is found:/
+describe VIRUS_WARNING334	Unhelpful 'virus warning' (334)
+score VIRUS_WARNING334		10
+
+# TJ
+# Custom? From Uni. of Sydney
+# DSN: Null, CT
+rawbody VIRUS_WARNING335	/^\# The following files were found to be malicious and removed:$/
+describe VIRUS_WARNING335	Unhelpful 'virus warning' (335)
+score VIRUS_WARNING335		20
+
+# AF
+rawbody VIRUS_WARNING336	/^the message contains virus/
+describe VIRUS_WARNING336	Could be unhelpful KAV 'virus warning' (336)
+score VIRUS_WARNING336		1
+
+# AF
+rawbody VIRUS_WARNING337	/^\s*The message contains file attachments that are not permitted\.\s*$/
+describe VIRUS_WARNING337	Unhelpful Guinevere AV 'virus warning' (337)
+score VIRUS_WARNING337		10
+
+# TJ
+# Could be custom message - seen from postmaster@disney.com
+# DSN: Null
+header VIRUS_WARNING338		Subject =~ /^Warning: Message Not Delivered - Attachment Restriction$/
+describe VIRUS_WARNING338	Unhelpful 'virus warning' (338)
+score VIRUS_WARNING338		20
+
+# TJ
+# DSN: Null, CT, !Attach
+rawbody VIRUS_WARNING339	/^Warning: Please read the "ISSWarning\.txt" attachment\(s\) for more information\.$/
+describe VIRUS_WARNING339	Unhelpful MailScanner 'virus warning' (339)
+score VIRUS_WARNING339		20
+
+# TJ
+rawbody VIRUS_WARNING340	/^Warning: This message has had one or more attachments removed$/
+describe VIRUS_WARNING340	Unhelpful MailScanner 'virus warning' (340)
+score VIRUS_WARNING340		10
+
+# TJ/TV
+header VIRUS_WARNING341		Subject =~ /^eTrust Antivirus Gateway (SMTP|POP3): Virus notification message$/
+describe VIRUS_WARNING341	Unhelpful eTrust 'virus warning' (341)
+score VIRUS_WARNING341		20
+
+# TJ
+header VIRUS_WARNING342		Subject =~ /^AUTOMATED EMAIL BLOCK: VIRUS$/
+describe VIRUS_WARNING342	Unhelpful 'virus warning' (342)
+score VIRUS_WARNING342		20
+
+# TJ
+# Hopefully this should really kill all the variations of VirusWall/eManager junk
+header VIRUS_WARNING343		InterScan-Notification =~ /^yes$/
+describe VIRUS_WARNING343	Unhelpful InterScan 'virus warning' (343)
+score VIRUS_WARNING343		20
+
+# TJ
+# seen as VIRUS (foobar) EM SUA MENSAGEM
+# DSN: Null, CT
+header VIRUS_WARNING344		Subject =~ /^VIRUS.* EM SUA MENSAGEM$/
+describe VIRUS_WARNING344	Unhelpful 'virus warning' (344)
+score VIRUS_WARNING344		20
+
+# AF
+body VIRUS_WARNING345		/(This message contained attachments that have been blocked by Guinevere|This is an automatic message from the Guinevere Internet Antivirus Scanner)\./
+describe VIRUS_WARNING345	Unhelpful Guinevere 'virus warning' (345)
+score VIRUS_WARNING345		5
+
+# AF
+# Guinevere crap again
+rawbody VIRUS_WARNING346	/^\w+\s+attachment type\(s\) blocked\s*$/
+describe VIRUS_WARNING346	Unhelpful Guinevere 'virus warning' (346)
+score VIRUS_WARNING346		5
+
+# AF
+rawbody VIRUS_WARNING347	/^KAV for MS Exchange Report on detecting virus in the following message:$/
+describe VIRUS_WARNING347	Unhelpful KAV 'virus warning' (347)
+score VIRUS_WARNING347		10
+
+# AF
+header VIRUS_WARNING348		Subject =~ /Report Message from KAV for MS Exchange Server/
+describe VIRUS_WARNING348	Unhelpful KAV 'virus warning'? (348)
+score VIRUS_WARNING348		3
+
+# TJ
+# DSN: none, modified message
+full VIRUS_WARNING349		/filename="Panda_Alert\.txt"/
+describe VIRUS_WARNING349	Unhelpful Panda Antivirus 'virus warning' (349)
+score VIRUS_WARNING349		10
+
+# TJ
+# DSN: none, modified message
+rawbody VIRUS_WARNING350	/^Panda Antivirus has found a virus in:/
+describe VIRUS_WARNING350	Unhelpful Panda Antivirus 'virus warning' (350)
+score VIRUS_WARNING350		10
+
+# TJ
+# DSN: unknown
+rawbody VIRUS_WARNING351	/^Message from SENDER was quarantined because it contained banned$/
+describe VIRUS_WARNING351	Unhelpful 'virus warning' (351)
+score VIRUS_WARNING351		20
+
+# AF
+# DSN: None
+rawbody VIRUS_WARNING352	/^This Mail has a Virus and has been blocked!$/
+describe VIRUS_WARNING352	Unhelpful 'virus warning' (352)
+score VIRUS_WARNING352		20
+
+# TJ
+# DSN: Null, CT
+# This regex is extraordinarily sensitive for some reason (surely "\s+.+\s+" 
+# should be the same as ".+" ? Apparently not!); handle with care!
+full VIRUS_WARNING353		/Your message was not delivered to the following recipients:\s*.+\s*:\s*Email rejected\s+because the attachment\s+.+\s+could contain a virus\./m
+describe VIRUS_WARNING353	Unhelpful 'virus warning' (353)
+score VIRUS_WARNING353		20
+
+# PSI
+# DSN: None
+rawbody __VIRUS_WARNING354A	/\s*The email contained the virus: .*$/
+header __VIRUS_WARNING354B	X-Nmp-Notice-Type =~ /^A message from you was blocked/
+meta VIRUS_WARNING354           __VIRUS_WARNING354A && __VIRUS_WARNING354B
+describe VIRUS_WARNING354	Unhelpful 'virus warning' (354)
+score VIRUS_WARNING354		20
+
+# GD/JT
+# DSN: None
+# TJ: This is sometimes sent in HTML, so cannot assert the body text
+header __VIRUS_WARNING355A	Subject =~ /^Report to Sender$/
+body __VIRUS_WARNING355B	/Incident Information:-/
+body __VIRUS_WARNING355C	/infected with the \S+ virus and was/
+meta VIRUS_WARNING355		__VIRUS_WARNING355A && __VIRUS_WARNING355B && __VIRUS_WARNING355C
+describe VIRUS_WARNING355	Unhelpful Lotus Notes 'virus warning' (355)
+score VIRUS_WARNING355		20
+
+# HD
+# DSN: None
+rawbody VIRUS_WARNING356	/^A mail message with subject ".+" has been found to contain a virus!$/
+describe VIRUS_WARNING356	Unhelpful 'virus warning' (356)
+score VIRUS_WARNING356		20
+
+# AF
+# DSN: Null, CT
+header VIRUS_WARNING357		Subject =~ /^\*\*Message you sent blocked by our bulk email filter\*\*$/
+describe VIRUS_WARNING357	Unhelpful 'virus warning' (357)
+score VIRUS_WARNING357		20
+
+# TJ
+# DSN: Null
+rawbody VIRUS_WARNING358	/^The above email was not delivered to the intended recipient as it was found to contain a virus\. The details of the message are as follows:$/
+describe VIRUS_WARNING358	Unhelpful 'virus warning' (358)
+score VIRUS_WARNING358		20
+
+# AF
+# DSN: None
+header __VIRUS_WARNING359A	Subject =~ /^VIRUS POSLAN SA VASE ADRESE/
+rawbody __VIRUS_WARNING359B	/^UPOZORENJE O VIRUSIMA!$/
+meta VIRUS_WARNING359		__VIRUS_WARNING359A || __VIRUS_WARNING359B
+describe VIRUS_WARNING359	Unhelpful 'virus warning' (359)
+score VIRUS_WARNING359		20
+
+# HD
+header VIRUS_WARNING360		Subject =~ /^virus in outgoing mail$/
+describe VIRUS_WARNING360	Unhelpful 'virus warning' (360)
+score VIRUS_WARNING360		20
+
+# JT
+# DSN: Null, CT
+rawbody VIRUS_WARNING361	/^WARNING -- A POSSIBLE VIRUS WAS DETECTED IN THIS MAIL MESSAGE$/
+describe VIRUS_WARNING361	Unhelpful 'virus warning' (361)
+score VIRUS_WARNING361		20
+
+# MB
+body VIRUS_WARNING362           /\bThe mail you have sent to one of our users is infected by a virus\b/
+describe VIRUS_WARNING362       Unhelpful 'virus warning' (361)
+score VIRUS_WARNING362          20
+
+# TJ
+header VIRUS_WARNING363		Subject =~ /^Warning: Virus found by AVAS Anti-Virus module$/
+describe VIRUS_WARNING363	Unhelpful AVAS 'virus warning' (363)
+score VIRUS_WARNING363		20
+
+# TJ
+# Some true comedian called David Pinnegar (B.Sc, A.R.C.S. dontcha know!)
+# runs an incompetent antispam service that spews an extremely verbose
+# collateral junk lecture back at non-senders
+# See www.antespam.co.uk (what a superb domain, not) and
+# http://www.mistral.co.uk/hammerwood/compdoc.htm :
+# Apparently "quantum physicists have the training necessary to deal with
+# your computer problems", but not reject viruses at SMTP time, apparently...
+#
+# His BVA spew ironically complains about...BVA spew! Classic!
+# Oh, and he wants GBP4,000-30,000 for a copy of his *amazing* SA rules.
+# I wonder if this guy has seen rulesemporium.com?
+# And, by the way, if you send him spam, you may be reported to the
+# "Common Search-Engines Blacklist". Huh? Scary.
+#
+# Completely unrelated to the BVA spam but good for a laugh anyway:
+# http://www.nominet.org.uk/DisputeResolution/Decisions/MistralInternetGroupLimited-v-DavidPinnegar.html
+# http://www.info-world.com/ (spot the search engine spam, and on the other
+# stacks of link-farm domains he has)
+# http://www.mistral.co.uk/hammerwood/compdoc.htm (spot the blatent SEO)
+#
+# IMHO, jokers like this shouldn't even be allowed NEAR a mailserver... if
+# anyone doesn't believe me, read the above pages and ask me for a copy of
+# his BVA spew! Sheesh...
+rawbody VIRUS_WARNING364	/^www.antespam.co.uk has intercepted a message from your address:-$/
+describe VIRUS_WARNING364	Unhelpful 'virus warning' (364)
+score VIRUS_WARNING364		20
+
+# AF/TJ
+full __VIRUS_WARNING365	/Content-Disposition: attachment;\s*filename=\"DELETED0.TXT\"/m
+meta VIRUS_WARNING365		__REPORT_DSN && __VIRUS_WARNING365
+describe VIRUS_WARNING365	Unhelpful 'virus warning' (365)
+score VIRUS_WARNING365		20
+
+# TJ
+full __VIRUS_WARNING366        /Content-Disposition: attachment;\s*filename=\"AV_nocleanMsg\.txt\"/m
+meta VIRUS_WARNING366           __REPORT_DSN && __VIRUS_WARNING366
+describe VIRUS_WARNING366       Unhelpful 'virus warning' (366)
+score VIRUS_WARNING366         20
+
+# JT
+# DSN: Null, CT
+rawbody __VIRUS_WARNING367	/^554 5\.7\.1 Virus \S+ found in mail - rejected$/
+meta VIRUS_WARNING367		__REPORT_DSN && __VIRUS_WARNING367
+describe VIRUS_WARNING367	Unhelpful 'virus warning' (367)
+score VIRUS_WARNING367		20
+
+# AF
+# DSN: Null, CT
+rawbody VIRUS_WARNING368	/^\[Attachment denied by WatchGuard SMTP proxy/
+describe VIRUS_WARNING368	Unhelpful 'virus warning' (368)
+score VIRUS_WARNING368		20
+
+# TJ
+# DSN: Null
+header VIRUS_WARNING369		Subject =~ /^Warning: E-mail virus detected$/
+describe VIRUS_WARNING369	Unhelpful 'virus warning' (369)
+score VIRUS_WARNING369		20
+
+# AF
+# DSN: Null
+header VIRUS_WARNING370		X-Mailer =~ /^ProScan Mail scanner$/
+describe VIRUS_WARNING370	Unhelpful ProScan 'virus warning' (370)
+score VIRUS_WARNING370		20
+
+# AF
+# DSN: Null
+# See also 370 - goes alongside it
+rawbody VIRUS_WARNING371	/^\s*The file attached to following mail is infected with virus\.$/
+describe VIRUS_WARNING371	Unhelpful 'virus warning' (371)
+score VIRUS_WARNING371		20
+
+# AF
+# DSN: Null, CT
+# This is for bounced collateral munged by a scanner
+rawbody  VIRUS_WARNING372	/Subject: \[PMX:suspect attachment\]/
+describe VIRUS_WARNING372	Unhelpful 'virus warning' (372)
+score VIRUS_WARNING372		20
+
+# PB
+rawbody VIRUS_WARNING373	/^Il contenait un fichier attache non autoris/
+describe VIRUS_WARNING373	Unhelpful 'virus warning' (373)
+score VIRUS_WARNING373		20
+
+# PB
+rawbody VIRUS_WARNING374	/^Our SPAM\/CONTENT filter has rejected your message/
+describe VIRUS_WARNING374	Unhelpful 'virus warning' (374)
+score VIRUS_WARNING374		20
+
+# AF
+# DSN: None
+rawbody VIRUS_WARNING375	/^\s*AAPT Anti Virus has detected a virus contained in this email attachment/
+describe VIRUS_WARNING375	Unhelpful 'virus warning' (375)
+score VIRUS_WARNING375		20
+
+# TJ
+# DSN: Null
+# It's a shame some of the largest e-mail providers in the world
+# (Yahoo in this case) are such idiots and hypocrites (wrt "anti-spam")
+body VIRUS_WARNING376		/554 5\.7\.1 Message cannot be accepted, virus found/
+describe VIRUS_WARNING376	Unhelpful 'virus warning' (376)
+score VIRUS_WARNING376		20
+
+# AF
+# DSN: Null, CT
+header VIRUS_WARNING377		Subject =~ /^ALERTE VIRUS !$/
+describe VIRUS_WARNING377	Unhelpful 'virus warning' (377)
+score VIRUS_WARNING377		20
+
+# TJ
+# DSN: Null
+rawbody VIRUS_WARNING378	/^Attachment has been removed due to the presence of the following virus:$/
+describe VIRUS_WARNING378	Unhelpful 'virus warning' (378)
+score VIRUS_WARNING378		20
+
+# TJ
+# as seen in 378
+full VIRUS_WARNING379		/filename="ReplText6\.txt"/
+describe VIRUS_WARNING379	Could be unhelpful 'virus warning' (379)
+score VIRUS_WARNING379		0.8
+
+# RP
+rawbody VIRUS_WARNING380	/^This message was rejected due to a possible virus\.$/
+describe VIRUS_WARNING380	Unhelpful 'virus warning' (380)
+score VIRUS_WARNING380		20
+
+# PSI
+# DSN: Null
+rawbody VIRUS_WARNING381	/^Sender Note - Inbound Virus Found$/
+describe VIRUS_WARNING381	Unhelpful 'virus warning' (381)
+score VIRUS_WARNING381		20
+
+# TJ
+# DSN: None
+body VIRUS_WARNING382		/it contains an attachment that does not conform to the HMV Email Policy/
+describe VIRUS_WARNING382	Unhelpful HMV 'virus warning' (382)
+score VIRUS_WARNING382		20
+
+# TJ
+# DSN: Null
+header VIRUS_WARNING383		Subject =~ /^Unfortunately your message was blocked as a possible Virus was detected\.$/
+describe VIRUS_WARNING383	Unhelpful 'virus warning' (383)
+score VIRUS_WARNING383		20
+
+# MB
+# DSN: Null
+header VIRUS_WARNING384		Subject =~ /^Virus trovato in un messaggio inviato/
+describe VIRUS_WARNING384	Unhelpful 'virus warning' (384)
+score VIRUS_WARNING384		20
+
+# MB
+# DSN: Null
+header VIRUS_WARNING385		Subject =~ /^ACHTUNG! Sie haben eine mit einem Virus infizierte Mail verschickt\.$/
+describe VIRUS_WARNING385	Unhelpful 'virus warning' (385)
+score VIRUS_WARNING385		20
+
+# AF
+rawbody VIRUS_WARNING386	/^The following message attachments were flagged by the antivirus scanner:$/
+describe VIRUS_WARNING386	Unhelpful Mirapoint 'virus warning' (386)
+score VIRUS_WARNING386		20
+
+# AF
+# DSN: none
+# Seen from postmaster@fife.gov.uk
+# They even KNOW that virus spew is forged, but still send you the junk anyway...
+# surely incriminating themselves!
+rawbody VIRUS_WARNING387	/^has not been delivered as a virus has been detected. This e-mail may not have originated from you/
+describe VIRUS_WARNING387	Unhelpful 'virus warning' (387)
+score VIRUS_WARNING387		20
+
+# AF
+# DSN: none
+header VIRUS_WARNING388		Subject =~ /^Virus Alert -/
+describe VIRUS_WARNING388	Unhelpful 'virus warning' (388)
+score VIRUS_WARNING388		10
+
+# TJ
+# DSN: none
+# seen from administrator@shgroup.org.uk
+rawbody VIRUS_WARNING389	/^A message with Subject: \S+ contains a virus and has been quarantined\.$/
+describe VIRUS_WARNING389	Unhelpful 'virus warning' (389)
+score VIRUS_WARNING389		20
+
+# TJ/JT
+# DSN: varies, this is a general rule
+# see also 179
+header VIRUS_WARNING390		Subject =~ /^VIRUS ALERT:/
+describe VIRUS_WARNING390	Unhelpful 'virus warning' (390)
+score VIRUS_WARNING390		20
+
+# JT
+# DSN: None
+# usually caught also by 390
+header VIRUS_WARNING391		X-Mailer =~ /^OdeiaVir/
+describe VIRUS_WARNING391	Unhelpful OdeiaVir 'virus warning' (391)
+score VIRUS_WARNING391		20
+
+# AF
+# DSN: null
+header VIRUS_WARNING392		Subject =~ /^Suppression de fichier due a un virusMail Delivery/
+describe VIRUS_WARNING392	Unhelpful 'virus warning' (392)
+score VIRUS_WARNING392		20
+
+# AF
+# DSN: null
+body VIRUS_WARNING393		/The Attachment \S+ is replaced by this message because it contained a virus:/
+describe VIRUS_WARNING393	Unhelpful 'virus warning' (393)
+score VIRUS_WARNING393		20 
+
+# JT
+# DSN: !Attach
+body VIRUS_WARNING394		/A virus \(\S+\) was detected in the file \(.+\)\. Action taken\s*= remove/
+describe VIRUS_WARNING394	Unhelpful 'virus warning' (394)
+score VIRUS_WARNING394		20
+
+# AF
+header VIRUS_WARNING395		Received =~ /from MailMarshal/
+describe VIRUS_WARNING395	MailMarshal bogus 'virus warning'? (395)
+score VIRUS_WARNING395		3
+
+# AF
+header VIRUS_WARNING396		Subject =~ /^McAfee detected a virus in a document sent to you\.$/
+describe VIRUS_WARNING396	Unhelpful McAfee 'virus warning' (396)
+score VIRUS_WARNING396		20
+
+# HPK
+# DSN: none
+body VIRUS_WARNING397		/A virus was found in a message sent by this account\./
+describe VIRUS_WARNING397	Unhelpful 'virus warning' (397)
+score VIRUS_WARNING397		8
+
+# HPK
+# see also 397
+rawbody VIRUS_WARNING398	/^Result: Virus Detected$/
+describe VIRUS_WARNING398	Unhelpful 'virus warning' (398)
+score VIRUS_WARNING398		5
+
+# AF
+# DSN: none
+# matches 400 too
+body VIRUS_WARNING399	/The file attached to this email was removed because it is infected with the (\S+) virus\./
+describe VIRUS_WARNING399	Unhelpful 'virus warning' (399)
+score VIRUS_WARNING399		20
+
+# AF
+# General
+rawbody VIRUS_WARNING400	/^\s*name="DELETED0.TXT"$/
+describe VIRUS_WARNING400	Looks like unhelpful 'virus warning' (400)
+score VIRUS_WARNING400		5
+
+# AF/TV
+# DSN: none
+header VIRUS_WARNING401		Subject =~ /^\[VIRUS\??\]/i
+describe VIRUS_WARNING401	Unhelpful 'virus warning' (401)
+score VIRUS_WARNING401		10
+
+
+# HPK
+# DSN: CT
+# the next two come together
+rawbody VIRUS_WARNING402A	/^Virus scanner reported virus infection for/
+describe VIRUS_WARNING402A	Looks like unhelpful 'virus warning' (402A)
+score VIRUS_WARNING402A		5
+
+rawbody VIRUS_WARNING402B	/^Reason: Virus infection$/
+describe VIRUS_WARNING402B	Looks like unhelpful 'virus warning' (402B)
+score VIRUS_WARNING402B		5
+
+meta VIRUS_WARNING402C		VIRUS_WARNING402A && VIRUS_WARNING402B
+describe VIRUS_WARNING402C	Looks a lot like unhelpful 'virus warning' (402C)
+score VIRUS_WARNING402C		10
+
+
+# JT
+# DSN: null,CT
+header VIRUS_WARNING403		Subject =~ /^Returned mail: Possible Virus Infection$/
+describe VIRUS_WARNING403	Unhelpful 'virus warning' (403)
+score VIRUS_WARNING403		20
+
+# PBR
+# DSN: null, !Attach
+rawbody VIRUS_WARNING404	/^= Message body deleted by antivirus subsystem on e-mail gateway=$/
+describe VIRUS_WARNING404	Unhelpful 'virus warning' (404)
+score VIRUS_WARNING404		20
+
+# PC
+# DSN: unknown
+rawbody VIRUS_WARNING405	/^Virus: "\S+" found!$/
+describe VIRUS_WARNING405	Unhelpful WinProxy 'virus warning' (405)
+score VIRUS_WARNING405		20
+
+#AF
+# DSN: none
+header VIRUS_WARNING406		Subject =~ /^\[NOD32: deleted\]/
+describe VIRUS_WARNING406	Unhelpful NOD32 'virus warning' (406)
+score VIRUS_WARNING406		20
+
+# AF
+# double-check for 406
+rawbody VIRUS_WARNING407	/^Warning: NOD32 Antivirus System for Linux Mail Server found the following infiltrations in this message/
+describe VIRUS_WARNING407	Unhelpful NOD32 'virus warning' (407)
+score VIRUS_WARNING407		10
+
+# TV
+header VIRUS_WARNING408		Subject =~ /^AVISO: Email rejeitado: VIRUS Detectado$/
+describe VIRUS_WARNING408	Unhelpful 'virus warning' (408)
+score VIRUS_WARNING408		20
+
+# TV
+header VIRUS_WARNING409		Subject =~ /^MDaemon Notificacion - Virus Encontrado!!!!$/
+describe VIRUS_WARNING409	Unhelpful MDaemon 'virus warning' (409)
+score VIRUS_WARNING409		20
+
+# TV
+# the Netcabo version appears to be a customised Antigen install
+header VIRUS_WARNING410		Subject =~ /^(Antigen|Netcabo Antivirus) found \S+ virus$/
+describe VIRUS_WARNING410	Unhelpful MDaemon 'virus warning' (410)
+score VIRUS_WARNING410		20
+
+# TV
+header VIRUS_WARNING411		Subject =~ /^ATENTIE !!! Virusi detectati$/
+describe VIRUS_WARNING411	Unhelpful 'virus warning' (411)
+score VIRUS_WARNING411		20
+
+#TV
+rawbody VIRUS_WARNING412	/^Vírus no seu e-mail\./
+describe VIRUS_WARNING412	Unhelpful 'virus warning' (412)
+score VIRUS_WARNING412		20
+
+# TV
+header VIRUS_WARNING413		Subject =~ /^Virus found, original message not delivered\.$/
+describe VIRUS_WARNING413	Unhelpful InterScan 'virus warning' (413)
+score VIRUS_WARNING413		20
+
+# TV
+rawbody VIRUS_WARNING414	/^We received a message from you containing a virus or other harmful content\.$/
+describe VIRUS_WARNING414	Unhelpful 'virus warning' (414)
+score VIRUS_WARNING414		20
+
+# PC
+rawbody VIRUS_WARNING415	/^RAV AntiVirus for Linux i686 version: \d/
+describe VIRUS_WARNING415	Unhelpful 'virus warning'? (415)
+score VIRUS_WARNING415		2
+
+# PC
+# not sure what the munged character is or whether this rule will even catch it
+# email forwarded to me had munged character encoding
+header VIRUS_WARNING416		Subject =~ /Resultado da procura por V.rus$/
+describe VIRUS_WARNING416	Unhelpful 'virus warning' (416)
+score VIRUS_WARNING416		3
+
+# PC
+header VIRUS_WARNING417		X-Mailer =~ /^ravmd\/\d/
+describe VIRUS_WARNING417	Unhelpful 'virus warning'? (417)
+score VIRUS_WARNING417		3
+
+# ML
+rawbody VIRUS_WARNING418	/^This attachment contained a virus and was stripped\.$/
+describe VIRUS_WARNING418	Unhelpful 'virus warning' (418)
+score VIRUS_WARNING418		20
+
+# ML
+header VIRUS_WARNING419		Subject =~ /^\[Virus attachment removed\]/
+describe VIRUS_WARNING419	Unhelpful 'virus warning' (419)
+score VIRUS_WARNING419		20
+
+# MM
+rawbody VIRUS_WARNING420	/^O Symantec Email Proxy excluiu a seguinte mensagem de e-mail:$/
+describe VIRUS_WARNING420	Unhelpful 'virus warning' (420)
+score VIRUS_WARNING420		20
+
+# PBR
+rawbody VIRUS_WARNING421	/^Disallowed file (.+) assosiated with unrelated MIME type (.+) - potential virus$/
+describe VIRUS_WARNING421	Unhelpful 'virus warning' (421)
+score VIRUS_WARNING421		4
+
+# PC
+rawbody VIRUS_WARNING422	/^Content-Disposition: attachment; filename="Norton AntiVirus Deleted1.txt"$/
+describe VIRUS_WARNING422	Unhelpful 'virus warning'? (422)
+score VIRUS_WARNING422		8
+
+header VIRUS_WARNING423		Subject =~ /^Policy Violation$/
+describe VIRUS_WARNING423	Unhelpful 'virus warning'? (423)
+score VIRUS_WARNING423		0.1
+
+meta VIRUS_WARNING424		VIRUS_WARNING188 && VIRUS_WARNING423
+describe VIRUS_WARNING424	Unhelpful 'virus warning' (424)
+score VIRUS_WARNING424		10
+
+header VIRUS_WARNING425		Subject =~ /^Mail rejected: Executable attachment ".+" not permitted\.$/
+describe VIRUS_WARNING425	Unhelpful 'virus warning' (425)
+score VIRUS_WARNING425		20
+
+header VIRUS_WARNING426		Subject =~ /^Antivirus Notification$/
+describe VIRUS_WARNING426	Unhelpful 'virus warning' (426)
+score VIRUS_WARNING426		20
+
+
+### TJ: Executable. Could be a virus
+# See http://archives.neohapsis.com/archives/postfix/2002-04/1841.html
+# and http://archives.neohapsis.com/archives/postfix/2002-04/1931.html
+rawbody VIRUS_WARNING_EXE1	/^TV[nopqr][A-Z]...[AB]..A.A....*AAAA...*AAAA/
+describe VIRUS_WARNING_EXE1	Message appears to contain a Windows executable
+score VIRUS_WARNING_EXE1	2.0
+
+rawbody VIRUS_WARNING_EXE2	/^M35[GHIJK].`..`..*````/i
+describe VIRUS_WARNING_EXE2	Message contains a UUencoded Windows executable
+score VIRUS_WARNING_EXE2	2.0
+
+
+### HD/TJ: Looks like some (unknown) virus
+
+# Netsky variation?
+# line starts with +-+-+ or *** ...
+rawbody VIRUS_WARNING_XXX1	/^[\+\-\*]+ (Anti-\s?Virus|X-\s?Attachment_\s?Scanner|Mail-\s?Attachment|X-\s?Mail_Scanner): (NO VIRUS|No Virus found|No Virus!?|No suspicious Virus signatures)$/
+describe VIRUS_WARNING_XXX1	Unidentified virus or bounce thereof (2)
+score VIRUS_WARNING_XXX1	20
+
+### TJ: Novarg, I think
+header __VIRUS_WARNING_NOVARG1A X-Virus-Scanned =~ /^Symantec AntiVirus Scan Engine$/
+header __VIRUS_WARNING_NOVARG1B	X-Virus-Scan-Result =~ /^Repaired \d+/
+meta VIRUS_WARNING_NOVARG1	__VIRUS_WARNING_NOVARG1A && __VIRUS_WARNING_NOVARG1B
+describe VIRUS_WARNING_NOVARG1	Looks like Novarg virus
+score VIRUS_WARNING_NOVARG1	20
+
+# Bounce of Novarg
+rawbody __VIRUS_WARNING_NOVARG2A /^\s*X-Virus-Scanned: Symantec AntiVirus Scan Engine$/
+rawbody __VIRUS_WARNING_NOVARG2B /^\s*X-Virus-Scan-Result: Repaired \d+/
+meta VIRUS_WARNING_NOVARG2      __VIRUS_WARNING_NOVARG2A && __VIRUS_WARNING_NOVARG2B
+describe VIRUS_WARNING_NOVARG2	Looks like Novarg virus bounce
+score VIRUS_WARNING_NOVARG2     20
+
+### TJ: Texts normally found in the body of Bagle.B viruses
+
+rawbody VIRUS_WARNING_BAGLE1	/^Subject: ID .+\.\.\. thanks$/
+describe VIRUS_WARNING_BAGLE1	Could be a Bagle.B bounce
+score VIRUS_WARNING_BAGLE1	4
+
+rawbody VIRUS_WARNING_BAGLE2	/^Yours ID/
+describe VIRUS_WARNING_BAGLE2	Could be a Bagle.B bounce
+score VIRUS_WARNING_BAGLE2	1
+
+
+### TJ: Bagle-Q/R virus
+
+rawbody VIRUS_WARNING_BAGLE3	/^<OBJECT\s+STYLE="display:none"\s+DATA="http:\/\/[0-9\.]+(:81)?\/[0-9]+\.php">$/
+describe VIRUS_WARNING_BAGLE3	Looks like Bagle.Q/R virus/bounce
+score VIRUS_WARNING_BAGLE3	10
+
+
+### TJ: Stuff to do with Netsky virus
+
+rawbody __VIRUS_WARNING_NETSKY1	/^Subject: (unknown|fake|stolen|information|warning|something for you|read it immediately|hello)$/
+#describe VIRUS_WARNING_NETSKY1	Could be a Netsky virus bounce (subject matched)
+#score VIRUS_WARNING_NETSKY1	1
+
+rawbody __VIRUS_WARNING_NETSKY2	/^(anything ok?|what does it mean?|ok|i'm waiting|read the details.|here is the document.|read it immediately!|my hero|here|is that true?|is that your name?|is that your account?|i wait for a reply!|is that from you?|you are a bad writer|I have your password!|something about you!|kill the writer of this document!|i hope it is not true!|your name is wrong|i found this document about you|yes, really?|that is bad|here it is|see you|greetings|stuff about you?|something is going wrong!|information about you|about me|from the chatter|here, the serials|here, the introduction|here, the cheats|that's funny|do you?|reply|take it easy|why?|thats wrong|misc|you earn money|you feel the same|you try to steal|you are bad|something is going wrong|something is fool)$/
+#describe VIRUS_WARNING_NETSKY2	Could be a Netsky virus bounce (body matched)
+#score VIRUS_WARNING_NETSKY2	1
+
+meta VIRUS_WARNING_NETSKY	(__VIRUS_WARNING_NETSKY1 && __VIRUS_WARNING_NETSKY2)
+score VIRUS_WARNING_NETSKY	3
+
+# Netsky G - http://www.sophos.com/virusinfo/analyses/w32netskyg.html
+# There are many other subjects, but many are too common to reject on, 
+# and I don't want this to become a virus scanner, but here are a few.
+body VIRUS_WARNING_NETSKY3	/^Subject: Re: (Re: Re: Your document|Re: Thanks!|Re: Document|Re: Message|Approved|Here is the document|Excel file|Word file)$/
+describe VIRUS_WARNING_NETSKY4	Netsky virus bounce (subject matched)
+score VIRUS_WARNING_NETSKY3	3
+
+body VIRUS_WARNING_NETSKY4	/In order to read the attach you have to use the following password:/
+describe VIRUS_WARNING_NETSKY4	Looks like Netsky bounce (body attached password)
+score VIRUS_WARNING_NETSKY4	5
+
+# Netsky P - http://www.sophos.com/virusinfo/analyses/w32netskyp.html
+# VS/TJ
+rawbody VIRUS_WARNING_NETSKY5A	/^\++\s*Attachment: No Virus found$/
+describe VIRUS_WARNING_NETSKY5A	Looks like Netsky/P bounce (5A)
+score VIRUS_WARNING_NETSKY5A	10
+
+rawbody VIRUS_WARNING_NETSKY5B	/^\++\s*(MessageLabs|Norton|MC-Afee|Kaspersky|Norman|Panda|Kaspersky|F-Secure) AntiVirus/
+describe VIRUS_WARNING_NETSKY5B	Looks like Netsky/P bounce (5B)
+score VIRUS_WARNING_NETSKY5B	10
+
+meta VIRUS_WARNING_NETSKY5	VIRUS_WARNING_NETSKY5A && VIRUS_WARNING_NETSKY5B
+describe VIRUS_WARNING_NETSKY5	Looks like Netsky/P bounce (5)
+score VIRUS_WARNING_NETSKY5	10
+
+### TJ: Texts normally found in the body of MyDoom viruses
+
+rawbody VIRUS_WARNING_MYDOOM1	/The message cannot be represented in 7-bit ASCII encoding and has been sent as a binary attachment/
+describe VIRUS_WARNING_MYDOOM1	Body contains Mydoom text
+score VIRUS_WARNING_MYDOOM1	6.0
+
+rawbody VIRUS_WARNING_MYDOOM2	/The message contains Unicode characters and has been sent as a binary attachment\./
+describe VIRUS_WARNING_MYDOOM2	Body contains Mydoom text
+score VIRUS_WARNING_MYDOOM2	6.0
+
+rawbody VIRUS_WARNING_MYDOOM3	/Mail transaction failed. Partial message is available\./
+describe VIRUS_WARNING_MYDOOM3	Body contains Mydoom text
+score VIRUS_WARNING_MYDOOM3	6.0
+
+# Looks like a bounce containing a Mydoom message
+# Some bounces will match both 4 and 4a, so 4a is scored low
+# Next two rules used to contain a question mark at the end, to match
+# empty subject lines. Now removed, since the worst has passed
+rawbody __VIRUS_WARNING_MYDOOM4	/^Subject: (Hello|hi|test|mail delivery system|mail transaction failed|server report|status|error)$/i
+#describe VIRUS_WARNING_MYDOOM4	Body looks like a bounce which could be from Mydoom (contains Mydoom Subject)
+#score VIRUS_WARNING_MYDOOM4	1.3
+
+rawbody __VIRUS_WARNING_MYDOOM4A	/\sSubject: (Hello|hi|test|mail delivery system|mail transaction failed|server report|status|error)$/i
+#describe VIRUS_WARNING_MYDOOM4A	Body could be a Mydoom bounce (contains Mydoom Subject)
+#score VIRUS_WARNING_MYDOOM4A	0.5
+
+rawbody TJ_EMPTY_SUBJECT	/^Subject: $/
+describe TJ_EMPTY_SUBJECT		Empty subject. Could be a MyDoom bounce.
+score TJ_EMPTY_SUBJECT	0.5
+
+# Could be a bounce containing a Mydoom message
+body VIRUS_WARNING_MYDOOM5	/filename="(body|data|doc|document|file|message|readme|test)\.(bat|cmd|exe|pif|scr|zip|htm|txt|doc)/i
+describe VIRUS_WARNING_MYDOOM5	Body contains possible Mydoom attachment
+score VIRUS_WARNING_MYDOOM5	1.2
+
+meta VIRUS_WARNING_DOOM_BNC	VIRUS_WARNING78 && (VIRUS_WARNING_MYDOOM4 || __VIRUS_WARNING_MYDOOM4A || VIRUS_WARNING_MYDOOM5)
+describe VIRUS_WARNING_DOOM_BNC	Looks like a Mydoom bounce
+score VIRUS_WARNING_DOOM_BNC	7.5
+
+
+### TJ: Failed/cleaned infections
+# Used to match empty subjects too
+#header VIRUS_CLEANED_MYDOOM	Subject =~ /^(Hello|hi|test|mail delivery system|mail transaction failed|server report|status|error)$/i
+#describe VIRUS_CLEANED_MYDOOM	Failed/cleaned Mydoom infection?
+#score VIRUS_CLEANED_MYDOOM	1
+
+# TJ/VS
+header VIRUS_CLEANED_SOBIG_F1	Subject =~ /^(Re: )?(Approved|Wicked screensaver|That movie|Thank you!)$/
+describe VIRUS_CLEANED_SOBIG_F1	Failed/cleaned Sobig/F infection? (1)
+score VIRUS_CLEANED_SOBIG_F1	2
+
+header VIRUS_CLEANED_SOBIG_F2	Subject =~ /^Re: (Re: )?((My|Your) )?Details$/
+describe VIRUS_CLEANED_SOBIG_F2	Failed/cleaned Sobig/F infection? (2)
+score VIRUS_CLEANED_SOBIG_F2	2
+
+header VIRUS_CLEANED_1		Subject =~ /^Re: Your application$/
+describe VIRUS_CLEANED_1	Failed/cleaned Sobig/F or Netsky/K infection? (1)
+score VIRUS_CLEANED_1		1

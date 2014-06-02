@@ -1,0 +1,1 @@
+(gnus-kill "From" "Manoj Srivastava" '(gnus-summary-mark-as-dormant 1))

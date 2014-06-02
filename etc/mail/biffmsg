@@ -1,0 +1,5 @@
+%b
+New mail for %u has arrived in %f:
+----
+%-A
+----%b

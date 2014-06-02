@@ -1,0 +1,22 @@
+NAME
+
+	approve -- Approves command in advance by specifying a password
+
+SYNOPSIS
+
+	approve password command
+
+DESCRIPTION
+
+This command records the specified password in the environment and then
+launches the command given as argument.
+
+It is entirely up to the command to check the approve variable when it
+otherwise expects a password, otherwise this command has no visible
+effect.
+
+It is not currently possible to approve a command which collects input.
+
+EXAMPLE
+
+	approve list-password subscribe agent-users ram@acri.fr

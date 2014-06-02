@@ -1,0 +1,31 @@
+NAME
+
+	user -- Runs a command on behalf of another user
+
+SYNOPSIS
+
+	user [name [command]]
+
+DESCRIPTION
+
+This command may be used to execute some other commands on behalf of a user.
+
+If a command is specified, it is immediately executed under the new identity
+(which is merely an e-mail address), and that new identity only lasts for
+that single command. Otherwise, the remaining commands are executed with the
+new identity.
+
+If no user name is specified, the original sender identity is restored.
+
+All the powers are lost when the 'user' command is executed, but this is
+only temporary when a command is specified on the same line.
+
+Note that it is up to the command to make use of this "effective" user
+identity, by looking at the proper environment variables.
+
+EXAMPLES
+
+	user root@acri.fr
+	... some commands ...
+	user
+	user ram@acri.fr subscribe agent-users

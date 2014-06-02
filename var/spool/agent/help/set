@@ -1,0 +1,18 @@
+NAME
+
+	set -- Sets a command environment variable
+
+SYNOPSIS
+
+	set variable value
+
+DESCRIPTION
+
+This command sets the variable to the specified value. Flags are only
+set to 'true' or 'false', although 'on', 'yes' and an empty value are
+also recognized to be 'true', anything else being 'false'.
+
+EXAMPLES
+
+	set eof END_OF_FILE
+	set trace on

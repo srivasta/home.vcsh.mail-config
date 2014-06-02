@@ -1,0 +1,110 @@
+((files "~/var/spool/news/SMEGHEADS"  "~/var/spool/news/BLACKLIST")
+ ("Subject"
+  ("[Aa][Nn[Nn][Oo][Uu][Nn][Cc][Ee]" 1024 nil r)
+  ("\\<\\(make\\|fast\\|big\\)\\s-*\\(money\\|cash\\|bucks?\\)\\>" -1000 nil r)
+  ;; CAPS OF THE WORLD, UNITE
+  ("^..[^a-z]+$" -512 nil R)
+  ;; ("^\\([Rr][Ee]: +\\)?[^a-z]+$" -256 nil R)
+  ;; ("^\\(Re: \\)?[^a-z]*$" -256 nil R)
+  ;; $$$ Make Money $$$ (Try work)
+  ;; multiple dollar signs are bad news
+  ("[$$]" 64 nil s) ("$" -16 nil s) ("$$" -63 nil s) ("$$$" -64 nil s)
+  ("$$$$" -128 nil s) ("$$$$$" -256 nil s) ("$$$$$$" -512 nil s)
+  ("need cash" -10000 nil s) ("easy cash" -10000 nil s)
+  ;; as are people who need self-promotion
+  ("please read" -1000 nil s)
+  ;; or those who just can't think of *anything*
+  ("(no subject)" -1000 nil s) ("(none)" -1000 nil s)
+  ;; I'm important! And I have exclamation marks to prove it!
+  ;; any bangs and more than one asterisk or question are bad news
+  ("[!!]" 32 nil s) ("[**]" 16 nil s) ("[??]" 16 nil s)
+
+  ("!" -8 nil s) ("!!" -16 nil s) ("!!!" -32 nil s) ("!!!!" -64 nil s)
+  ("!!!!!" -128 nil s) ("!!!!!!" -256 nil s)
+
+  ("**" -8 nil s) ("***" -16 nil s) ("****" -32 nil s)
+  ("*****" -64  nil s) ("******" -128 nil s)
+
+  ("??"  -8 nil s) ("???" -16 nil s) ("????" -32 nil s)
+  ("?????"  -64  nil s) ("??????" -128 nil s)
+  ;; followups are slightly more interesting
+  ("^ *re\\(\\[[0-9]+\\]\\)*: " 4 nil r)
+  ;; Empty subjects are worthless!
+  ("^ *\\([(<]none[>)]\\|(no subject\\( given\\)?)\\)? *$" -16 nil r)
+  ;; Sometimes interesting announces occur!
+  ("ANN?OU?NC\\(E\\|ING\\)" +128 nil r)
+  ;; Some people think they're on mailing lists
+  ("\\(un\\)?sub?scribe" -256 nil r)
+  ;; who needs a smilie in a subject line?
+  (":)" -128 nil s) (":-)" -128 nil s) ("^_^" -128 nil s)
+  ;; phone numbers are bad news (thanks to Elf S. for this idea)
+  ("[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]" -1024 nil r)
+  ;; I'm sure you could phrase that more eloquently
+  ("fuck" -1024 nil s) ("asshole" -1024 nil s) ("cunt" -1024 nil s)
+  ("pedophil" -1024 nil s)
+  ;; free offers (in caps) never are
+  ("FREE" -2048 nil S)
+  ;; Stop Micro$oft NOW!!
+  ("\\(m\\(icro\\)?[s$]\\(oft\\|lot\\)?-?\\)?wind?\\(ows\\|aube\\|oze\\)?[- ]*\\('?95\\|NT\\|3[.]1\\|32\\)" -1 nil r)
+  ;; I've nothing to buy
+  ("\\(for\\|4\\)[- ]*sale" -128 nil r)
+  ;; SELF-DISCIPLINED people
+  ("\\[[^a-z0-9 \t\n][^a-z0-9 \t\n]\\]" +128 nil r)
+  ("^ *\\[\\([-+?*$!]\\)\\1\\]" 128 nil r)
+  ("\\[\\([-+?*$!]\\)\\1\\]" 16 nil r)
+  ;; No junk mail please!
+  ("please ignore" -512 nil s)
+  ("test" -512 nil e)
+  )
+ ("from"
+  ("Manoj Srivastava" +1024 nil s)
+  ("srivasta@.*datasync.com" +1024 nil s)
+  ("srivasta@.*debian.org" +1024 nil s)
+  ("srivasta@acm.org" +1024 nil s)
+  ("srivasta@computer.org" +1024 nil s)
+  ("m.srivastava@opengroup.org" +1024 nil s)
+  ("manoj@opengroup.org" +1024 nil s)
+  ("srivasta@" +128 nil s)
+  ;; To keep track of posters from my site
+  (".datasync.com" +1000 nil s)
+  ("Law Doctor" -1024 nil s)
+  ("Manus" -1024 nil s)
+  ("Grubor" -1024 nil s)
+  ("DrG" -1024 nil s)
+  )
+ ("followup"
+  ;; Keep track of answers to my posts
+  ("srivasta" +1000 nil s))
+ ("lines"
+  ;; Some people have really nothing to say!!
+  (1 -10 nil <=)
+  (200 128 nil >=)
+  )
+ ("xref"
+  ("gmane.spam.detected" -1024 nil s)
+  ;; the more cross posting, the exponentially worse the article
+  ("^xref: \\S-+ \\S-+ \\S-+ \\S-+" -16 nil r)
+  ("^xref: \\S-+ \\S-+ \\S-+ \\S-+ \\S-+" -32 nil r)
+  ("^xref: \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+" -64 nil r)
+  ("^xref: \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+" -128 nil r)
+  ("^xref: \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+" -256 nil r)
+  ("^xref: \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+" -512 nil r)
+  ("^xref: \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+" -1024 nil r)
+  ("^xref: \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+" -2048 nil r)
+  ("^xref: \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+" -4096 nil r)
+  ("^xref: \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+ \\S-+" -8182 nil r)
+  )
+ ("references"
+  ("<87[0-9a-z]+\\.fsf\\(_-_\\)?@tiamat.datasync.com>" 512 nil r)
+  ("<87[0-9a-z]+\\.fsf\\(_-_\\)?@anzu\\.internal\\.golden-gryphon\\.com>" 512 nil r)
+  ("<87[0-9a-z]+\\.fsf\\(_-_\\)?@spark\\.internal\\.golden-gryphon\\.com>" 512 nil r)
+  )
+ (read-only t)
+ )
+
+
+;;; My Gnus global score file.  If you're interested in funky scoring,
+;;; please also see my Internet blacklist scorefile, available at
+;;;   http://www.cs.ubc.ca/spider/edmonds/usenet/gnus/BLACKLIST
+;;; and my smegheads scorefile, available at
+;;;   http://www.cs.ubc.ca/spider/edmonds/usenet/gnus/SMEGHEADS

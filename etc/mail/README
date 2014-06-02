@@ -1,0 +1,41 @@
+you should be able to check the status of the smartcard using GnuPG.
+
+# gpg --card-status
+
+Now for the interesting part. OpenSSH talks to an agent for private
+key handling, and GnuPG’s gpg-agent supports this protocol when the
+--enable-ssh-support parameter is given. During startup, gpg-agent
+will print some environment variables that needs to be set when ssh is
+run. Normally gpg-agent is invoked by the Xsession.d login scripts, so
+that the environment variables are inherited by all your
+processes. However, for an unattended machine without any normal login
+process, we need to write a script to start gpg-agent. First do these
+manual steps, to confirm that everything works.
+
+# gpg-agent --daemon --enable-ssh-support > /var/run/gpg-agent-info.env
+# . /var/run/gpg-agent-info.env
+# ssh-add -L
+ssh-rsa AAAAB3N... cardno:000500000BD8
+#
+
+The typical use-pattern is as follows. After the machine has been
+started, gpg-agent is running but the smartcard is not unlocked with
+the PIN. You need to manually login to the machine and run
+‘unlock-smartcard’ and enter the PIN. In the script that runs the
+backup jobs, invoked via cron, make sure that the first line of the
+scripts reads (assuming Bourne shell script syntax):
+
+. /var/run/gpg-agent-info.env; export GPG_AGENT_INFO SSH_AUTH_SOCK SSH_AGENT_PID
+
+To avoid needlessly attempting ssh connections if the smartcard is not
+unlocked, your backup script can also call the checkpin code and abort
+if it doesn’t return true.
+
+checkpin || exit 1
+
+Some final words about debugging. A basic command to run to check that
+the GnuPG side is working is gpg --card-status, it should print some
+information about the smartcard if successful. To check that the SSH
+agent part is working, use ssh-add -L. If you get error messages, try
+killing the scdaemon process by running killall -9 scdaemon and let
+gpg-agent respawn a new scdaemon process.

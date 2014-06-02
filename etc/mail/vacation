@@ -1,0 +1,27 @@
+Subject: This is a recording... [Re: %R]
+Organization: %o
+Precedence: bulk
+Cc: %u@%C
+
+[This is a recording -- Last revision made on %T]
+
+Dear %N:
+
+ I've received your message of %[Date], regarding 
+ "%R".  
+
+ 	I'm out of town at the moment. It will be read as soon as I
+ come back from this trip.  I am expected back around thankgiving (yes, it
+ _is_ a long trip).
+	
+ 	I will send you such an acknowledgment only once a day. (Your
+ mail was received by a program, not by a person, in case you wonder.)
+
+ Sincerely,
+
+  mailagent speaking for %U 
+
+--
+Manoj Srivastava     <srivasta@acm.org>    <http://www.golden-gryphon.com/>
+Key C7261095 fingerprint = CB D9 F4 12 68 07 E4 05  CC 2D 27 12 1D F5 E8 6E
+ 
