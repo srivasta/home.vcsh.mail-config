@@ -61,9 +61,7 @@
 !/var/spool
 !/var/spool/agent
 !/var/spool/agent/agenthelp
-!/var/spool/agent/agent.wait
 !/var/spool/agent/commands
-!/var/spool/agent/context
 !/var/spool/agent/distribs
 !/var/spool/agent/help
 !/var/spool/agent/help/addauth
