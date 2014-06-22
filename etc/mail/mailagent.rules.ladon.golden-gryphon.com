@@ -459,7 +459,8 @@ From:  /calendar-notification\@google\.com/i,
   };
 
 <INITIAL> From Sender Envelope:
- /autoprocessing\@westernunionspeedpay\.com/i
+  /autoprocessing\@westernunionspeedpay\.com/i,
+  /noreply\@nationstar-email\.com/i
           { ANNOTATE -d X-Agent-list 'nationstar';
             ASSIGN list 'nationstar';
             BOUNCE jshardo@mail.golden-gryphon.com;
@@ -635,6 +636,7 @@ From:  /calendar-notification\@google\.com/i,
  /annualfund\@admin\.(umass)\.edu/i,
  /newsletter\@(alumni)\.net/i,
  /(summer-admin)-announce-2006\@googlegroups\.com/i,
+ /community\@lists\.(leastsquar)\.es/i,
  /umalumni\@admin\.(umass)\.edu/i,
  /pointsofpride\@ecs\.(umass)\.edu/i,
  /demers\@ecs\.(umass)\.edu/i,
@@ -657,6 +659,7 @@ From:  /calendar-notification\@google\.com/i,
  /\@cwonline\.(computerworld)\.com/i,
  /\@newsletters\.(nationalgeographic)\.com/i,
  /research\@response\.(techsurvey)research\.com/i,
+ /\@(washingtontechnology)\.org/i,
  /apc\@(apc)\.chtah\.com/i,
  /newsletter\@email\.(saveur)\.com/i,
  /\@inside-(erp).com/i,
@@ -846,6 +849,7 @@ From:  /calendar-notification\@google\.com/i,
  /(communications)-digital-edition@acm.org/i,
  /meetings\@(comsoc)\.org/i,
  /Reader_Survey\@(computer)\.org/i,
+ /k\.mccabe\@(ieee)\.org/i,
  /\@bmsmail3\.(ieee)\.org/i,
  /IEEEservice\@(ieee)\.org/i,
  /IEEE-Annual-Election\@(ieee)\.org/i,
@@ -1171,6 +1175,7 @@ From:  /calendar-notification\@google\.com/i,
  /\@delivery\.(bankofamerica)\.com/i,/noreply\@account\.(plaxo)\.com/i,
  /noreply-(android-market)\@google\.com/i,
  /(location)-noreply\@google\.com/i,
+ /noreply\@mail\.(goodreads)\.com/i,
  /news-(googleplay)\@google\.com/i,
  /(googleplay)-noreply\@google\.com/i,
  /\@(wallet)\.google\.com/i,
