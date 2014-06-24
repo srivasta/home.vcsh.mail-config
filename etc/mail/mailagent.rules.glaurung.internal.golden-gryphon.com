@@ -638,6 +638,7 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /pointsofpride\@ecs\.(umass)\.edu/i,
  /demers\@ecs\.(umass)\.edu/i,
  /alumni\@admin\.(umass)\.edu/i,
+ /\@engin\.(umass)\.edu/i,
  /admin\@admin\.(umass)\.edu/i
  {
    ANNOTATE -d X-Disposition Alumni-Mailinglist;
@@ -1025,6 +1026,7 @@ From:  /\@txt\.(voice)\.google\.com/i,
 # Services
 <RETRY,INITIAL> From To Cc Reply-To Sender X-Mn-Key Envelope Delivered-To X-BeenThere:
  /\@(asurion)\.com/i,
+ /\@(wahbexchange)\.org/i,
  /Member\.experience\@survey\.(firsttech)fed\.com/i,
  /Memberexperience\@survey\.(firsttech)fed\.com/i,
  /alerts\@(firsttech)fed\.com/i,
@@ -1489,6 +1491,8 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /(zazzle)\@echo7\.bluehornet\.com/i,
  /(zazzle)\@email\.zazzle\.com/i,
  /\@.*\.(verizonwireless).com/i,
+ /QuickenOnlineBackup\@(quicken)\.com/i.
+ /customercare\@(quicken)\.com/i.
  /\@info1\.(quicken)\.com/i,
  /no-reply\@(yelp)\.com/i,
  /TechSaver\@eletters\.(ztechsaver)\.com/i
