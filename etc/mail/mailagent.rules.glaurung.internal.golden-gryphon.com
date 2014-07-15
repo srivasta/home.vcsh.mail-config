@@ -254,7 +254,7 @@ All: /./        { PERL sbin/mailagent.log.pl};
 <INITIAL> To From: /([-\w]+)-commits-(owner|bounce)\@lists.alioth.debian.org/i
         { REJECT AliothAdmin };
 
-From:  /calendar-notification\@google\.com/i,
+From:  /(calendar)-notification\@google\.com/i,
   To: /manoj\.srivastava\.1962\@gmail\.com/i
   {
   ` ASSIGN list 'calendar';

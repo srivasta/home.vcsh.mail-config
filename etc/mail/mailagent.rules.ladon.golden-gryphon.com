@@ -451,7 +451,7 @@ From:  /\@txt\.voice\.google\.com/i,
     REJECT MailingList;
   };
 
-From:  /calendar-notification\@google\.com/i,
+From:  /(calendar)-notification\@google\.com/i,
   To: /manoj\.srivastava\.1962\@gmail\.com/i
   {
   ` ASSIGN list 'calendar';
