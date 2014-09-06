@@ -437,6 +437,15 @@ All: /./        { PERL sbin/mailagent.log.pl};
  };
 
 <INITIAL> From Sender X-Mn-Key Envelope:
+ /\@(Time)customerservice\.delivery\.net/i
+ {
+   ASSIGN list 'time';
+   BOUNCE jshardo@mail.golden-gryphon.com;
+   REJECT MailingList;
+ };
+
+
+<INITIAL> From Sender X-Mn-Key Envelope:
  /(xandros)\@reply.exacttarget.com/i
  {
    ASSIGN list 'Xandros-Mailinglist';
@@ -751,7 +760,10 @@ From:  /(calendar)-notification\@google\.com/i,
  /nwinfo\@(networkworld)\.info/i,
  /openenterprise\@newsletter\.(infoworld)\.com/i,
  /realitycheck\@newsletter\.(infoworld)\.com/i,
- /subscriptions\@(wired)\.com/i,
+ /wired\@email\.(wired)\.com/i,
+ /wired\@email\.(wired)magazine\.com/i,
+ /subscriptions\@email\.(wired)\.com/i,
+ /\@(wired)\.com/i,
  /Wired_Promotions\@(wired)\.messages2\.com/i,
  /wired\@email\.(wired)magazine\.com/i,
  /wired\@email\.(wired)\.com/i,
@@ -1041,6 +1053,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@billpayment\.(firsttech)fed\.com/i,
  /email\@only(mytoyota)\.com/i,
  /\@(beamanauto)\.com/i,
+ /\@(toyota)ofbellevue\.com/i,
  /(michaelstoyota)ofbellevue\@mydealerevent\.com/i,
  /(michaelstoyota)ofbellevue\@mydealerreminder\.com/i,
  /sales\@(toyota)ofbellevue\.com/i,

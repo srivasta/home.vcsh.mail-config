@@ -129,6 +129,15 @@ All: /./        { PERL sbin/mailagent.log.pl};
    { ANNOTATE -d X-List Known; REJECT ADDRESSED };
 
 
+## <INITIAL> From Sender X-Mn-Key Envelope:
+##  /\@(Time)customerservice\.delivery\.net/i
+##  {
+##    ASSIGN list 'time';
+##    BOUNCE jshardo@mail.golden-gryphon.com;
+##    REJECT MailingList;
+##  };
+
+
 # New homes, automated email
 <INITIAL> From Sender X-Return-Path Envelope X-Envelope-From:
  /kmartins\@mcenearney.com/i,
@@ -751,7 +760,7 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /wired\@email\.(wired)\.com/i,
  /wired\@email\.(wired)magazine\.com/i,
  /subscriptions\@email\.(wired)\.com/i,
- /subscriptions\@(wired)\.com/i,
+ /\@(wired)\.com/i,
  /Wired_Promotions\@(wired)\.messages2\.com/i,
  /wired\@email\.(wired)magazine\.com/i,
  /wir\@(wired)-email\.com/i,
@@ -1039,6 +1048,7 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /\@billpayment\.(firsttech)fed\.com/i,
  /\@(beamanauto)\.com/i,
  /email\@only(mytoyota)\.com/i,
+ /\@(toyota)ofbellevue\.com/i,
  /(michaelstoyota)ofbellevue\@mydealerevent\.com/i,
  /(michaelstoyota)ofbellevue\@mydealerreminder\.com/i,
  /sales\@(toyota)ofbellevue\.com/i,
