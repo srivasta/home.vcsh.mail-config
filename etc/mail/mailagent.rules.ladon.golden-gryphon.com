@@ -660,6 +660,7 @@ From:  /(calendar)-notification\@google\.com/i,
 
 # Trade mags
 <RETRY,INITIAL> From To Cc Sender X-Mn-Key Envelope Delivered-To X-BeenThere:
+ /\@(androidauthority)\.com/i,
  /\@(computerworld)\.com/i,
  /\@(huffingtonpost)\.com/i,
  /\@.*\.(computerworld).com/i,
@@ -959,6 +960,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@(washingtoncan)\.org/i,
  /\@(povertylaw)\.org/i,
  /\imawa09@mail\.house\.(gov)/i,
+ /avaaz\@(avaaz)\.org/i,
  /info\@(hillaryclinton)\.com/i
  {
    ANNOTATE -d X-Disposition prof-soc-Mailinglist;
@@ -1079,6 +1081,8 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@e\.(tripadvisor)\.com/i,
  /\@(wallypark)\.com/i,
  /\@mail\.(orvis)\.com/i,
+ /\@(pininterest).com/i,
+ /\@(sendgrid)\.net/i,
  /(dolrenewal)reminder\@dol\.wa\.gov/i,
  /support\@(steam)powered.com/i,
  /Billing\@(relianceglobalcall).com/i,
@@ -1587,6 +1591,10 @@ From:  /(calendar)-notification\@google\.com/i,
                                           REJECT MailingList };
 
 <INITIAL>  Subject: /CFV: Proposal/ { REJECT VOTE };
+<INITIAL>  Subject: /PuPy-Puget-Sound-Python-pronounced-puppy/ {
+   ASSIGN list 'puppy';
+   REJECT MailingList
+};
 
 <INITIAL> X-SBClass:/Admin/       { REJECT ADMIN };
 
