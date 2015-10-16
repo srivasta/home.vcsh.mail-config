@@ -7,8 +7,6 @@
 !/etc/mail/fetchmail
 !/etc/mail/fetchmail/feeds
 !/etc/mail/fetchmail/feeds/.gitignore
-!/etc/mail/fetchmail/feeds/gmail-imap.google.com
-!/etc/mail/fetchmail/feeds/gmail-imap.google.com/fetchmailrc
 !/etc/mail/fetchmail/fetchmailrc.example
 !/etc/mail/.gitignore
 !/etc/mail/KNOWN
