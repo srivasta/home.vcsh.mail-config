@@ -244,7 +244,12 @@ All: /./        { PERL sbin/mailagent.log.pl};
     REJECT MailingList
  };
 
-
+<INITIAL> From Sender X-Return-Path Envelope X-Envelope-From:
+              /(bootstrap-vz)\@noreply.github.com/
+              {
+              ASSIGN list '%1';
+              REJECT MailingList
+              };
 ######################################################################
 ######################################################################
 #                                                                    #
@@ -441,7 +446,9 @@ All: /./        { PERL sbin/mailagent.log.pl};
  };
 
 <INITIAL> From Sender X-Mn-Key Envelope:
- /\@(Time)customerservice\.delivery\.net/i
+              /\@(Time)customerservice\.delivery\.net/i,
+              /wesTD.undlv@customersvc.com/i,
+              /TD\@customersvc.com/i
  {
    ASSIGN list 'time';
    BOUNCE jshardo@mail.golden-gryphon.com;
@@ -707,6 +714,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /IDGConnect\@(idgconnect)-resources\.com/i,
  /(itworld)\@.*itwpub1.com/i,
  /(smithsonian)\@customersvc\.com/i,
+ /\@mail\.(smithsonianmag)\.com/i,
  /newsletters\@(gamespot)\.online\.com/i,
  /\@(seekingalpha)\.com/i,
  /\@itwonline\.(itworld).com/i,
@@ -939,6 +947,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /\imawa09@mail\.house\.(gov)/i,
  /avaaz\@(avaaz)\.org/i,
  /\@(voiceson)-resources\.com/i,
+ /\@(berniesanders)\.com/i,
  /info\@(hillaryclinton)\.com/i
  {
    ANNOTATE -d X-Disposition prof-soc-Mailinglist;
@@ -1026,6 +1035,8 @@ From:  /(calendar)-notification\@google\.com/i,
  /Member\.experience\@survey\.(firsttech)fed\.com/i,
  /\@.*\.(alliant)creditunion\.com/i,
  /\@(betterment)\.com/i,
+ /\@the(cpap)shop.com/i,
+/\@(growingwashington)\.org/i,
  /\@(wahbexchange)\.org/i,
  /\@(wageworks)\.com/i,
  /Memberexperience\@survey\.(firsttech)fed\.com/i,
@@ -1104,8 +1115,11 @@ From:  /(calendar)-notification\@google\.com/i,
  /online\.service\@(schwab)\.com/i,
  /dollarrentacar\@email\.(dollar)\.com/i,
  /\@luv\.(southwest).com/i,
+ /\@contact\.(britishairways)\.com/i,
+/\@(britishairways)\.com/i,
  /continentalairlines\@email\.(continental)\.com/i,
  /billpay\@(disposal)\.com/i,
+ /\@(carezone)\.com/i,
  /\@email\.(glassdoor)\.com/i,
  /reply\@(glassdoor)\.com/i,
  /reply\@emails\.(lq)\.com/i,
@@ -1140,6 +1154,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /alert\@(kayak)\.com/i,
  /service\@(stumble)upon\.com/i,
  /\@(stumble)mail\.com/i,
+ /\@mail\.(stumble)mail\.net/i,
  /\@online\.(costco)\.com/i,
  /\@luv\.(southwest)\.com/i,
  /noreply\@email\.(driverside)\.com/i,
@@ -1167,6 +1182,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /citicards\@(citi)bank\.delivery\.net/i,
  /citicards\@info.?\.(citi)bank\.com/i,
  /citicards\@info.?\.(citi)\.com/i,
+ /citicards\@info?\.(citi)\.com/i,
  /\@info\.(citi)bank\.com/i,
  /alerts\@(citi)bank\.com/i,
  /\@info\.(sears)card\.com/i,
@@ -1435,7 +1451,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@.*\.(ebags)\.com/i,
  /(foodnetwork)store\@foodnewsletters\.com/i,
  /FoodNetworkStore\.com\@email-(foodnetwork)store\.com/i,
- /newsletter\@(giantmicrobes)\.com/i
+ /\@(giantmicrobes)\.com/i
  /\@shop\.(hammacher)\.com/i,
  /Hammacher\.custcare\@(hammacher)\.com/i,
  /hammacher\@(hammacher)\.whatcounts\.com/i,
@@ -1455,6 +1471,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /(gentleware)_AG\@mail\.vresp\.com/i,
  /Marketing\@(extendedstay)hotels\.com/i,
  /\@(extendedstay)hotels\.com/i,
+ /\@em\.(extendedstayamerica)\.com/i,
  /\@(drsfostersmith)\.com/i,
  /(fogcreek)\@.*whatcounts\.com/i,
  /(homefocus)\@e.homefocuscatalog.com/i,
@@ -1494,6 +1511,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@.*\.(verizonwireless).com/i,
  /QuickenOnlineBackup\@(quicken)\.com/i.
  /customercare\@(quicken)\.com/i.
+ /\@info\.(quicken)\.com/i,
  /\@info1\.(quicken)\.com/i,
  /no-reply\@(yelp)\.com/i,
  /TechSaver\@eletters\.(ztechsaver)\.com/i

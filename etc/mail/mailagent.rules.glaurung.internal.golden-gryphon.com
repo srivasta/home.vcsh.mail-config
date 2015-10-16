@@ -137,6 +137,15 @@ All: /./        { PERL sbin/mailagent.log.pl};
 ##    REJECT MailingList;
 ##  };
 
+<INITIAL> From Sender X-Mn-Key Envelope:
+              /\@(Time)customerservice\.delivery\.net/i,
+              /wesTD.undlv@customersvc.com/i,
+              /TD\@customersvc.com/i
+ {
+   ASSIGN list 'time';
+   REJECT MailingList;
+ };
+
 
 # New homes, automated email
 <INITIAL> From Sender X-Return-Path Envelope X-Envelope-From:
@@ -284,6 +293,12 @@ From:  /\@txt\.(voice)\.google\.com/i,
     REJECT MailingList
  };
 
+<INITIAL> From Sender X-Return-Path Envelope X-Envelope-From:
+              /(bootstrap-vz)\@noreply.github.com/
+              {
+              ASSIGN list '%1';
+              REJECT MailingList
+              };
 
 ######################################################################
 ######################################################################
@@ -703,6 +718,7 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /IDGConnect\@(idgconnect)-resources\.com/i,
  /(itworld)\@.*itwpub1.com/i,
  /(smithsonian)\@customersvc\.com/i,
+ /\@mail\.(smithsonianmag)\.com/i,
  /newsletters\@(gamespot)\.online\.com/i,
  /\@(seekingalpha)\.com/i,
  /\@itwonline\.(itworld).com/i,
@@ -975,6 +991,7 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /\@(povertylaw)\.org/i,
  /avaaz\@(avaaz)\.org/i,
  /\imawa09@mail\.house\.(gov)/i,
+ /\@(berniesanders)\.com/i,
  /info\@(hillaryclinton)\.com/i
  {
    ANNOTATE -d X-Disposition prof-soc-Mailinglist;
@@ -1067,6 +1084,8 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /Memberexperience\@survey\.(firsttech)fed\.com/i,
  /alerts\@(firsttech)fed\.com/i,
  /\@(betterment)\.com/i,
+ /\@the(cpap)shop.com/i,
+/\@(growingwashington)\.org/i,
  /\@(a2z)-insurance\.com/i.
  /\@(firsttech)fed\.com/i,
  /member\.communications\@(firsttech)fed\.com/i,
@@ -1131,11 +1150,14 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /\@email\.(carecredit)\.com/i,
  /billpay\@(disposal)\.com/i,
  /\@email\.(continental)\.com/i,
+ /\@contact\.(britishairways)\.com/i,
+ /\@(britishairways)\.com/i,
  /continentalairlines\@email\.(continental)\.com/i,
  /dollarrentacar\@email\.(dollar)\.com/i,
  /\@markit\.(schwab).com/i,
  /schwabalerts\.service\@(schwab)\.com/i,
  /schwabalerts\@(schwab)\.com/i,
+ /\@(carezone)\.com/i,
  /online\.service\@(schwab)\.com/i,
  /\@(schwab)\.com/i,
  /\@luv\.(southwest).com/i,
@@ -1173,6 +1195,7 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /fidelity\.investments\.email\@(fidelity)\.com/i,
  /\@email\.(fidelity)\.com/i,
  /\@mail\.(fidelity)\.com/i,
+ /\@(Fidelity)\.com/i,
  /\@(foursquare)\.com/i,
  /nytdirect\@(nytimes)\.com/i,
  /(nytimes)\@email\.newyorktimes\.com/i,
@@ -1192,6 +1215,7 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /vanguardinvestments\@(vanguard).com/i,
  /service\@(stumble)upon\.com/i,
  /\@(stumble)mail\.com/i,
+ /\@mail\.(stumble)mail\.net/i,
  /\@online\.(costco)\.com/i,
  /\@luv\.(southwest)\.com/i,
  /service\@(kayak)\.com/i,
@@ -1224,6 +1248,7 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /citicards\@(citi)bank\.delivery\.net/i,
  /citicards\@info.?\.(citi)bank\.com/i,
  /citicards\@info.?\.(citi)\.com/i,
+ /citicards\@info?\.(citi)\.com/i,
  /\@info\.(citi)bank\.com/i,
  /alerts\@(citi)bank\.com/i,
  /\@info\.(sears)card\.com/i,
@@ -1487,7 +1512,7 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /\@.*\.(ebags)\.com/i,
  /(foodnetwork)store\@foodnewsletters\.com/i,
  /FoodNetworkStore\.com\@email-(foodnetwork)store\.com/i,
- /newsletter\@(giantmicrobes)\.com/i
+ /\@(giantmicrobes)\.com/i
  /\@shop\.(hammacher)\.com/i,
  /Hammacher\.custcare\@(hammacher)\.com/i,
  /hammacher\@(hammacher)\.whatcounts\.com/i,
@@ -1507,6 +1532,7 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /(gentleware)_AG\@mail\.vresp\.com/i,
  /Marketing\@(extendedstay)hotels\.com/i,
  /\@(extendedstay)hotels\.com/i,
+ /\@em\.(extendedstayamerica)\.com/i,
  /\@(drsfostersmith)\.com/i,
  /(fogcreek)\@.*whatcounts\.com/i,
  /(homefocus)\@e.homefocuscatalog.com/i,
@@ -1546,6 +1572,7 @@ From:  /\@txt\.(voice)\.google\.com/i,
  /\@.*\.(verizonwireless).com/i,
  /QuickenOnlineBackup\@(quicken)\.com/i.
  /customercare\@(quicken)\.com/i.
+ /\@info\.(quicken)\.com/i,
  /\@info1\.(quicken)\.com/i,
  /no-reply\@(yelp)\.com/i,
  /TechSaver\@eletters\.(ztechsaver)\.com/i
