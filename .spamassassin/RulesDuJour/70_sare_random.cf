@@ -1,0 +1,576 @@
+# SARE Random Ruleset for SpamAssassin
+# Version:  1.30.21
+# Created:  2004-03-01
+# Modified: 2005-12-12
+# Changes:  Added new tests.
+# License:  Artistic - see http://www.rulesemporium.com/license.txt
+# Current Maintainer: Fred Tarasevicius - tech2@i-is.com
+# Current Home: http://www.rulesemporium.com/rules/70_sare_random.cf
+# Comments:  Catches ratware mis-fires and other mistakes.
+
+
+header    SARE_RAND_HGBOTCH   Subject =~ m'%TXT_'
+score     SARE_RAND_HGBOTCH   3.0
+
+header  SARE_RAND_SUB_MOR Subject =~ /%MORT_SUBJ/
+score   SARE_RAND_SUB_MOR 2.5
+
+uri     SARE_RAND_URI_MOR /%MORT_DOM/
+score   SARE_RAND_URI_MOR 1.994
+
+header  __RANDH_1   ALL =~ /[%\#\[\$]RANDOM/i
+header  __RANDH_1B  ALL =~ /[%\#\[\$](?:BIG)?RANDOM_?CHAR/i
+header  __RANDH_1C  ALL =~ /[%\#\[\$]RANDOM_DATE/i
+header  __RANDH_1D  ALL =~ /[%\#\[\$]RANDOM_LETTER/i
+header  __RANDH_1E  ALL =~ /[%\#\[\$]RANDOM_NUMBER/i
+header  __RANDH_1F  ALL =~ /[%\#\[\$]RANDOM_TEXT/
+header  __RANDH_1G  ALL =~ /[%\#\[\$]RANDOM_TIME/
+header  __RANDH_1H  ALL =~ /[%\#\[\$]RANDOM_WORD/
+header  __RANDH_1I  ALL =~ /[%\#\[\$]RANDOMIZE/
+
+rawbody __RANDR_1   /[%\#\[\$]RANDOM/i
+rawbody __RANDR_1B  /[%\#\[\$](?:BIG)?RANDOM_?CHAR/i
+rawbody __RANDR_1C  /[%\#\[\$]RANDOM_DATE/i
+rawbody __RANDR_1D  /[%\#\[\$]RANDOM_LETTER/i
+rawbody __RANDR_1E  /[%\#\[\$]RANDOM_NUMBER/i
+rawbody __RANDR_1F  /[%\#\[\$]RANDOM_TEXT/
+rawbody __RANDR_1G  /[%\#\[\$]RANDOM_TIME/
+rawbody __RANDR_1H  /[%\#\[\$]RANDOM_WORD/
+rawbody __RANDR_1I  /[%\#\[\$]RANDOMIZE/
+
+meta  SARE_RAND_1   (__RANDH_1  || __RANDR_1)
+meta  SARE_RAND_1B  (__RANDH_1B || __RANDR_1B)
+meta  SARE_RAND_1C  (__RANDH_1C || __RANDR_1C)
+meta  SARE_RAND_1D  (__RANDH_1D || __RANDR_1D)
+meta  SARE_RAND_1E  (__RANDH_1E || __RANDR_1E)
+meta  SARE_RAND_1F  (__RANDH_1F || __RANDR_1F)
+meta  SARE_RAND_1G  (__RANDH_1G || __RANDR_1G)
+meta  SARE_RAND_1H  (__RANDH_1H || __RANDR_1H)
+meta  SARE_RAND_1I  (__RANDH_1I || __RANDR_1I)
+
+score SARE_RAND_1   2.0
+score SARE_RAND_1B  1.5
+score SARE_RAND_1C  1.5
+score SARE_RAND_1D  1.5
+score SARE_RAND_1E  1.5
+score SARE_RAND_1F  1.5
+score SARE_RAND_1G  1.5
+score SARE_RAND_1H  1.5
+score SARE_RAND_1I  1.5
+
+
+
+
+
+# I've seen both upper case and lower case.
+header  __RANDH_2  ALL =~ /[%\$]R?ND/i
+header  __RANDH_2B ALL =~ /[%\$]R?ND_AD_[0-9]/
+header  __RANDH_2C ALL =~ /[%\$]R?ND_ALL_OTHER_MEDS/
+header  __RANDH_2D ALL =~ /[%\$]RND_ALT/
+header  __RANDH_2E ALL =~ /[%\$]R?ND_BUY_TAG/
+header  __RANDH_2F ALL =~ /[%\$]R?ND_CHAR/
+header  __RANDH_2G ALL =~ /[%\$]R?ND_CIALIS/
+header  __RANDH_2H ALL =~ /[%\$]R?ND_DATE_ONLY/
+header  __RANDH_2I ALL =~ /[%\$]R?ND_DATE_TIME/
+header  __RANDH_2J ALL =~ /[%\$]R?N?D?_?DIGITS?/
+header  __RANDH_2K ALL =~ /[%\$]R?ND_FROM_DOMAIN?/
+header  __RANDH_2L ALL =~ /[%\$]R?ND_HOST/i
+header  __RANDH_2M ALL =~ /[%\$]R?ND_IMA/
+header  __RANDH_2N ALL =~ /[%\$]R?ND_IP/
+header  __RANDH_2O ALL =~ /[%\$]R?ND_MED_ATIVAN/
+header  __RANDH_2P ALL =~ /[%\$]R?ND_MEDS_[0-9]PILLS/
+header  __RANDH_2Q ALL =~ /[%\$]R?ND_MEDS_LIST/
+header  __RANDH_2R ALL =~ /[%\$]R?ND_MONTH_DAY_YEAR/
+header  __RANDH_2S ALL =~ /[%\$]R?ND_PHRASE/
+header  __RANDH_2T ALL =~ /[%\$]R?ND_SYB/
+header  __RANDH_2U ALL =~ /[%\$]R?ND_TEXT/
+header  __RANDH_2V ALL =~ /[%\$]R?ND_TIME/
+header  __RANDH_2W ALL =~ /[%\$]?R?ND_?[UL]C_?CHAR/
+header  __RANDH_2X ALL =~ /[%\$]R?ND_URL/
+header  __RANDH_2Y ALL =~ /[%\$]R?ND_VERSION/
+header  __RANDH_2Z ALL =~ /[%\$]R?ND_WORD/
+
+rawbody __RANDR_2  /[%\$]R?ND/i
+rawbody __RANDR_2B /[%\$]R?ND_AD_[0-9]/
+rawbody __RANDR_2C /[%\$]R?ND_ALL_OTHER_MEDS/
+rawbody __RANDR_2D /[%\$]RND_ALT/
+rawbody __RANDR_2E /[%\$]R?ND_BUY_TAG/
+rawbody __RANDR_2F /[%\$]R?ND_CHAR/
+rawbody __RANDR_2G /[%\$]R?ND_CIALIS/
+rawbody __RANDR_2H /[%\$]R?ND_DATE_ONLY/
+rawbody __RANDR_2I /[%\$]R?ND_DATE_TIME/
+rawbody __RANDR_2J /[%\$]R?N?D?_?DIGITS?/
+rawbody __RANDR_2K /[%\$]R?ND_FROM_DOMAIN?/
+rawbody __RANDR_2L /[%\$]R?ND_HOST/i
+rawbody __RANDR_2M /[%\$]R?ND_IMA/
+rawbody __RANDR_2N /[%\$]R?ND_IP/
+rawbody __RANDR_2O /[%\$]R?ND_MED_ATIVAN/
+rawbody __RANDR_2P /[%\$]R?ND_MEDS_[0-9]PILLS/
+rawbody __RANDR_2Q /[%\$]R?ND_MEDS_LIST/
+rawbody __RANDR_2R /[%\$]R?ND_MONTH_DAY_YEAR/
+rawbody __RANDR_2S /[%\$]R?ND_PHRASE/
+rawbody __RANDR_2T /[%\$]R?ND_SYB/
+rawbody __RANDR_2U /[%\$]R?ND_TEXT/
+rawbody __RANDR_2V /[%\$]R?ND_TIME/
+rawbody __RANDR_2W /[%\$]?R?ND_?[UL]C_?CHAR/
+rawbody __RANDR_2X /[%\$]R?ND_URL/
+rawbody __RANDR_2Y /[%\$]R?ND_VERSION/
+rawbody __RANDR_2Z /[%\$]R?ND_WORD/
+
+meta  SARE_RAND_2  (__RANDH_2  || __RANDR_2)
+meta  SARE_RAND_2B (__RANDH_2B || __RANDR_2B)
+meta  SARE_RAND_2C (__RANDH_2C || __RANDR_2C)
+meta  SARE_RAND_2D (__RANDH_2D || __RANDR_2D)
+meta  SARE_RAND_2E (__RANDH_2E || __RANDR_2E)
+meta  SARE_RAND_2F (__RANDH_2F || __RANDR_2F)
+meta  SARE_RAND_2G (__RANDH_2G || __RANDR_2G)
+meta  SARE_RAND_2H (__RANDH_2H || __RANDR_2H)
+meta  SARE_RAND_2I (__RANDH_2I || __RANDR_2I)
+meta  SARE_RAND_2J (__RANDH_2J || __RANDR_2J)
+meta  SARE_RAND_2K (__RANDH_2K || __RANDR_2K)
+meta  SARE_RAND_2L (__RANDH_2L || __RANDR_2L)
+meta  SARE_RAND_2M (__RANDH_2M || __RANDR_2M)
+meta  SARE_RAND_2N (__RANDH_2N || __RANDR_2N)
+meta  SARE_RAND_2O (__RANDH_2O || __RANDR_2O)
+meta  SARE_RAND_2P (__RANDH_2P || __RANDR_2P)
+meta  SARE_RAND_2Q (__RANDH_2Q || __RANDR_2Q)
+meta  SARE_RAND_2R (__RANDH_2R || __RANDR_2R)
+meta  SARE_RAND_2S (__RANDH_2S || __RANDR_2S)
+meta  SARE_RAND_2T (__RANDH_2T || __RANDR_2T)
+meta  SARE_RAND_2U (__RANDH_2U || __RANDR_2U)
+meta  SARE_RAND_2V (__RANDH_2V || __RANDR_2V)
+meta  SARE_RAND_2W (__RANDH_2W || __RANDR_2W)
+meta  SARE_RAND_2X (__RANDH_2X || __RANDR_2X)
+meta  SARE_RAND_2Y (__RANDH_2Y || __RANDR_2Y)
+meta  SARE_RAND_2Z (__RANDH_2Z || __RANDR_2Z)
+
+score SARE_RAND_2  2.5
+score SARE_RAND_2B 1.5
+score SARE_RAND_2C 1.5
+score SARE_RAND_2D 1.5
+score SARE_RAND_2E 1.5
+score SARE_RAND_2F 1.5
+score SARE_RAND_2G 1.5
+score SARE_RAND_2H 1.5
+score SARE_RAND_2I 1.5
+score SARE_RAND_2J 1.5
+score SARE_RAND_2K 1.5
+score SARE_RAND_2L 1.5
+score SARE_RAND_2M 1.5
+score SARE_RAND_2N 1.5
+score SARE_RAND_2O 1.5
+score SARE_RAND_2P 1.5
+score SARE_RAND_2Q 1.5
+score SARE_RAND_2R 1.5
+score SARE_RAND_2S 1.5
+score SARE_RAND_2T 1.5
+score SARE_RAND_2U 1.5
+score SARE_RAND_2V 1.5
+score SARE_RAND_2W 1.5
+score SARE_RAND_2X 1.5
+score SARE_RAND_2Y 1.5
+score SARE_RAND_2Z 1.5
+
+
+
+
+# I've seen both upper case and lower case.
+header   __RANDH_3	ALL =~ /%CUSTOM/i
+header   __RANDH_3B	ALL =~ /%CUSTOM_DOMAIN/i
+
+rawbody  __RANDR_3	/%CUSTOM/i
+rawbody  __RANDR_3B	/%CUSTOM_DOMAIN/i
+
+meta     SARE_RAND_3	(__RANDH_3  || __RANDR_3)
+meta     SARE_RAND_3B	(__RANDH_3B || __RANDR_3B)
+
+score    SARE_RAND_3	2.0
+score    SARE_RAND_3B	2.0
+
+
+
+
+
+
+header  __RANDH_4  ALL =~ /%HEADER/
+header  __RANDH_4B ALL =~ /%HEADER_RANDOMIZER_TAG/
+header  __RANDH_4C ALL =~ /%HEADER_RDM_MAILERS/
+header  __RANDH_4D ALL =~ /%HEADER_SMTP_RDM/
+header  __RANDH_4E ALL =~ /%HEADER_X_MSSG_INFO/
+
+rawbody __RANDR_4  /%HEADER/
+rawbody __RANDR_4B /%HEADER_RANDOMIZER_TAG/
+rawbody __RANDR_4C /%HEADER_RDM_MAILERS/
+rawbody __RANDR_4D /%HEADER_SMTP_RDM/
+rawbody __RANDR_4E /%HEADER_X_MSSG_INFO/
+
+meta  SARE_RAND_4  (__RANDH_4  || __RANDR_4)
+meta  SARE_RAND_4B (__RANDH_4B || __RANDR_4B)
+meta  SARE_RAND_4C (__RANDH_4C || __RANDR_4C)
+meta  SARE_RAND_4D (__RANDH_4D || __RANDR_4D)
+meta  SARE_RAND_4E (__RANDH_4E || __RANDR_4E)
+
+score SARE_RAND_4  2.0
+score SARE_RAND_4B 1.5
+score SARE_RAND_4C 1.5
+score SARE_RAND_4D 1.5
+score SARE_RAND_4E 1.5
+
+
+
+
+
+
+
+
+
+
+
+header  __RANDH_5  ALL =~ /%CURRENT/
+header  __RANDH_5B ALL =~ /%CURRENT_DATE_TIME/
+
+rawbody  __RANDR_5  /%CURRENT/
+rawbody  __RANDR_5B /%CURRENT_DATE_TIME/
+
+meta  SARE_RAND_5  (__RANDH_5  || __RANDR_5)
+meta  SARE_RAND_5B (__RANDH_5B || __RANDR_5B)
+
+score SARE_RAND_5  2.0
+score SARE_RAND_5B 1.5
+
+
+
+
+
+
+
+
+header __RANDH_6  ALL =~ /%TO/
+header __RANDH_6B ALL =~ /%TO_NEW/
+
+rawbody  __RANDR_6  /%TO/
+rawbody  __RANDR_6B /%TO_NEW/
+
+meta  SARE_RAND_6  (__RANDH_6  || __RANDR_6)
+meta  SARE_RAND_6B (__RANDH_6B || __RANDR_6B)
+
+score SARE_RAND_6  2.0
+score SARE_RAND_6B 1.5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+header  __RANDH_7  ALL =~ /%FROM/
+header  __RANDH_7B ALL =~ /%FROM_NAME/
+header  __RANDH_7C ALL =~ /%FROM_EMAIL/
+
+rawbody  __RANDR_7  /%FROM/
+rawbody  __RANDR_7B /%FROM_NAME/
+rawbody  __RANDR_7C /%FROM_EMAIL/
+
+meta  SARE_RAND_7  (__RANDH_7  || __RANDR_7)
+meta  SARE_RAND_7B (__RANDH_7B || __RANDR_7B)
+meta  SARE_RAND_7C (__RANDH_7C || __RANDR_7C)
+
+score SARE_RAND_7  2.0
+score SARE_RAND_7B 1.5
+score SARE_RAND_7C 1.5
+
+
+
+
+
+
+
+
+
+header  __RANDH_8  ALL =~ /%RAND/
+header  __RANDH_8B ALL =~ /%RANDLOWCHAR/
+
+rawbody __RANDR_8  /%RAND/
+rawbody __RANDR_8B /%RANDLOWCHAR/
+
+meta  SARE_RAND_8  (__RANDH_8  || __RANDR_8)
+meta  SARE_RAND_8B (__RANDH_8B || __RANDR_8B)
+
+score SARE_RAND_8  2.0
+score SARE_RAND_8B 1.5
+
+
+
+
+
+
+
+
+# MISC Other entries which don't fit any other sets:
+header  __RANDH_OTHER_1  ALL =~ /%FEM_NAME/
+header  __RANDH_OTHER_2  ALL =~ /%MULTI_NAME/
+header  __RANDH_OTHER_3  ALL =~ /%NEW_HEADER_RDM_DIGITS/
+header  __RANDH_OTHER_4  ALL =~ /%THE2_HEADER_RND_DIGITS_2/
+header  __RANDH_OTHER_5  ALL =~ /\@RND_FROM_DOMAIN/
+header  __RANDH_OTHER_6  ALL =~ /\#\#randomword\#\#/
+header  __RANDH_OTHER_7  ALL =~ /rndlt\[\d/i
+header  __RANDH_OTHER_8  ALL =~ /%SUBJECT/
+header  __RANDH_OTHER_9  ALL =~ /%BOUNDARY/
+header  __RANDH_OTHER_A  ALL =~ /%PRIORITY_NUMBER/
+header  __RANDH_OTHER_B  ALL =~ /%STRING_CONST/
+header  __RANDH_OTHER_C  ALL =~ /%CONTENT_TYPE/
+header  __RANDH_OTHER_D  ALL =~ /%PROXY/
+header  __RANDH_OTHER_E  ALL =~ /%X_MAILER/
+header  __RANDH_OTHER_F  ALL =~ /%PRIORITY_STRING/
+header  __RANDH_OTHER_G  ALL =~ /\[RANDOMIZE\]/i
+header  __RANDH_OTHER_H  ALL =~ /\$(?:FIRST|LAST)NAME/
+header  __RANDH_OTHER_I  ALL =~ /\$STRIPPEDUSER/
+header  __RANDH_OTHER_J  ALL =~ /%DOMAINS_FOR_MAILING/
+header  __RANDH_OTHER_K  ALL =~ /%SOME_TEXT/
+header  __RANDH_OTHER_L  ALL =~ /rndms\[\d/
+header  __RANDH_OTHER_M  ALL =~ /%DELIVERY_TAG/
+header  __RANDH_OTHER_N  ALL =~ /%DELIVERY_TYPE/
+header  __RANDH_OTHER_O  ALL =~ /%DELIVERER/
+header  __RANDH_OTHER_P  ALL =~ /%HEAD_RND_DOM/
+header  __RANDH_OTHER_Q  ALL =~ /\[\&emailuser\&\]/i
+header  __RANDH_OTHER_R  ALL =~ /%CUSTOMBUDDA/
+header  __RANDH_OTHER_S  ALL =~ /%DRUG_\d/
+header  __RANDH_OTHER_T  ALL =~ /%CUSTOM_URL_RX/
+header  __RANDH_OTHER_U  ALL =~ /%X?MESSA/
+header  __RANDH_OTHER_V  ALL =~ /%_9TAG/
+header  __RANDH_OTHER_W  ALL =~ /%PUNCTUATION/
+header  __RANDH_OTHER_X  ALL =~ /%RNDDOMAINWORD/
+header  __RANDH_OTHER_Y  ALL =~ /%PHARM_/
+header  __RANDH_OTHER_Z  ALL =~ /%TIF/
+header  __RANDH_OTHER_AA ALL =~ /%MAKE_TXT/
+
+
+rawbody  __RANDR_OTHER_1  /%FEM_NAME/
+rawbody  __RANDR_OTHER_2  /%MULTI_NAME/
+rawbody  __RANDR_OTHER_3  /%NEW_HEADER_RDM_DIGITS/
+rawbody  __RANDR_OTHER_4  /%THE2_HEADER_RND_DIGITS_2/
+rawbody  __RANDR_OTHER_5  /\@RND_FROM_DOMAIN/
+rawbody  __RANDR_OTHER_6  /\#\#randomword\#\#/
+rawbody  __RANDR_OTHER_7  /rndlt\[\d/i
+rawbody  __RANDR_OTHER_8  /%SUBJECT/
+rawbody  __RANDR_OTHER_9  /%BOUNDARY/
+rawbody  __RANDR_OTHER_A  /%PRIORITY_NUMBER/
+rawbody  __RANDR_OTHER_B  /%STRING_CONST/
+rawbody  __RANDR_OTHER_C  /%CONTENT_TYPE/
+rawbody  __RANDR_OTHER_D  /%PROXY/
+rawbody  __RANDR_OTHER_E  /%X_MAILER/
+rawbody  __RANDR_OTHER_F  /%PRIORITY_STRING/
+rawbody  __RANDR_OTHER_G  /\[RANDOMIZE\]/i
+rawbody  __RANDR_OTHER_H  /\$(?:FIRST|LAST)NAME/
+rawbody  __RANDR_OTHER_I  /\$STRIPPEDUSER/
+rawbody  __RANDR_OTHER_J  /%DOMAINS_FOR_MAILING/
+rawbody  __RANDR_OTHER_K  /%SOME_TEXT/
+rawbody  __RANDR_OTHER_L  /rndms\[\d/
+rawbody  __RANDR_OTHER_M  /%DELIVERY_TAG/
+rawbody  __RANDR_OTHER_N  /%DELIVERY_TYPE/
+rawbody  __RANDR_OTHER_O  /%DELIVERER/
+rawbody  __RANDR_OTHER_P  /%HEAD_RND_DOM/
+rawbody  __RANDR_OTHER_Q  /\[\&emailuser\&\]/i
+rawbody  __RANDR_OTHER_R  /%CUSTOMBUDDA/
+rawbody  __RANDR_OTHER_S  /%DRUG_\d/
+rawbody  __RANDR_OTHER_T  /%CUSTOM_URL_RX/
+rawbody  __RANDR_OTHER_U  /%X?MESSA/
+rawbody  __RANDR_OTHER_V  /%_9TAG/
+rawbody  __RANDR_OTHER_W  /%PUNCTUATION/
+rawbody  __RANDR_OTHER_X  /%RNDDOMAINWORD/
+rawbody  __RANDR_OTHER_Y  /%PHARM_/
+rawbody  __RANDR_OTHER_Z  /%TIF/
+rawbody  __RANDR_OTHER_AA /%MAKE_TXT/
+
+meta  SARE_RAND_OTHER_1  (__RANDH_OTHER_1 || __RANDR_OTHER_1)
+meta  SARE_RAND_OTHER_2  (__RANDH_OTHER_2 || __RANDR_OTHER_2)
+meta  SARE_RAND_OTHER_3  (__RANDH_OTHER_3 || __RANDR_OTHER_3)
+meta  SARE_RAND_OTHER_4  (__RANDH_OTHER_4 || __RANDR_OTHER_4)
+meta  SARE_RAND_OTHER_5  (__RANDH_OTHER_5 || __RANDR_OTHER_5)
+meta  SARE_RAND_OTHER_6  (__RANDH_OTHER_6 || __RANDR_OTHER_6)
+meta  SARE_RAND_OTHER_7  (__RANDH_OTHER_7 || __RANDR_OTHER_7)
+meta  SARE_RAND_OTHER_8  (__RANDH_OTHER_8 || __RANDR_OTHER_8)
+meta  SARE_RAND_OTHER_9  (__RANDH_OTHER_9 || __RANDR_OTHER_9)
+meta  SARE_RAND_OTHER_A  (__RANDH_OTHER_A || __RANDR_OTHER_A)
+meta  SARE_RAND_OTHER_B  (__RANDH_OTHER_B || __RANDR_OTHER_B)
+meta  SARE_RAND_OTHER_C  (__RANDH_OTHER_C || __RANDR_OTHER_C)
+meta  SARE_RAND_OTHER_D  (__RANDH_OTHER_D || __RANDR_OTHER_D)
+meta  SARE_RAND_OTHER_E  (__RANDH_OTHER_E || __RANDR_OTHER_E)
+meta  SARE_RAND_OTHER_F  (__RANDH_OTHER_F || __RANDR_OTHER_F)
+meta  SARE_RAND_OTHER_G  (__RANDH_OTHER_G || __RANDR_OTHER_G)
+meta  SARE_RAND_OTHER_H  (__RANDH_OTHER_H || __RANDR_OTHER_H)
+meta  SARE_RAND_OTHER_I  (__RANDH_OTHER_I || __RANDR_OTHER_I)
+meta  SARE_RAND_OTHER_J  (__RANDH_OTHER_J || __RANDR_OTHER_J)
+meta  SARE_RAND_OTHER_K  (__RANDH_OTHER_K || __RANDR_OTHER_K)
+meta  SARE_RAND_OTHER_L  (__RANDH_OTHER_L || __RANDR_OTHER_L)
+meta  SARE_RAND_OTHER_M  (__RANDH_OTHER_M || __RANDR_OTHER_M)
+meta  SARE_RAND_OTHER_N  (__RANDH_OTHER_N || __RANDR_OTHER_N)
+meta  SARE_RAND_OTHER_O  (__RANDH_OTHER_O || __RANDR_OTHER_O)
+meta  SARE_RAND_OTHER_P  (__RANDH_OTHER_P || __RANDR_OTHER_P)
+meta  SARE_RAND_OTHER_Q  (__RANDH_OTHER_Q || __RANDR_OTHER_Q)
+meta  SARE_RAND_OTHER_R  (__RANDH_OTHER_R || __RANDR_OTHER_R)
+meta  SARE_RAND_OTHER_S  (__RANDH_OTHER_S || __RANDR_OTHER_S)
+meta  SARE_RAND_OTHER_T  (__RANDH_OTHER_T || __RANDR_OTHER_T)
+meta  SARE_RAND_OTHER_U  (__RANDH_OTHER_U || __RANDR_OTHER_U)
+meta  SARE_RAND_OTHER_V  (__RANDH_OTHER_V || __RANDR_OTHER_V)
+meta  SARE_RAND_OTHER_W  (__RANDH_OTHER_W || __RANDR_OTHER_W)
+meta  SARE_RAND_OTHER_X  (__RANDH_OTHER_X || __RANDR_OTHER_X)
+meta  SARE_RAND_OTHER_Y  (__RANDH_OTHER_Y || __RANDR_OTHER_Y)
+meta  SARE_RAND_OTHER_Z  (__RANDH_OTHER_Z || __RANDR_OTHER_Z)
+meta  SARE_RAND_OTHER_AA (__RANDH_OTHER_AA || __RANDR_OTHER_AA)
+
+score SARE_RAND_OTHER_1  3.0
+score SARE_RAND_OTHER_2  3.0
+score SARE_RAND_OTHER_3  3.0
+score SARE_RAND_OTHER_4  3.0
+score SARE_RAND_OTHER_5  3.0
+score SARE_RAND_OTHER_6  3.0
+score SARE_RAND_OTHER_7  1.0
+score SARE_RAND_OTHER_8  3.0
+score SARE_RAND_OTHER_9  3.0
+score SARE_RAND_OTHER_A  3.0
+score SARE_RAND_OTHER_B  3.0
+score SARE_RAND_OTHER_C  3.0
+score SARE_RAND_OTHER_D  3.0
+score SARE_RAND_OTHER_E  3.0
+score SARE_RAND_OTHER_F  3.0
+score SARE_RAND_OTHER_G  3.0
+score SARE_RAND_OTHER_H  3.0
+score SARE_RAND_OTHER_I  3.0
+score SARE_RAND_OTHER_J  3.0
+score SARE_RAND_OTHER_K  3.0
+score SARE_RAND_OTHER_L  3.0
+score SARE_RAND_OTHER_M  3.0
+score SARE_RAND_OTHER_N  3.0
+score SARE_RAND_OTHER_O  3.0
+score SARE_RAND_OTHER_P  3.0
+score SARE_RAND_OTHER_Q  3.0
+score SARE_RAND_OTHER_R  3.0
+score SARE_RAND_OTHER_S  3.0
+score SARE_RAND_OTHER_T  3.0
+score SARE_RAND_OTHER_U  3.0
+score SARE_RAND_OTHER_V  3.0
+score SARE_RAND_OTHER_W  3.0
+score SARE_RAND_OTHER_X  3.0
+score SARE_RAND_OTHER_Y  3.0
+score SARE_RAND_OTHER_Z  3.0
+score SARE_RAND_OTHER_AA 3.0
+
+
+# Organization: [[&EMAILADR&]] T> 35703.17
+header  SARE_RAND_ORGAN	ALL =~ /\[\&EMAILADR\%\]/
+score   SARE_RAND_ORGAN	3.0
+
+header  SARE_RAND_SUBJ1	Subject =~ /%CUST_RND_SUB/
+score   SARE_RAND_SUBJ1	3.0
+
+header  SARE_RAND_SUBJ2	Subject =~ /%ZOAN_FIRST_NAME%/
+score   SARE_RAND_SUBJ2	3.0
+
+header  SARE_RAND_CT1	Content-Type =~ /%HDR_BAT_BOUNDARY/
+score   SARE_RAND_CT1	3.0
+
+body    SARE_RAND_BD1	/%HDR_VIRUS/
+score   SARE_RAND_BD1	3.0
+
+body    SARE_RAND_BD2	/%BODY_LNG_TXT/
+score   SARE_RAND_BD2	3.0
+
+body    SARE_RAND_BD3	/%BODY_CTL_CHARS/
+score   SARE_RAND_BD3	3.0
+
+body    SARE_RAND_BD4	/(?:\[REMOVELINK\]|\[LINK\]|\[LINK2\])/
+score   SARE_RAND_BD4	3.0
+
+header  SARE_RAND_HD1	Received =~ /%REC(?:EIVED|_WITH)/
+score   SARE_RAND_HD1	2.0
+
+header  SARE_RAND_HD2	ALL =~ /%FROM_USER/
+score   SARE_RAND_HD2	2.0
+
+header  SARE_RAND_HD3	MESSAGEID =~ /%MESS(?:AGE)?IDA?/
+score   SARE_RAND_HD3	3.0
+
+rawbody SARE_RAND_DRUGS	/%(?:VALIUM_10|XANAX_1|VICODIN|VIAGRA_50|VIAGRA_100|CARISOPRODOL|PHENTERMINE|ADIPEX|TRAMADOL|AMBIEN|FIORICET)/
+score   SARE_RAND_DRUGS	3.0
+
+# This was tricky, the first attempt did not catch it.
+# uri     SARE_RAND_URI1	/\<word\>/
+full    SARE_RAND_URI1	m{http://.{0,10}<word>}i
+score   SARE_RAND_URI1	3.0
+
+
+header  SARE_RAND_HD4	ALL =~ /%XMESSB/
+header  SARE_RAND_HD5	ALL =~ /%RECB/
+header  SARE_RAND_HD6	ALL =~ /%BY/
+header  SARE_RAND_HD7	ALL =~ /%MESSIDB/
+
+score   SARE_RAND_HD4	3.0
+score   SARE_RAND_HD5	3.0
+score   SARE_RAND_HD6	3.0
+score   SARE_RAND_HD7	3.0
+
+
+header  SARE_RAND_AL1	ALL =~ /%RECA/
+score   SARE_RAND_AL1	3.0
+
+header  SARE_RAND_AL2	ALL =~ /~~OWNER(?:FIRSTNAME|CITY|STATE)~~/
+score   SARE_RAND_AL2	2.0
+
+header  SARE_RAND_AL3	ALL =~ /\$Field\d/i
+score   SARE_RAND_AL3	2.0
+
+rawbody SARE_RAND_RBD1	/%HGH_COLORS/
+score   SARE_RAND_RBD1	3.0
+
+rawbody SARE_RAND_RBD2	/%BEGIN_SPLIT/
+score   SARE_RAND_RBD2	3.0
+
+rawbody SARE_RAND_RBD3	/~EMAIL~/
+score   SARE_RAND_RBD3	1.0
+
+rawbody SARE_RAND_LCVAL /%LCVALUES/
+score   SARE_RAND_LCVAL	2.0
+
+rawbody SARE_RAND_NEW2005 /%(?:CHILL|DICK|CONTACT|BYE|ASSHOLE)/
+score   SARE_RAND_NEW2005 2.0
+
+uri     SARE_RAND_URI2 /%URL/
+score   SARE_RAND_URI2 2.0
+
+body    SARE_RAND_BD5  /%(?:ASSHOLE|PART4|PROFILE|OUT)/
+score   SARE_RAND_BD5  2.5
+
+header  SARE_RAND_CHRSET Content-Type =~ /%CHARSET/
+score   SARE_RAND_CHRSET 2.5
+
+header  SARE_RAND_DOMFROM  Received =~ /%DOMAIN_FROM/
+score   SARE_RAND_DOMFROM  2.5
+
+header  SARE_RAND_NAME1  ALL =~ /%(?:NAME|MAIL)_(?:FROM|TO)/
+score   SARE_RAND_NAME1  3.455
+
+# %SYNUC_DIGITAL %SYNUC_VIDEO %SYNUC_CAMERA %SYNUC_DATING
+header  SARE_RAND_SYNUC  ALL =~ /%SYNUC_/
+score   SARE_RAND_SYNUC  3.455
+
+
+# The following rule is most likely not a *random* sign like the rest (a mistake in processing), this is more
+# like a tracking key which found it's home here.
+# 
+# Example: 
+# Content-Type: multipart/alternative; boundary="rnd1=:1086604847=:1084946356"
+# Looks like an identification string used to determine who this message was for (used for listwashing).
+header  SARE_RAND_CT2	Content-Type =~ /"rnd\d=:\d{4,8}/
+score   SARE_RAND_CT2	3.0
+
+
+
+# EOF

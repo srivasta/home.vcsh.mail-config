@@ -1,0 +1,169 @@
+#
+# Configuration file for mailagent
+#
+
+#
+# Configuration section
+#
+
+# Paramters likely to change
+home     : /home/srivasta			# Home directory (must be correctly set)
+level    : 9					# Logging level
+tmpdir   : ~/tmp				# Temporary directory to be used
+emergdir : ~/tmp/lost+mail			# Emergency directory (for dumps)
+track    : ON   				# Track matches on stdout (on/off)
+
+# Minimum path to ensure and path depending on the machine
+path     : $home/bin:/bin:/sbin:/usr/bin:/usr/sbin:$home/sbin
+
+# User who runs mailagent
+user     : srivasta
+name     : Manoj Srivastava,,615 414 9914,615 796 6646
+email	 : srivasta@debian.org
+tome     : srivasta@ieee.org,srivasta@acm.org,srivasta@computer.org,srivasta@golden-gryphon.com # Alternate logins for me
+
+#hidenet  : OFF					# Prefix domain with hostname when OFF
+
+# Vacation mode (on/off), vacation file and period
+vacation : OFF					# Vacation mode on/off
+vacfile  : ~/etc/mail/vacation			# File to be sent back
+vacperiod: 1d					# Period between two vacation messages
+vacfixed : OFF					# Turn to on to solely allow vacfile message
+
+# Mail and news transport agents
+# By default, values for sendmail and sendnews are determined at configuration
+# time. The default mailopt is "-odq -i" when sendmail is used.
+# The -h option is always added to the sendnews program to indicate headers
+# are already present.
+sendmail : /usr/sbin/sendmail
+sendnews : /usr/bin/inews
+mailopt  : -odq
+newsopt  : -h
+fromesc  : ON
+
+
+#
+# Parameters which should not change very often
+#
+
+# Define main configuration parameters
+umask    : 077					# Default umask
+spool    : ~/var/spool/agent			# Spool directory
+queue    : $spool/queue				# Queue directory (must exist)
+logdir   : ~/var/log				# Where logfile is stored
+context  : $spool/context			# Mailagent's context file
+callout  : $spool/callout			# Callout queue
+log      : agentlog				# Log file is in $logdir
+seq      : .seq					# Seq file is in $spool
+timezone : PST8PDT				# Time zone location
+statfile : $spool/mailagent.st			# Statistics file
+rules    : ~/etc/mail/mailagent.rules			# Filter's rules location (optional)
+rulecache: $spool/rulecache			# Cache for compiled rules (optional)
+
+# Security checks
+secure   : OFF					# Make extended checks on sensitive files
+linkdirs : ON					# Also carefully check symlinks to dirs
+groupsafe: ON					# Allow group-writable files when OFF
+execsafe : OFF					# Make extended checks on exec()ed files
+execskip : OFF					# Turn to ON to avoid all checks on exec()
+
+# Mailbox parameters
+##maildrop : /usr/spool/mail	# System mail drop directory (optional)
+##mailbox  : $user		# Mailbox file name (optional)
+mmdf     : OFF			# Allow MMDF-style mailbox delivery
+mmdfbox  : OFF			# Force new folders to MMDF format
+maildrop : /var/spool/mail	# System mail drop directory (optional)
+mailbox  : $user		# Mailbox file name (optional)
+mboxlock : %f.lock		# Lock mailbox with .lock file
+fromall  : OFF			# Escape all From, even within paragraph
+fromfake : ON			# Attempt creation of From: header when missing
+tofake   : ON			# Fake a To: line when missing
+
+# Biffing support
+biff     : ON			# Whether biff is wanted
+biffhead : From, To, Subject	# Which header fields should be printed
+bifflen  : 560			# Maximum body length printed anyway
+bifflines: 7			# Maximum body lines printed
+biffnl   : ON			# Turn to OFF to avoid blank body lines
+biffmsg  : ~/etc/mail/biffmsg	# Template format for biff (optional)
+bifftrim : ON			# Whether trim info should be part of biffing
+bifftrlen: 2			# Minimal trimming length, in lines
+biffquote: ON			# Whether the attribution line should be shown
+biffmh   : OFF			# Compact biffing message ala MH
+biffnice : OFF			# Whether compacted body should be reformatted
+
+# MH-style folders
+#mhprofile: $home/etc/mail/.mh_profile # Name of the MH profile file (optional)
+msgprefix: .msg_prefix		# File containing message name prefix
+
+# Locking parameters
+lockmax  : 20			# Maximum number of locking attempts
+lockdelay: 2			# Amount of seconds between two lock attempts
+lockhold : 3600			# Amount of seconds before breaking lock
+locksafe : ON			# Locking style on mailboxes
+lockwarn : 20,300		# Warn on busy locks after 20s, then every 300
+nfslock  : ON			# NFS-secure locking (optional)
+
+
+# Timeout parameters
+queuewait: 60			# Delay for filter before calling mailagent
+queuehold: 1800			# Amount of seconds queued mail remains skipped
+queuelost: 86400		# Timeout before flagging old queued mail
+runmax   : 3600			# Timeout for RUN command and friends
+
+
+# Optional parameters (for experts...)
+# Folder compression
+#compress : ~/.compress		# Folder compression list
+compspecs: $spool/compressors	# Compression progs config file
+comptag  : compress		# Default compression tag
+
+
+# Optional parameters (for experts...)
+newcmd   : $spool/newcmd	# Definition of new filtering commands
+perlib   : pl			# Extended perl library search path
+rulemac  : ON			# Macro substitution in rule patterns
+
+# Database hashing directory (in $spool) and other controls
+hash     : dbr				# Hashing directory
+cleanlaps: 1M				# Laps between cleanings
+autoclean: ON				# Turn periodic cleaning on/off
+agemax   : 1y				# Maximum lifetime for entries
+
+#
+# Parameters for SERVER
+#
+
+comserver: $spool/server	# Valid server commands
+servdir  : $spool/cmds		# Default path for perl server commands
+servshell: /bin/sh		# Shell used to spawn shell commands (optional)
+maxerrors: 10			# Allow at most ten errors before flushing
+maxcmds  : 10			# Allow maximum of ten commands in one request
+scriptcc : ON			# Send copy of sesssion transcripts to user?
+bqueue   : $spool/batch		# Batch queue (not implemented yet)
+powers   : $spool/powers	# Directory for power administration
+powerlog : $logdir/powerlog	# Log requests for new powers
+powerlist: $powers/aliases	# Mapping of powers to filename in powerdir
+powerdir : $powers/clearance	# Directory listing user clearances for powers
+passwd   : $powers/passwd	# Power passwords
+helpdir  : $spool/help		# Help directory for server commands
+
+#
+# Parameters for PROCESS
+#
+
+comfile  : $spool/commands	# Valid commands
+distlist : $spool/distribs	# Distribution list
+proglist : $spool/proglist	# Program description list
+maxsize  : 150000		# Maximum size before kiting
+plsave   : $spool/plsave	# Where patchlevels are saved
+authfile : $spool/auth		# Remote sending authorizations (not yet)
+
+
+
+#
+# Extra variables added to configuration -- version 3.0 PL73
+#
+
+domain   : golden-gryphon.com		# Your domain name (no leading '.')
+hidenet  : ON				# Prefix domain with hostname when OFF

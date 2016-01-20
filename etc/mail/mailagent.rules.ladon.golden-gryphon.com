@@ -675,6 +675,14 @@ From:  /(calendar)-notification\@google\.com/i,
    REJECT MailingList
  };
 
+<RETRY,INITIAL> From To Cc Sender X-Mn-Key Envelope Delivered-To X-BeenThere:
+ /hi\@mail\.stackcommerce\.com/i
+ {
+   ANNOTATE -d X-Disposition Alumni-Mailinglist;
+   ASSIGN list 'androidcommunity';
+   REJECT MailingList
+ };
+
 # Trade mags
 <RETRY,INITIAL> From To Cc Sender X-Mn-Key Envelope Delivered-To X-BeenThere:
  /\@(androidauthority)\.com/i,
@@ -1178,6 +1186,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /news-(googleplay)\@google\.com/i,
  /(googleplay)-noreply\@google\.com/i,
  /\@(wallet)\.google\.com/i,
+ /\@(accounts)\.l\.google\.com/i,
  /info\@specialoffers\.(citi)cards\.com/i,
  /citicards\@(citi)bank\.delivery\.net/i,
  /citicards\@info.?\.(citi)bank\.com/i,
@@ -1205,6 +1214,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@offers.(brookstone).com/i,
  /\@.*\.(united)\.com/i,
  /\@(naymz)\.com/i,
+ /\@mail\.(instagram)\.com/i,
  /\@(twitter)\.com/i,
  /\@(facebook)mail\.com/i,
  /fancast\@(fancast)\.delivery\.net/i,
