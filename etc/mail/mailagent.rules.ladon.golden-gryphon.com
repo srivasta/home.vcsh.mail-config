@@ -85,6 +85,10 @@ All:  /./
           From: /logcheck\@ladon.golden-gryphon.com/,
           From: /logcheck\@ip-10-248-0-85\.us-west-2\.compute\.internal/
            { REJECT ADMIN };
+<INITIAL> From: /fail2ban\@internal.golden-gryphon.com/,
+          From: /fail2ban\@ladon.golden-gryphon.com/,
+          From: /fail2ban\@ip-10-248-0-85\.us-west-2\.compute\.internal/
+           { REJECT ADMIN };
 <INITIAL> From: /nobody\@(internal|ladon).golden-gryphon.com/,
           Subject: /DenyHosts Report/                  { REJECT ADMIN };
 
@@ -113,7 +117,11 @@ All:  /./
 # All that enter here get logged
 All: /./        { PERL sbin/mailagent.log.pl};
 
-<LOST,INITIAL> From:  /plaistedg\@erols.com/, /67_camaro\@charter.net/
+ <LOST,INITIAL> From:
+ /plaistedg\@erols.com/i,
+ /corpcuts\@msn.com/i,
+ /corpcuts\@gmail.com/i,
+ /67_camaro\@charter.net/i
    { ANNOTATE -d X-List Known; REJECT ADDRESSED };
 
 
@@ -244,12 +252,6 @@ All: /./        { PERL sbin/mailagent.log.pl};
     REJECT MailingList
  };
 
-<INITIAL> From Sender X-Return-Path Envelope X-Envelope-From:
-              /(bootstrap-vz)\@noreply.github.com/
-              {
-              ASSIGN list '%1';
-              REJECT MailingList
-              };
 ######################################################################
 ######################################################################
 #                                                                    #
@@ -430,6 +432,7 @@ All: /./        { PERL sbin/mailagent.log.pl};
         /jobs\@dice\.com/i,
         /autoReply\@dice\.com/i,
         /jagent\@route.monster.com/i,
+        /\@widenet-consulting.com/i,
         /monster\@e0\.monster\.com/i
         { ASSIGN list 'jobs'; REJECT MailingList };
 
@@ -604,7 +607,6 @@ From:  /(calendar)-notification\@google\.com/i,
  /(refpolicy)\@oss\.tresys\.com/i,
  /(refpolicy)-bounces\@oss1\.tresys\.com/i,
  /(refpolicy)-request\@oss1\.tresys\.com/i,
- /(setools3)\@noreply\.github\.com/i,
  /(mailman)-owner\@lists\.bestpractical\.com/i,
  /no-reply-(amazonpayments)\@amazon\.com/i,
  /auto-(confirm)\@amazon\.com/i,
@@ -618,7 +620,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /(rt-users)-bounces\@lists\.bestpractical\.com/i,
  /(rt-devel)\@lists\.bestpractical\.com/i,
  /(rt-devel)-bounces\@lists\.bestpractical\.com/i,
- /(selinux-commits)-request\@oss1\.tresys\.com/i.
+ /(selinux-commits)-request\@oss1\.tresys\.com/i,
  /(selinux-commits)-bounces\@oss1\.tresys\.com/i,
  /updates\@lists.(spambouncer).org/i,
  /(vdt-discuss)-request\@LISTSERV\.FNAL\.GOV/i,
@@ -690,6 +692,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@(androidauthority)\.com/i,
  /\@(androidcommunity)\.com/i,
  /\@email\.(americastestkitchen)\.com/i,
+ /\@(archana)skitchen\.com/i,
  /\@(computerworld)\.com/i,
  /\@(huffingtonpost)\.com/i,
  /\@.*\.(computerworld).com/i,
@@ -747,6 +750,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /(sysadmin)\@promos\.sdmediagroup\.com/i,
  /(unixreview)\@newsletters\.sdmediagroup\.com/i,
  /no-reply\@mail\.(goodreads)\.com/i,
+ /no-reply\@(goodreads)\.com/i,
  /wbg\@enews\.(webbuyersguide)\.com/i,
  /newsletters\@response\.(webbuyersguide)\.com/i,
  /ciominute\@enews\.(cioinsight)\.com/i,
@@ -880,6 +884,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /gslug-general\@(gslug)\.org/i, /bagley_rep\@(acm)\.org/i,
  /pervasive\@(computer)\.org/i, /csconnection\@(computer)\.org/i,
  /csnews\@(computer)\.org/i, /membervalue\@(computer)\.org/i,
+ /learning\@(acm)\.org/i,
  /membernet\@hq\.(acm)\.org/i,
  /mn-subscribers\@listserv\.(acm)\.org/i, /(acm)-bulletin\@ACM\.ORG/i,
  /CommunicationsSociety\@(comsoc).org/i,
@@ -891,6 +896,13 @@ From:  /(calendar)-notification\@google\.com/i,
  /orderconfirmation\@(ieee)\.org/i, /enotice\@(ieee)\.org/i,
  /(ieee)-enotice\@ieee\.org/i, /(ieee)usa\@readexsurvey\.com/i,
  /(ieee)vote\@directvote\.net/i, /(ieee)csvote\@directvote\.net/i,
+ /ieee-computervote\@(ieee)\.org/i,
+ /ieee-edsvote\@(ieee)\.org/i,
+ /noreply\@(ieee)\.org/i,
+ /pes\@(ieee)\.org/i,
+ /uce-admin\@(ieee).org/i,
+ /ou-evoting\@(ieee)\.org/i,
+ /(ieee)seattle4\@gmail\.com/i,
  /\@lists\.(sasag)\.org/i, /(techalert)@ieee\.org/i,
  /\@(ieee)standards\.org/i, /\@(ieee)standards\.org/i,
  /tialert\@(ieee)\.org/i, /eds-members\@listserv\.(ieee)\.org/i,
@@ -906,7 +918,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /(pugetsoundpythonprogramming)-announce\@meetup.com/i,
  /(pugetsoundpythonprogramming)-list\@meetup.com/i,
  /\@(quora)\.com/i,
- /info\@(meetup)\.com/i, /\@q(mags)\.com/i.
+ /info\@(meetup)\.com/i, /\@q(mags)\.com/i,
  /\@q(mags)delivery\.com/i, /newsletters\@(the-scientist)\.com/i,
  /\@strongmail\.(the-scientist)\.com/i,
  /buildyourcareer\@(computer)\.org/i, /cacs\@(cacs)2010\.org/i,
@@ -956,6 +968,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@(corker)\.enews\.senate\.gov/i,
  /\@(washingtoncan)\.org/i,
  /\@(povertylaw)\.org/i,
+ /\@(dga)\.net/i,
  /\imawa09@mail\.house\.(gov)/i,
  /avaaz\@(avaaz)\.org/i,
  /\@(voiceson)-resources\.com/i,
@@ -1005,6 +1018,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /ecomments\@(wwf)us\.org/i,
  /member\@(tnc)\.org/i,
  /email\@(unicef)usa\.org/i,
+ /\@email\.(unicef)usa\.org/i,
  /development\@(path)\.org/i,
  /events\@(path)\.org/i,
  /publications\@(path)\.org/i,
@@ -1042,12 +1056,43 @@ From:  /(calendar)-notification\@google\.com/i,
    REJECT MailingList
  };
 
+<INITIAL> From Sender X-Return-Path Envelope X-Envelope-From:
+ /^(\S+)\@noreply.github.com/
+ {
+   ANNOTATE -d X-Disposition GitHub-Mailinglist;
+   ASSIGN list '%1';
+   REJECT MailingList
+ };
+
+
+<RETRY,INITIAL> From To Cc Sender X-Mn-Key Envelope Delivered-To X-BeenThere:
+ /notifications\@(github)\.com/i
+ {
+   REJECT GITHUB
+ };
+
+ <GITHUB> Subject: /^\s*\[(\S+)\] /
+ {
+   ANNOTATE -d X-Disposition GitHub-Mailinglist;
+   ASSIGN list '%1';
+   SUBST #list /^[^\/]+\///gi;
+   REJECT MailingList
+ };
+
+<RETRY,INITIAL> From To Cc Sender X-Mn-Key Envelope Delivered-To X-BeenThere:
+ /ecare@(uwp)n\.org/i,
+ /donotreply-(\S+)\@ndr.mysecurebill.com/i
+ {
+   ASSIGN list '%1';
+   REJECT MailingList
+ };
 
 # Services
 <RETRY,INITIAL> From To Cc Reply-To Sender X-Mn-Key Envelope Delivered-To X-BeenThere:
  /\@(asurion)\.com/i,
  /Member\.experience\@survey\.(firsttech)fed\.com/i,
  /\@.*\.(alliant)creditunion\.com/i,
+ /\@email-(becu)\.org/i,
  /(cash)\@square\.com/i,
  /\@(charitynavigator)\.org/i,
  /\@(betterment)\.com/i,
@@ -1061,13 +1106,14 @@ From:  /(calendar)-notification\@google\.com/i,
  /Memberexperience\@survey\.(firsttech)fed\.com/i,
  /member\.communications\@(firsttech)fed\.com/i,
  /memberservice\@billpayment\.(firsttech)fed\.com/i,
- /memberservice\@(firsttech)fed\.com/i.
- /\@(a2z)-insurance\.com/i.
+ /memberservice\@(firsttech)fed\.com/i,
+ /\@(a2z)-insurance\.com/i,
  /alerts\@(firsttech)fed\.com/i,
  /\@(firsttech)fed\.com/i,
  /\@billpayment\.(firsttech)fed\.com/i,
  /email\@only(mytoyota)\.com/i,
  /\@(beamanauto)\.com/i,
+ /\@(beamanauto)\.dealercrm\.com/i,
  /\@(toyota)ofbellevue\.com/i,
  /(michaelstoyota)ofbellevue\@mydealerevent\.com/i,
  /(michaelstoyota)ofbellevue\@mydealerreminder\.com/i,
@@ -1076,8 +1122,9 @@ From:  /(calendar)-notification\@google\.com/i,
  /searscardissuedby(citi)bank\@info[0-9]?\.searscard\.com/i,
  /info\@(fatsecret)\.com/i,
  /(aws)-marketing-email-replies\@amazon\.com/i,
- /no-reply-(aws)\@amazon\.com/i.
- /no-try-to-reply\@(amazon)\.com/i.
+ /\@(dyne)\.com/i,
+ /no-reply-(aws)\@amazon\.com/i,
+ /no-try-to-reply\@(amazon)\.com/i,
  /account-update\@(amazon)\.com/i,
  /\@marketplace\.(amazon)\.com/i,
  /magazine\@email\.(saveur)\.com/i,
@@ -1100,6 +1147,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@(pininterest).com/i,
  /\@(sendgrid)\.net/i,
  /(dolrenewal)reminder\@dol\.wa\.gov/i,
+ /(step)-notifications\@state.gov/i,
  /support\@(steam)powered.com/i,
  /Billing\@(relianceglobalcall).com/i,
  /Customercare\@(relianceindiacall)\.com/i,
@@ -1110,6 +1158,9 @@ From:  /(calendar)-notification\@google\.com/i,
  /customercare\@(relianceindiacall)\.com/i,
  /relianceglobalcall\@(relianceglobalcall)\.com/i,
  /webmaster\@(relianceindiacall)\.com/i,
+ /\@messages\.(xoom)\.com/i,
+ /\@(xoom)\.com/i,
+ /\@reply\.service\.sp\.(xoom)\.com/i,
  /CSA-noreply\@(comcast)\.net/i,
  /comcast\@(comcast)\.delivery\.net/i,
  /\@alerts\.(comcast)\.net/i,
@@ -1127,6 +1178,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@(republicservices)\.com/i,
  /postman\@(dopplr)\.com/i,
  /technical-alerts\@(us-cert)\.gov/i,
+ /\@ncas\.(us-cert)\.gov/i,
  /\@email\.(carecredit)\.com/i,
  /\@email\.(continental)\.com/i,
  /\@markit\.(schwab).com/i,
@@ -1150,7 +1202,9 @@ From:  /(calendar)-notification\@google\.com/i,
  /reservations\@(laquinta)\.com/i,
  /\@(tivo)\.com/i,
  /tivo\@info\.(tivo)\.com/i,
+ /tivo\@email\.(tivo)\.com/i,
  /tivo\@mkmail\.(tivo)\.com/i,
+ /\@email\.(siriusxm)\.com/i,
  /support\@(tripit).com/i,
  /MemberUpdate\@e\.(tripadvisor)\.com/i,
  /subscriptions\@subscriptions\.(symantec)\.com/i,
@@ -1203,6 +1257,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /(googleplay)-noreply\@google\.com/i,
  /\@(wallet)\.google\.com/i,
  /\@(accounts)\.l\.google\.com/i,
+ /\@(accounts)\.google\.com/i,
  /info\@specialoffers\.(citi)cards\.com/i,
  /citicards\@(citi)bank\.delivery\.net/i,
  /citicards\@info.?\.(citi)bank\.com/i,
@@ -1216,7 +1271,9 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@(ontheroad)\.to/i,
  /(americanexpress)\@welcome\.aexp\.com/i,
  /\@.*\.(americanexpress).com/i,
+ /(americanexpress)\@amex-email\.mar0\.net/i,
  /(creditsecure)\@exprpt.com/i,
+ /(creditsecure)\@amex\.exprpt\.com
  /(protectmyid)\@exprpt\.com/i,
  /dell\@outlethome\.usa\.(dell)\.com/i,
  /dell\@dellhome\.usa\.(dell)\.com/i,
@@ -1255,8 +1312,8 @@ From:  /(calendar)-notification\@google\.com/i,
  /yourflyer\@(gazaro)\.com/i,
  /PalmInc\@News\.(palm)newsletters\.com/i,
  /noreply\@(github)\.com/i,
- /notifications\@(github)\.com/i,
- /noreply\@(sourceforge)\.net/i,
+ /noreply\@(github)\.com/i,
+ /support\@(sourceforge)\.net/i,
  /no-reply\@mailer\.(last)\.fm/i,
  /noreply\@(myopenid)\.com/i,
  /Directv\@(directv)\.com/i,
@@ -1279,6 +1336,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /gpnet\@(hyatt)\.com/i,
  /\@e\.(hyatt)\.com/i,
  /mail\@(netapp)\.com/i,
+ /\@(tapatalk)\.com/i,
  /news\@e\.(seesmic)\.com/i,
  /Countryinnsandsuites\@(carlsonhotels)\.rsys1\.com/i,
  /carlsonhotels\@email\.(carlsonhotels)\.com/i,
@@ -1319,6 +1377,8 @@ From:  /(calendar)-notification\@google\.com/i,
  /newsletter\@(treo)central-mailings\.com/i,
  /\@(petdoors)\.com/i,
  /PetRescuers\@(homeagain)-email\.com/i,
+ /\@petrescuers\.(homeagain)\.com/i,
+ /\@(yubico)\.com/i,
  /Info\@(posterrevolution)\.com/i,
  /info\@homewatch\.(homegain)\.com/i,
  /(hometheater)mag\@email\.sourceinterlinkpubs\.com/i,
@@ -1326,7 +1386,6 @@ From:  /(calendar)-notification\@google\.com/i,
  /newsletter\@(hometheater)mag\.email\.primedia\.com/i,
  /(hometheater)mag\@sourceinterlinkpubs\.com/i,
  /(hometheater)\@primediamags\.chtah\.com/i,
- /\@(profantasy)\.com/i,
  /newsletter\@(trip-journal).com/i,
  /travelercare\@(orbitz)\.com/i,
  /customercare\@(orbitz)\.com/i,
@@ -1349,6 +1408,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /(tigerdirect)\@promo\.tigeronline\.com/i,
  /(tigerdirect)\.com\@email\.tigeronline\.com/i,
  /\@(thermador)\.wacampaign\.com/i,
+ /\@mail\.(thermador)\.com/i,
  /\@(expedia)mail\.com/i,
  /\@m\.(aa)-mail\.com/i,
  /\@(roscoebrown)\.com/i,
@@ -1359,6 +1419,11 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@checkin\.email\.(aa)\.com/i,
  /\@aadvantage\.email\.(aa)\.com/i,
  /notify\@(aa)\.globalnotifications\.com/i,
+ /\@(zipcar)\.com/i,
+ /\@et\.(uber)\.com/i,
+ /\@(uber)\.com/i,
+ /\@(tripcase)\.com/i,
+ /\@em\.(tripcase)\.com/i,
  /\@(plus).google.com/i,
  /news\@(linkedin)\.com/i,
  /hit-reply\@(linkedin)\.com/i,
@@ -1384,6 +1449,9 @@ From:  /(calendar)-notification\@google\.com/i,
  /srivasta=ieee\.org\@postmaster\.(twitter)\.com/i,
  /srivasta=acm\.org\@postmaster\.(twitter)\.com/i,
  /(verizon)wireless\@email\.vzwshop\.com/i,
+ /\@(t-mobile)-email\.com/i,
+ /\@documents\.(t-mobile).com/i,
+ /\@(t-mobile).com/i,
  /uhc\@(unitedhealthcare)-hmhb\.com/i,
  /\@(pandora)\.com/i,
  /\@(softlayer)\.com/i,
@@ -1394,7 +1462,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@(diabetes)\.org/i,
  /support\@(mywot)\.com/i
  /newsletters\@(boston)\.com/i,
- /\@mail\.(zillow)\.com/i,
+ /\@e?mail\.(zillow)\.com/i,
  /alerter\@(my-cast)\.com/i
  {
    ANNOTATE -d X-Disposition Services-Mailinglist;
@@ -1426,6 +1494,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /americanairlines\@aadvantage\.email\.(aa)\.com/i,
  /americanairlines\@email\.(aa)\.com/i,
  /\@e\.(milesandmore)\.com/i,
+ /\@my\.(ba)\.com/i,
  /\@newsletter\.(milesandmore)\.com/i,
  /apc\@email\.(apc)c\.com/i,
  /apexhotels\@communicate\.(apexhotels)\.co\.uk/i,
@@ -1508,6 +1577,9 @@ From:  /(calendar)-notification\@google\.com/i,
  /(homefocus)\@e.homefocuscatalog.com/i,
  /nigel\@dl2\.(profantasy)\.com/i,
  /nigel\@(profantasy)\.com/i,
+ /\@(profantasy)\.com/i,
+ /\@(fantasygrounds)\.com/i,
+ /\@(fg-con)\.com/i,
  /support\@(officedepot).chtah.com/i,
  /\@.*\.the(planet)\.com/i,
  /hm1\@(handmark).net/i,
@@ -1540,8 +1612,11 @@ From:  /(calendar)-notification\@google\.com/i,
  /(zazzle)\@echo7\.bluehornet\.com/i,
  /(zazzle)\@email\.zazzle\.com/i,
  /\@.*\.(verizonwireless).com/i,
- /QuickenOnlineBackup\@(quicken)\.com/i.
- /customercare\@(quicken)\.com/i.
+ /\@email\.(personalcapital)\.com/i,
+ /\@(personalcapital)\.com/i,
+ /\@(wealthfront)\.com/i,
+ /QuickenOnlineBackup\@(quicken)\.com/i,
+ /customercare\@(quicken)\.com/i,
  /\@info\.(quicken)\.com/i,
  /\@info1\.(quicken)\.com/i,
  /no-reply\@(yelp)\.com/i,
@@ -1567,6 +1642,18 @@ From:  /(calendar)-notification\@google\.com/i,
  {
    ANNOTATE -d X-Disposition LUG-Mailinglist;
    ASSIGN list '%1';
+   REJECT MailingList
+ };
+
+# Tor
+<RETRY,INITIAL> X-BeenThere List-Id: /lists.torproject.org/i  { REJECT TOR };
+<TOR> From To Cc Sender X-Mn-Key Envelope Delivered-To X-BeenThere:
+ /(tor-[\w-]+)(-(bounces|request|dist))?\@lists\.torproject\.org/i
+ {
+   ANNOTATE -d X-Disposition TOR-Mailinglist;
+   ANNOTATE -d X-Agent-list 'tor';
+   ASSIGN list '%1';
+   SUBST #list /-(bounces|request|dist)//gi;
    REJECT MailingList
  };
 
