@@ -1081,6 +1081,14 @@ From:  /(calendar)-notification\@google\.com/i,
    REJECT MailingList
  };
 
+ <GITHUB> Subject: /^\s*Re:\s*\[(\S+)\] /
+ {
+   ANNOTATE -d X-Disposition GitHub-Mailinglist;
+   ASSIGN list '%1';
+   SUBST #list /^[^\/]+\///gi;
+   REJECT MailingList
+ };
+
 <RETRY,INITIAL> From To Cc Sender X-Mn-Key Envelope Delivered-To X-BeenThere:
  /ecare@(uwp)n\.org/i,
  /donotreply-(\S+)\@ndr.mysecurebill.com/i
@@ -1143,6 +1151,7 @@ From:  /(calendar)-notification\@google\.com/i,
  /\@e\.(tripadvisor)\.com/i,
  /\@(wallypark)\.com/i,
  /(wallypark)\@usdm\.messages2\.com/i,
+ /google(cast)-noreply\@google\.com/i,
  /\@go(sphero).com/i,
  /\@mail\.(synchronybank)\.com/i,
  /\@mail\.(orvis)\.com/i,
